@@ -4,7 +4,7 @@ const app = express();
 
 
 app.get("/", async (req, res) => {
-	res.sendFile(__dirname + "/index.html");
+	res.send({ message: "Hello World" });
 });
 
 
