@@ -3,9 +3,9 @@ const express = require("express");
 const app = express();
 
 
-app.get("/", async (req, res) => {
-	res.send({ message: "Hello World" });
+app.get("/", (req, res) => {
+	res.send({ message: "This is kind of test for node-dev module" });
 });
 
-console.log("Hello World was sent to the browser")
-app.listen(5000);
+console.log("Hello World Zaid");
+app.listen(2222, () => console.log("Server running on port 2222"));
