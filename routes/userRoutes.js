@@ -27,6 +27,8 @@ module.exports = (app) => {
         res.send(user);
     });
 
+    // This is comment
+
     //Find Product details using Barcode_ID
     app.get("/api/barcode/:barcode/product", (req, res) => {
         Barcode.findOne({
