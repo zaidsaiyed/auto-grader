@@ -3,13 +3,23 @@ const { Schema } = mongoose;
 
 
 const userSchema = new Schema({
-    user_name: String,
-    student_id: String,
-    password: String,
+    user_name: {
+        type: String,
+        required: true,
+    },
+    student_id:{
+        type: String,
+        required: true,
+        maxlength: 9
+    },
+    password: {
+        type: String,
+        required: true,
+    },
     types: {
         type: String,
-        enum: ['A', 'B', ''],
-        default: 'A',
+        enum: ['A', 'S', 'P'],
+        default: 'S',
       },
 }, {
     timestamps: true
