@@ -15,4 +15,4 @@ const userSchema = new Schema({
     timestamps: true
 });
 
-mongoose.model('users', userSchema);
+mongoose.model('user', userSchema);
