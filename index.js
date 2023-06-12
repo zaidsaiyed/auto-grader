@@ -4,10 +4,14 @@ const keys = require('./config/keys');
 
 mongoose.connect(keys.mongoURI, { useUnifiedTopology: true });  // Connect to the MongoDB
 
+require("./models/User"); // Load the User model
+
 const app = express();
 
+require("./routes/userRoutes")(app); // Load the user routes
+
 app.get("/", (req, res) => {
-	res.send({ message: "This is kind of test for node-dev module" });
+	res.sendFile(__dirname + "/index.html");
 });
 
 console.log("Hello World Zaid");

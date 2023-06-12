@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zaid Saiyed</title>
 </head>
+
 <body>
-    <h1>"This is body"</h1>
+    <table>
+        <tr>
+            <td><input type="text" name="search" placeholder="Search..." id="invoiceStatus_text"></td>
+            <td><input type="submit" value="GO" id="invoiceStatus_go" onclick="handleSubmit()"></td>
+        </tr>
+    </table>
+    <div id="data"></div>
+    <script>
+        async function handleSubmit() {
+            var username = document.getElementById("invoiceStatus_text").value;
+
+            const response = await fetch("/api/user/" + username, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log(response.json());
+            const jsonData = await response.json() | "loading";
+            console.log(jsonData);
+
+            document.getElementById("data").innerHTML = response.json();
+        }
+    </script>
 </body>
+
 </html>
