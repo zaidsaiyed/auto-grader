@@ -11,4 +11,4 @@ app.get("/", (req, res) => {
 });
 
 console.log("Hello World Zaid");
-app.listen(2222, () => console.log("Server running on port 2222"));
+app.listen(2222, () => console.log("Server running on port 2222. Visit http://localhost:2222/"));
