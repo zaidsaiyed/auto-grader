@@ -2,11 +2,15 @@ const mongoose = require("mongoose");
 const Course = mongoose.model("course");
 
 module.exports = (app) => {
-    // Get all courses
-  app.get("/api/course", async (req, res) => {
+    // Get course by id
+  app.get("/api/course/:id", async (req, res) => {
     try {
-      const courses = await Course.find({}).exec();
-      res.json(courses);
+      if(req.params.id){
+        const courses = await Course.find({course_id : req.params.id}).exec();
+        res.json(courses);
+      }
+
+
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
