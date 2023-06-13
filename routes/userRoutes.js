@@ -3,13 +3,17 @@ const User = mongoose.model("user");
 
 module.exports = (app) => {
     app.get("/api/user/:id", async (req, res) => {
-        if(req.params.id){
-            const response = await User.find({student_id: req.params.id}).exec();
-            console.log(response);
-            res.send(response);
-        }
+        try {
+            if(req.params.id){
+                const response = await User.find({student_id: req.params.id}).exec();
+                res.send(response);
+            }
+            
+        } catch (error){
+            
+            res.status(500).JSON({message: "No ID provided"});
+        }   
 
-        res.send("Error")
     });
 
     app.post("/api/user", async (req, res) => {

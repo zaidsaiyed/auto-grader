@@ -20,6 +20,7 @@ const userSchema = new Schema({
         type: String,
         enum: ['A','S','P','TA'],
         default: 'S',
+        required: true,
       },
 }, {
     timestamps: true
