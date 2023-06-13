@@ -18,7 +18,7 @@ const userSchema = new Schema({
     },
     types: {
         type: String,
-        enum: ['A', 'S', 'P'],
+        enum: ['A','S','P','TA'],
         default: 'S',
       },
 }, {

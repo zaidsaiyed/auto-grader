@@ -1,0 +1,24 @@
+<html>
+<head>
+  <title>Login Page</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <input type="submit" value="Login">
+  </form>
+  <br>
+  <button onclick="createAccount()">Create New Account</button>
+
+  <script>
+    function createAccount() {
+      // Redirect to the new account creation page
+      window.location.href = "create_account.html";
+    }
+  </script>
+</body>
+</html>
