@@ -3,9 +3,13 @@ const User = mongoose.model("user");
 
 module.exports = (app) => {
     app.get("/api/user/:id", async (req, res) => {
-        const response = await User.find({}).exec();
-        console.log(response);
-        res.send(await User.find({}).exec());
+        if(req.params.id){
+            const response = await User.find({student_id: req.params.id}).exec();
+            console.log(response);
+            res.send(response);
+        }
+
+        res.send("Error")
     });
 
     app.post("/api/user", async (req, res) => {

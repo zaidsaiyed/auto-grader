@@ -8,12 +8,19 @@ require("./models/User"); // Load the User model
 
 const app = express();
 
+const bodyParser = require('body-parser'); // Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+
 require("./routes/userRoutes")(app); // Load the user routes
 
+// Get the default connection
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/index.html");
 });
 
+// Get registration page
 app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/registration.html");
 });
