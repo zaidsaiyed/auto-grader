@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const courseschema = new Schema ({
-    course_ID: {
+const courseSchema = new Schema ({
+    course_id: {
         type: String,
         required: true,
         unique: true,
@@ -17,4 +17,4 @@ const courseschema = new Schema ({
     }
 })
 
-mongoose.model('course', courseschema);
+mongoose.model('course', courseSchema);
