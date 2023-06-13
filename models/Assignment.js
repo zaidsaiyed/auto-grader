@@ -30,3 +30,5 @@ const assignmentSchema = new Schema({
       },
     });
     
+
+mongoose.model('assignment', assignmentSchema);
