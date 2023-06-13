@@ -9,11 +9,12 @@ module.exports = (app) => {
     });
 
     app.post("/api/user", async (req, res) => {
+        const types = (req.body.types)?req.body.types:'S';
+
         const {
             user_name,
             student_id,
-            password,
-            types
+            password
         } = req.body;
 
         const user = new User({
