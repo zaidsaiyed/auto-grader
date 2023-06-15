@@ -5,7 +5,9 @@ const keys = require('./config/keys');
 mongoose.connect(keys.mongoURI, { useUnifiedTopology: true });  // Connect to the MongoDB
 
 require("./models/User"); // Load the User model
-require("./models/Course"); // Load the User model
+require("./models/Course"); // Load the Course model
+require("./models/Assignment"); // Load the Assignment model
+require("./models/Grade"); // Load the Grades model
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 require("./routes/userRoutes")(app); // Load the user routes
 require("./routes/courseRoutes")(app); // Load the course routes
+require("./routes/assignmentRoutes")(app); // Load the assignment routes
+require("./routes/gradesRoutes")(app); // Load the grades routes
 // Get the default connection
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/index.html");

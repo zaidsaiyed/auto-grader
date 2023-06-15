@@ -42,3 +42,5 @@ const gradeschema = new Schema ({
         },
       },
 });
+
+mongoose.model('grade', gradeschema);

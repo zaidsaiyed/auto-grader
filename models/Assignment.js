@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const assignmentSchema = new Schema({
-    assign_ID: {
-        type: Number,
+    assign_id: {
+        type: String,
         required: true,
         unique: true,
       },
-      course_ID: {
-        type: Number,
+      course_id: {
+        type: String,
         required: true,
       },
       description: {
@@ -20,7 +20,6 @@ const assignmentSchema = new Schema({
       },
       required_files: {
         type: String,
-        maxlength: 10,
       },
       tests: {
         type: Number,
