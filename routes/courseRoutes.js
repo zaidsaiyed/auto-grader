@@ -2,6 +2,17 @@ const mongoose = require("mongoose");
 const Course = mongoose.model("course");
 
 module.exports = (app) => {
+  // Get all courses
+
+  app.get("/api/course", async (req, res) => {
+    try {
+      const courses = await Course.find({}).exec();
+      res.json(courses);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Get course by ID
   app.get("/api/course/:id", async (req, res) => {
     const { id } = req.params;
@@ -27,9 +38,7 @@ module.exports = (app) => {
         course_id,
         course_name,
         prof,
-      });
-
-      await course.save();
+      }).save();
       res.send(course);
     } catch (error) {
       res.status(400).json({ message: error.message });
