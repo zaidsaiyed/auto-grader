@@ -17,7 +17,7 @@ module.exports = (app) => {
     const { id } = req.params;
 
     try {
-      const assignment = await Assignment.findById(id).exec();
+      const assignment = await Assignment.find({ assign_id: id}).exec();
       if (assignment) {
         res.json(assignment);
       } else {
