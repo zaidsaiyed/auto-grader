@@ -8,7 +8,7 @@ const assignmentSchema = new Schema({
         unique: true,
       },
       course_id: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: 'course',
         required: true,
       },
       description: {
