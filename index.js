@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 require("./routes/userRoutes")(app); // Load the user routes
 require("./routes/courseRoutes")(app); // Load the course routes
 require("./routes/assignmentRoutes")(app); // Load the assignment routes
-require("./routes/gradesRoutes")(app); // Load the grades routes
+require("./routes/gradeRoutes")(app); // Load the grades routes
 // Get the default connection
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/index.html");
