@@ -21,7 +21,7 @@ const assignmentSchema = new Schema({
       required_files: {
         type: String,
       },
-      tests: {
+      total_tests: {
         type: Number,
       },
       results: {
