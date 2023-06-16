@@ -3,20 +3,23 @@ const { Schema } = mongoose;
 
 const gradeschema = new Schema ({
     student_id: {
-        type: Number,
+        type: Schema.Types.ObjectId, 
+        ref: 'user',
         required: true,
         maxlength: 9
       },
     course_id: {
-        type: String,
+        type: Schema.Types.ObjectId, 
+        ref: 'course',
         required: true,
       },
     assign_id: {
-        type: String,
+        type: Schema.Types.ObjectId, 
+        ref: 'assignment',
         required: true,
       },
-    total: {
-        type: Number,
+      total_tests: {
+        type: Schema.Types.ObjectId, ref: 'assignment',
         required: true,
       },
     earned: {
