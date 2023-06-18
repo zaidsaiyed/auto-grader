@@ -35,5 +35,5 @@ const assignmentSchema = new Schema({
       },
     });
     
-
+assignmentSchema.index({ course_id: 1, assign_id: 1 }, { unique: true });
 mongoose.model('assignment', assignmentSchema);
