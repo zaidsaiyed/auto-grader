@@ -8,12 +8,18 @@ const assignmentSchema = new Schema({
         unique: true,
       },
       course_id: {
-        type: Schema.Types.ObjectId, ref: 'course',
-        required: true,
+        type: String,
+        validate: {
+          validator: async function(value) {
+            const user = await mongoose.model('course').findOne({ course_id: value });
+            return user !== null;
+          },
+          message: 'Course does not exist.'
+        },
+        required: true
       },
       description: {
         type: String,
-        maxlength: 100,
       },
       files_location: {
         type: String,
