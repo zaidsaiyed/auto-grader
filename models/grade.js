@@ -1,49 +1,60 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const gradeschema = new Schema ({
-    student_id: {
-        type: Schema.Types.ObjectId, 
-        ref: 'user',
-        required: true,
-        maxlength: 9
+const gradeSchema = new Schema({
+  student_id: {
+    type: String,
+    required: true
+  },
+  course_id: {
+    type: String,
+    validate: {
+      validator: async function(value) {
+        const user = await mongoose.model('course').findOne({ course_id: value });
+        return user !== null;
       },
-    course_id: {
-        type: Schema.Types.ObjectId, 
-        ref: 'course',
-        required: true,
+      message: 'Course does not exist.'
+    },
+    required: true
+  },
+  assign_id: {
+    type: String,
+    validate: {
+      validator: async function(value) {
+        const user = await mongoose.model('assignment').findOne({ assign_id: value });
+        return user !== null;
       },
-    assign_id: {
-        type: Schema.Types.ObjectId, 
-        ref: 'assignment',
-        required: true,
+      message: 'Assignment does not exist.'
+    },
+    required: true
+  },
+  total_tests: {
+    type: Number,
+    required: true
+  },
+  earned: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: function(value) {
+        return value <= this.total_tests;
       },
-      total_tests: {
-        type: Schema.Types.ObjectId, ref: 'assignment',
-        required: true,
+      message: 'Earned marks cannot exceed total tests marks'
+    }
+  },
+  who_checked: {
+    type: String,
+    required: true,
+    validate: {
+      validator: async function(value) {
+        const user = await mongoose.model('user').findOne({ user_name: value, types: { $in: ['P', 'TA'] } });
+        return user !== null;
       },
-    earned: {
-        type: Number,
-        required: true,
-        validate: {
-          validator: function (value) {
-            return value <= this.total; // Validate that "earned" is less than or equal to "total"
-          },
-          message: 'Earned points cannot exceed total points',
-        },
-      },
-    who_checked: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        required: true,
-        validate: {
-          validator: async function (value) {
-            const user = await mongoose.model('user').findById(value);
-            return user && (user.type === 'P' || user.type === 'TA');
-          },
-          message: 'Invalid user or user type',
-        },
-      },
+      message: 'Who checked must be either a Professor (P) or a Teaching Assistant (TA)'
+    }
+  }
 });
 
-mongoose.model('grade', gradeschema);
+const Grade = mongoose.model('grade', gradeSchema);
+
+module.exports = Grade;
