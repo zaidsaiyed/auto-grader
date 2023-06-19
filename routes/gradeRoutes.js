@@ -14,6 +14,7 @@ module.exports = (app) => {
         }
     });
 
+    // Route to get all grades
     app.get('/api/grade', async (req, res) => {
         try {
             const grades = await Grade.find({});

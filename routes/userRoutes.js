@@ -48,6 +48,21 @@ module.exports = (app) => {
         res.send(user);
     });
 
+    // Delete a user by Id
+    app.delete("/api/user/:student_id", async (req, res) => {
+        try {
+            const studentId = req.params.student_id;
+            const user = await User.findOneAndDelete({ student_id: studentId }).exec();
+    
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+    
+            res.json({ message: "User deleted successfully" });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    });
 
     // Find all users
 

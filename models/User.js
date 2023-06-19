@@ -7,10 +7,23 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    student_id:{
-        type: String,
+    student_id: {
+        type: Number,
         required: true,
-        maxlength: 9
+        validate: {
+          validator: function (value) {
+            // Allow multiple documents with student_id = 0
+            if (value === 0) {
+              return true;
+            }
+    
+            // Check for uniqueness of student_id
+            return mongoose.models.user.countDocuments({ student_id: value })
+              .then((count) => count === 0);
+          },
+          message: 'Student ID must be unique except when it is 0.',
+        },
+        maxlength: 9,
     },
     password: {
         type: String,
