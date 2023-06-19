@@ -10,6 +10,7 @@ require("./models/Assignment"); // Load the Assignment model
 require("./models/Grade"); // Load the Grades model
 
 const app = express();
+app.use(express.static('public'));
 
 const bodyParser = require('body-parser'); // Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 app.use(bodyParser.json()); // for parsing application/json
@@ -22,7 +23,7 @@ require("./routes/assignmentRoutes")(app); // Load the assignment routes
 require("./routes/gradeRoutes")(app); // Load the grades routes
 // Get the default connection
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + "/index.html");
+	res.sendFile(__dirname + "/userDetails.html");
 });
 
 // Get registration page
