@@ -55,6 +55,7 @@ const gradeSchema = new Schema({
   }
 });
 
-const Grade = mongoose.model('grade', gradeSchema);
 
+const Grade = mongoose.model('grade', gradeSchema);
+gradeSchema.index({ student_id: 1, course_id: 1, assign_id: 1 }, { unique: true });
 module.exports = Grade;
