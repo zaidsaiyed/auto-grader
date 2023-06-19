@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Details</title>
+  <style>
+    /* Add your CSS styles here */
+    .user-container {
+      background-color: lightgray;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .user-name {
+      font-weight: bold;
+    }
+    .user-role {
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div id="user-details"></div>
+
+<script>
+
+  const userId = "169015983";
+  const userDetailsContainer = document.getElementById('user-details');
+  const users = []
+
+  if (users && users.length > 0) {
+    // Code to iterate over the users array and generate HTML elements
+    fetch(`/api/user/${userId}`)
+      .then(response => response.json())
+      .then(users => {
+        users.forEach(user => {
+          const userContainer = document.createElement('div');
+          userContainer.classList.add('user-container');
+    
+          const userName = document.createElement('p');
+          userName.classList.add('user-name');
+          userName.textContent = user.name;
+    
+          const userRole = document.createElement('p');
+          userRole.classList.add('user-role');
+          userRole.textContent = user.role;
+    
+          userContainer.appendChild(userName);
+          userContainer.appendChild(userRole);
+    
+          userDetailsContainer.appendChild(userContainer);
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        userDetailsContainer.textContent = 'Error fetching user details.';
+      });
+  } else {
+    // Handle the case when no users are returned
+    userDetailsContainer.textContent = 'No users found.';
+  }
+
+</script>
+</body>
+</html>
