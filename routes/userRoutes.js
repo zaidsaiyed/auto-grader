@@ -45,7 +45,7 @@ module.exports = (app) => {
             types
         }).save();
 
-        res.send(user);
+        res.redirect("./redirect");
     });
 
     // Delete a user by Id
