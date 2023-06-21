@@ -20,12 +20,9 @@ module.exports = (app) => {
                 const response = await User.find({student_id: req.params.id}).exec();
                 res.send(response);
             }
-            
         } catch (error){
-            
             res.status(500).JSON({message: "No ID provided"});
         }   
-
     });
 
     // Create a new user
