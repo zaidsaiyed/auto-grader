@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const log = require("node-dev/lib/log");
 const User = mongoose.model("user");
 
 module.exports = (app) => {
@@ -27,6 +28,7 @@ module.exports = (app) => {
 
     // Create a new user
     app.post("/api/user", async (req, res) => {
+        try {
         const types = (req.body.types)?req.body.types:'S';
         const student_id = (req.body.student_id)?req.body.student_id:"000";
 
@@ -43,6 +45,11 @@ module.exports = (app) => {
         }).save();
 
         res.redirect("./redirect");
+
+        } catch (error) {
+            console.log("zad");
+            res.status(400).json({ error: error.message });
+        }
     });
 
     // Delete a user by Id
