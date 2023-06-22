@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const log = require("node-dev/lib/log");
 const User = mongoose.model("user");
 
 module.exports = (app) => {
