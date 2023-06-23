@@ -46,7 +46,6 @@ module.exports = (app) => {
         res.redirect("./redirect");
 
         } catch (error) {
-            console.log("zad");
             res.status(400).json({ error: error.message });
         }
     });
