@@ -52,7 +52,7 @@ module.exports = (app) => {
     });
 
     // Delete a user by Id
-    app.delete("/api/user/:student_id", async (req, res) => {
+    app.delete("/api/user/del/:student_id", async (req, res) => {
         try {
             const studentId = req.params.student_id;
             const user = await User.findOneAndDelete({ student_id: studentId }).exec();

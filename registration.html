@@ -117,9 +117,26 @@
                 return false;
             }
 
-            return true;
+            var studentId = document.getElementById("student_id").value;
+            var error = document.getElementById("error-message");
+            error.innerHTML = "";
 
-            
+            fetch("/api/user")
+                .then(response => response.json())
+                .then(users => {
+                    var duplicateId = users.some(user => user.student_id === studentId);
+                    if (duplicateId) {
+                        error.innerHTML = "Student ID is already registered.";
+                    } else {
+                        document.getElementById("registration-form").submit();
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    error.innerHTML = "An error occurred. Please try again.";
+                });
+
+            return false;
         }
     </script>
 </head>
