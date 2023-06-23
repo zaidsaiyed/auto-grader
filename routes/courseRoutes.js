@@ -37,11 +37,26 @@ module.exports = (app) => {
       const course = new Course({
         course_id,
         course_name,
-        prof,
+        prof
       }).save();
       res.send(course);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
   });
-};
+
+  app.delete("/api/course/del/:course_id", async (req, res) => {
+    try {
+        const courseId = req.params.course_id;
+        const course = await Course.findOneAndDelete({ course_id: courseId }).exec();
+      
+        if (!course) {
+          return res.status(404).json({ message: "Course not found" });
+        }
+
+        res.json({ message: "Course deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+};  
