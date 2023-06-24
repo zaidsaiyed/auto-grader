@@ -1,24 +1,126 @@
+<!DOCTYPE html>
 <html>
-<head>
-  <title>Login Page</title>
-</head>
-<body>
-  <h2>Login</h2>
-  <form>
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <input type="submit" value="Login">
-  </form>
-  <br>
-  <button onclick="createAccount()">Create New Account</button>
 
-  <script>
-    function createAccount() {
-      // Redirect to the new account creation page
-      window.location.href = "create_account.html";
-    }
-  </script>
+<head>
+    <title>Login Page</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f2f2f2;
+      }
+
+      .container {
+          width: 300px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+          text-align: center;
+      }
+
+      .form-group {
+          margin-bottom: 15px;
+      }
+
+      .form-group label {
+          display: block;
+          font-weight: bold;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="password"] {
+          width: 100%;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+      }
+
+      .form-group input[type="submit"] {
+          width: 100%;
+          padding: 10px;
+          background-color: #4CAF50;
+          color: #fff;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+      }
+
+      .form-group input[type="submit"]:hover {
+          background-color: #45a049;
+      }
+
+      .error-message {
+          color: red;
+          margin-top: 5px;
+          text-align: center;
+      }
+  </style>
+    <script>
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var error = document.getElementById("error-message");
+
+            if (!username || !password) {
+                error.innerHTML = "Please fill in all fields.";
+                return;
+            }
+
+            fetch("/api/user")
+                .then(response => response.json())
+                .then(users => {
+                    var matchingUser = users.find(user => user.user_name === username && user.password === password);
+
+                    if (matchingUser) {
+                        // Login successful, redirect to the appropriate dashboard
+                        var userType = matchingUser.types;
+                        if (userType === "S") {
+                            window.location.href = "/student-dashboard";
+                        } else if (userType === "P") {
+                            window.location.href = "/professor-dashboard";
+                        } else if (userType === "A") {
+                            window.location.href = "/admin-dashboard";
+                        } else {
+                            // Invalid user type
+                            error.innerHTML = "Invalid user type.";
+                        }
+                    } else {
+                        // Login failed, display error message
+                        error.innerHTML = "Invalid username or password.";
+                    }
+                })
+                .catch(error => {
+                    // Error occurred during login
+                    error.innerHTML = "An error occurred. Please try again.";
+                    console.log(error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Login" onclick="login(); return false;">
+            </div>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
 </body>
+
 </html>

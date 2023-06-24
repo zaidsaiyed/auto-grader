@@ -47,10 +47,10 @@ const gradeSchema = new Schema({
     required: true,
     validate: {
       validator: async function(value) {
-        const user = await mongoose.model('user').findOne({ user_name: value, types: { $in: ['P', 'TA'] } });
+        const user = await mongoose.model('user').findOne({ user_name: value, types: { $in: ['P'] } });
         return user !== null;
       },
-      message: 'Who checked must be either a Professor (P) or a Teaching Assistant (TA)'
+      message: 'Who checked must be a Professor (P)'
     }
   }
 });

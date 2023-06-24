@@ -31,6 +31,11 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/registration.html");
 });
 
+// Get login page
+app.get("/login", (req, res) => {
+	res.sendFile(__dirname + "/login.html");
+});
+
 // Get create course page
 app.get("/createCourse", (req, res) => {
 	res.sendFile(__dirname + "/coursefunctions/createcourse.html");
