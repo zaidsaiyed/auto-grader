@@ -29,7 +29,7 @@ module.exports = (app) => {
     app.post("/api/user", async (req, res) => {
         try {
         const types = (req.body.types)?req.body.types:'S';
-        const student_id = (req.body.student_id)?req.body.student_id:"000";
+        const student_id = (req.body.student_id)?req.body.student_id:"0";
 
         const {
             user_name,
@@ -43,7 +43,7 @@ module.exports = (app) => {
             types
         }).save();
 
-        res.redirect("./redirect");
+        res.send(user);
 
         } catch (error) {
             res.status(400).json({ error: error.message });
