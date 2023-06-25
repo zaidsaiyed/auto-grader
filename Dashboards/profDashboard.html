@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>User Details</title>
+  <style>
+    /* Add your CSS styles here */
+    .user-container {
+      background-color: rgb(173, 172, 172);
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .user-container table {
+      width: 100%;
+      border: 1px solid black;
+    }
+
+    /*.user-container table tr th,
+      .user-container table tr td {
+      border: 1px solid black;
+      padding: 5px;
+    }*/
+  </style>
+</head>
+
+<body>
+  <h3>User Details</h3>
+  <input type="text" name="student-id" id="student-id">
+  <button onclick="runQuery()">Go</button>
+  <div id="user-details"></div>
+  
+
+  <script>
+    function runQuery() {
+      const userId = document.getElementById('student-id').value;
+      const userDetailsContainer = document.getElementById('user-details');
+      const users = [];
+
+      if (users && users.length > 0 || true) {
+        // Code to iterate over the users array and generate HTML elements
+        fetch(`/api/user/${userId}`)
+          .then(response => response.json())
+          .then(users => {
+            const userContainer = document.createElement('div');
+            userContainer.classList.add('user-container');
+
+            const userTable = document.createElement('table');
+
+            const headTr = document.createElement('tr');
+
+            const headName = document.createElement('th'); headName.textContent = 'Name'; headTr.appendChild(headName);
+            const headStuId = document.createElement('th'); headStuId.textContent = 'Student ID'; headTr.appendChild(headStuId);
+            const headType = document.createElement('th'); headType.textContent = 'Type'; headTr.appendChild(headType);
+
+            userTable.appendChild(headTr);
+
+            users.forEach(user => {
+              console.log(user);
+              const userTr = document.createElement('tr');
+
+              const userName = document.createElement('td');
+              userName.textContent = user.user_name;
+
+              const userStuId = document.createElement('td');
+              userStuId.textContent = user.student_id;
+
+              const userType = document.createElement('td');
+              userType.textContent = user.types;
+
+              userTr.appendChild(userName);
+              userTr.appendChild(userStuId);
+              userTr.appendChild(userType);
+
+              userTable.appendChild(userTr);
+            });
+
+            userContainer.appendChild(userTable);
+            console.log(userContainer);
+            userDetailsContainer.innerHTML = '';
+            userDetailsContainer.appendChild(userContainer);
+          })
+          .catch(error => {
+            console.error(error);
+            userDetailsContainer.textContent = 'Error fetching user details.';
+          });
+      } else {
+        // Handle the case when no users are returned
+        userDetailsContainer.textContent = 'No users found.';
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -79,13 +79,13 @@
                     if (matchingUser) {
                         // Login successful, redirect to the appropriate dashboard
                         var userType = matchingUser.types;
-                        if (userType === "S") {
+                        if (userType === "S")
                             window.location.href = "/student-dashboard";
-                        } else if (userType === "P") {
+                        else if (userType === "P")
                             window.location.href = "/professor-dashboard";
-                        } else if (userType === "A") {
+                        else if (userType === "A")
                             window.location.href = "/admin-dashboard";
-                        } else {
+                        else {
                             // Invalid user type
                             error.innerHTML = "Invalid user type.";
                         }

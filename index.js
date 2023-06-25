@@ -41,6 +41,11 @@ app.get("/createCourse", (req, res) => {
 	res.sendFile(__dirname + "/coursefunctions/createcourse.html");
 });
 
+// Get file Upload page
+app.get("/upload", (req, res) => {
+	res.sendFile(__dirname + "/Test and trials/tryUpload.html");
+});
+
 app.get("/api/redirect", (req, res) => {
 	res.sendFile(__dirname + "/redirect.html");
 });
