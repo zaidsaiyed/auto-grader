@@ -28,12 +28,12 @@ app.get("/", (req, res) => {
 
 // Get registration page
 app.get("/registration", (req, res) => {
-	res.sendFile(__dirname + "/registration.html");
+	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
 // Get login page
 app.get("/login", (req, res) => {
-	res.sendFile(__dirname + "/login.html");
+	res.sendFile(__dirname + "/userfunctions/login.html");
 });
 
 // Get create course page
