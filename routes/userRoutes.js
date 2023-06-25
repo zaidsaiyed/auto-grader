@@ -70,7 +70,6 @@ module.exports = (app) => {
 
     app.get("/api/barcode/:barcode/product", (req, res) => {
         Barcode.findOne({
-            barcode_id: req.params.barcode,
         })
             .exec()
             .then(barcode => Product.findById(barcode._product)
