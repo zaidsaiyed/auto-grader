@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
+const fs = require('fs'); // File system module
+const multer = require('multer'); // Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
 
 mongoose.connect(keys.mongoURI, { useUnifiedTopology: true });  // Connect to the MongoDB
 
@@ -21,6 +23,55 @@ require("./routes/userRoutes")(app); // Load the user routes
 require("./routes/courseRoutes")(app); // Load the course routes
 require("./routes/assignmentRoutes")(app); // Load the assignment routes
 require("./routes/gradeRoutes")(app); // Load the grades routes
+
+
+// Set up storage for uploaded files
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+	  cb(null, 'uploads');
+	},
+	filename: function (req, file, cb) {
+	  cb(null, file.originalname);
+	}
+  });
+  
+
+const upload = multer({ storage }); // Set up multer
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+
+// This is test code for uploading files
+
+app.post('/uploadfile', upload.single('file'), (req, res) => {
+	if (!req.file) {
+	  return res.status(400).send('No file uploaded');
+	}
+	
+	const filePath = req.file.path;
+  
+	fs.readFile(filePath, 'utf8', (err, data) => {
+	  if (err) {
+		console.error(err);
+		return res.status(500).send('Error reading file');
+	  }
+  
+	  res.render('index', { fileContent: data });
+	});
+  });
+  
+  app.get('/count_lines', (req, res) => {
+	if (!req.query.fileContent) {
+	  return res.status(400).send('No file content provided');
+	}
+  
+	const lines = req.query.fileContent.split('\n');
+	const lineCount = lines.length;
+	res.send(lineCount.toString());
+  });
+
+  // End of test code
+
 // Get the default connection
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/userDetails.html");
@@ -43,8 +94,11 @@ app.get("/createCourse", (req, res) => {
 
 // Get file Upload page
 app.get("/upload", (req, res) => {
-	res.sendFile(__dirname + "/Test and trials/tryUpload.html");
+	res.sendFile(__dirname + "/Test and trials/tryPy.html");
 });
+
+
+	
 
 app.get("/api/redirect", (req, res) => {
 	res.sendFile(__dirname + "/redirect.html");

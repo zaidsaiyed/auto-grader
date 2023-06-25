@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Python File Viewer</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <form action="/uploadfile" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="Upload" />
+  </form>
+
+  <pre id="file-content"></pre>
+  <button id="count-lines-btn">Count Lines</button>
+  <div id="line-count"></div>
+
+  <script>
+    $(document).ready(function() {
+      $("form").submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+        $.ajax({
+          url: "/uploadfile",
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+            $("#file-content").text(data);
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      });
+
+      $("#count-lines-btn").click(function() {
+        var fileContent = $("#file-content").text();
+        $.get("/count_lines", { fileContent: fileContent }, function(data) {
+          $("#line-count").text("Number of lines: " + data);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
