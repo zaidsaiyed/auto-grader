@@ -30,7 +30,7 @@ module.exports = (app) => {
         try {
         const types = (req.body.types)?req.body.types:'S';
         const student_id = (req.body.student_id)?req.body.student_id:"0";
-
+        const name = (req.body.name)?req.body.name:"";
         const {
             user_name,
             password

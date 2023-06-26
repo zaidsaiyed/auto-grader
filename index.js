@@ -82,6 +82,11 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
+// Get prof registration page
+app.get("/profRegistration", (req, res) => {
+	res.sendFile(__dirname + "/userfunctions/profRegistration.html");
+});
+
 // Get login page
 app.get("/login", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/login.html");
@@ -90,6 +95,11 @@ app.get("/login", (req, res) => {
 // Get create course page
 app.get("/createCourse", (req, res) => {
 	res.sendFile(__dirname + "/coursefunctions/createcourse.html");
+});
+
+//Get Admin page
+app.get("/admin", (req, res) => {
+	res.sendFile(__dirname + "/Dashboards/adminDashboard.html");
 });
 
 // Get file Upload page
