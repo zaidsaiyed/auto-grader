@@ -83,8 +83,33 @@
                     if (duplicateUser) {
                         error.innerHTML = "Professor already exists.";
                     } else {
-                        // Redirect to /admin on successful submission
-                        window.location.href = "/admin";
+                        fetch("/api/user", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                user_name: user_name,
+                                student_id:"0",
+                                password: password,
+                                name: name,
+                                types:'P'
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(course => {
+                                // Course created successfully
+                                // Perform any necessary actions or show success message
+                                console.log("Course created:", course);
+                                // Redirect to a success page if needed
+                                window.location.href = "/admin";
+                            })
+                            .catch(error => {
+                                // Error occurred while creating the course
+                                var error = document.getElementById("error-message");
+                                error.innerHTML = "An error occurred. Please try again.";
+                                console.log(error);
+                            });
                     }
                 })
                 .catch(error => {
@@ -100,7 +125,7 @@
 <body>
     <div class="container">
         <h1>Professor Registration</h1>
-        <form id="registration-form" action="/api/user" method="POST" onsubmit="return validateForm()">
+        <form id="registration-form" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="user_name">Username:</label>
                 <input type="text" id="user_name" name="user_name" required>
