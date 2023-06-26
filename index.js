@@ -97,6 +97,11 @@ app.get("/createCourse", (req, res) => {
 	res.sendFile(__dirname + "/coursefunctions/createcourse.html");
 });
 
+//Get Admin page
+app.get("/admin", (req, res) => {
+	res.sendFile(__dirname + "/Dashboards/adminDashboard.html");
+});
+
 // Get file Upload page
 app.get("/upload", (req, res) => {
 	res.sendFile(__dirname + "/Test and trials/tryPy.html");

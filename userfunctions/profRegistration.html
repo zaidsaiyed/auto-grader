@@ -21,6 +21,7 @@
 
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .form-group {
@@ -69,14 +70,36 @@
                 error.innerHTML = "Passwords do not match.";
                 return false;
             }
-            return true;
+
+            var user_name = document.getElementById("user_name").value;
+            var name = document.getElementById("name").value;
+            var error = document.getElementById("error-message");
+            error.innerHTML = "";
+
+            fetch("/api/user")
+                .then(response => response.json())
+                .then(users => {
+                    var duplicateUser = users.some(user => user.user_name === user_name || user.name === name);
+                    if (duplicateUser) {
+                        error.innerHTML = "Professor already exists.";
+                    } else {
+                        // Redirect to /admin on successful submission
+                        window.location.href = "/admin";
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    error.innerHTML = "An error occurred. Please try again.";
+                });
+
+            return false;
         }
     </script>
 </head>
 
 <body>
     <div class="container">
-        <h1>Registration</h1>
+        <h1>Professor Registration</h1>
         <form id="registration-form" action="/api/user" method="POST" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="user_name">Username:</label>
