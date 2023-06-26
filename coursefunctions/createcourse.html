@@ -75,8 +75,8 @@
                     var professors = users.filter(user => user.types === 'P');
                     professors.forEach(professor => {
                         var option = document.createElement("option");
-                        option.value = professor.user_name;
-                        option.text = professor.user_name;
+                        option.value = professor.name;
+                        option.text = professor.name;
                         selectElement.appendChild(option);
                     });
                 })

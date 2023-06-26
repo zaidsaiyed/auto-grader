@@ -82,6 +82,11 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
+// Get prof registration page
+app.get("/profRegistration", (req, res) => {
+	res.sendFile(__dirname + "/userfunctions/profRegistration.html");
+});
+
 // Get login page
 app.get("/login", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/login.html");
