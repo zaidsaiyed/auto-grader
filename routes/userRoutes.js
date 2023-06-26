@@ -40,6 +40,7 @@ module.exports = (app) => {
             user_name,
             student_id,
             password,
+            name,
             types
         }).save();
 
