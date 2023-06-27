@@ -68,6 +68,8 @@ module.exports = (app) => {
     });
 
     // Find all users
+    
+    console.log("Finding all users")
 
     app.get("/api/barcode/:barcode/product", (req, res) => {
         Barcode.findOne({
