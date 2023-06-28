@@ -66,19 +66,3 @@ module.exports = (app) => {
             res.status(500).json({ message: error.message });
         }
     });
-
-    // Find all users
-    
-    console.log("Finding all users")
-
-    app.get("/api/barcode/:barcode/product", (req, res) => {
-        Barcode.findOne({
-        })
-            .exec()
-            .then(barcode => Product.findById(barcode._product)
-                .then(result => res.send(result))
-                .catch(err => res.status(500).send(err))
-            )
-            .catch(err => res.status(500).send(err));
-    });
-};
