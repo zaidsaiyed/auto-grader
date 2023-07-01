@@ -66,5 +66,4 @@ module.exports = (app) => {
             res.status(500).json({ message: error.message });
         }
     });
-
-// Find User by ID
+};
