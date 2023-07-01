@@ -102,6 +102,11 @@ app.get("/admin", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/adminDashboard.html");
 });
 
+//Get Prof page
+app.get("/prof", (req, res) => {
+	res.sendFile(__dirname + "/Dashboards/profDashboard.html");
+});
+
 // Get file Upload page
 app.get("/upload", (req, res) => {
 	res.sendFile(__dirname + "/Test and trials/tryPy.html");
