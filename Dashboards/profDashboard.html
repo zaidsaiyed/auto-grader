@@ -2,94 +2,169 @@
 <html>
 
 <head>
-  <title>User Details</title>
-  <style>
-    /* Add your CSS styles here */
-    .user-container {
-      background-color: rgb(173, 172, 172);
-      padding: 10px;
-      margin-bottom: 10px;
-    }
+    <title>Professor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
 
-    .user-container table {
-      width: 100%;
-      border: 1px solid black;
-    }
+        .prof-dashboard {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
 
-    /*.user-container table tr th,
-      .user-container table tr td {
-      border: 1px solid black;
-      padding: 5px;
-    }*/
-  </style>
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .course-section,
+        .professor-section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        button {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        // Function to generate table rows for courses
+        function generateCourseTableRows() {
+            fetch('/api/course')
+                .then(response => response.json())
+                .then(courses => {
+                    var tbody = document.getElementById('course-table-body');
+
+                    // Clear existing rows
+                    tbody.innerHTML = '';
+
+                    // Generate table rows
+                    courses.forEach(function (course) {
+                        var row = document.createElement('tr');
+                        var courseIdCell = document.createElement('td');
+                        var professorNameCell = document.createElement('td');
+
+                        courseIdCell.textContent = course.course_id;
+                        professorNameCell.textContent = course.prof;
+
+                        row.appendChild(courseIdCell);
+                        row.appendChild(professorNameCell);
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+
+        // Function to generate table rows for professors
+        function generateProfessorTableRows() {
+            fetch('/api/user')
+                .then(response => response.json())
+                .then(users => {
+                    var professors = users.filter(user => user.types === 'P');
+                    var tbody = document.getElementById('professor-table-body');
+
+                    // Clear existing rows
+                    tbody.innerHTML = '';
+
+                    // Generate table rows
+                    professors.forEach(function (professor) {
+                        var row = document.createElement('tr');
+                        var userNameCell = document.createElement('td');
+                        var nameCell = document.createElement('td');
+
+                        userNameCell.textContent = professor.user_name;
+                        nameCell.textContent = professor.name;
+
+                        row.appendChild(userNameCell);
+                        row.appendChild(nameCell);
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+
+        // Run the functions when the page is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            generateCourseTableRows();
+            generateProfessorTableRows();
+        });
+
+    </script>
 </head>
 
 <body>
-  <h3>User Details</h3>
-  <input type="text" name="student-id" id="student-id">
-  <button onclick="runQuery()">Go</button>
-  <div id="user-details"></div>
-  
+    <div class="prof-dashboard">
+        <h1>Welcome to the Professor Dashboard</h1>
 
-  <script>
-    function runQuery() {
-      const userId = document.getElementById('student-id').value;
-      const userDetailsContainer = document.getElementById('user-details');
-      const users = [];
+        <div class="course-section">
+            <h2>Courses</h2>
+            <button onclick="window.location.href='/createCourse'">Add Course</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course ID</th>
+                        <th>Professor Name</th>
+                    </tr>
+                </thead>
+                <tbody id="course-table-body"></tbody>
+            </table>
+        </div>
 
-      if (users && users.length > 0 || true) {
-        // Code to iterate over the users array and generate HTML elements
-        fetch(`/api/user/${userId}`)
-          .then(response => response.json())
-          .then(users => {
-            const userContainer = document.createElement('div');
-            userContainer.classList.add('user-container');
-
-            const userTable = document.createElement('table');
-
-            const headTr = document.createElement('tr');
-
-            const headName = document.createElement('th'); headName.textContent = 'Name'; headTr.appendChild(headName);
-            const headStuId = document.createElement('th'); headStuId.textContent = 'Student ID'; headTr.appendChild(headStuId);
-            const headType = document.createElement('th'); headType.textContent = 'Type'; headTr.appendChild(headType);
-
-            userTable.appendChild(headTr);
-
-            users.forEach(user => {
-              console.log(user);
-              const userTr = document.createElement('tr');
-
-              const userName = document.createElement('td');
-              userName.textContent = user.user_name;
-
-              const userStuId = document.createElement('td');
-              userStuId.textContent = user.student_id;
-
-              const userType = document.createElement('td');
-              userType.textContent = user.types;
-
-              userTr.appendChild(userName);
-              userTr.appendChild(userStuId);
-              userTr.appendChild(userType);
-
-              userTable.appendChild(userTr);
-            });
-
-            userContainer.appendChild(userTable);
-            console.log(userContainer);
-            userDetailsContainer.innerHTML = '';
-            userDetailsContainer.appendChild(userContainer);
-          })
-          .catch(error => {
-            console.error(error);
-            userDetailsContainer.textContent = 'Error fetching user details.';
-          });
-      } else {
-        // Handle the case when no users are returned
-        userDetailsContainer.textContent = 'No users found.';
-      }
-    }
-  </script>
+        <div class="professor-section">
+            <h2>Professors</h2>
+            <button onclick="window.location.href='/profRegistration'">Add Professor</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody id="professor-table-body"></tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>
