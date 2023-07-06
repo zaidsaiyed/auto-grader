@@ -98,13 +98,18 @@ app.get("/createCourse", (req, res) => {
 });
 
 //Get Admin page
-app.get("/admin", (req, res) => {
+app.get("/admin?userId=", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/adminDashboard.html");
 });
 
 //Get Prof page
-app.get("/prof", (req, res) => {
+app.get("/professor-dashboard?userId=", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/profDashboard.html");
+});
+
+//Get Student page
+app.get("/student-dashboard?userId=", (req, res) => {
+	res.sendFile(__dirname + "/Dashboards/studentDashboard.html");
 });
 
 // Get file Upload page

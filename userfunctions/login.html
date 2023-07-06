@@ -77,14 +77,17 @@
                     var matchingUser = users.find(user => user.user_name === username && user.password === password);
 
                     if (matchingUser) {
-                        // Login successful, redirect to the appropriate dashboard
+                        // Login successful, get the user ID
+                        var userId = matchingUser.student_id;
+
+                        // Redirect to the appropriate dashboard with user ID as a parameter
                         var userType = matchingUser.types;
                         if (userType === "S")
-                            window.location.href = "/student-dashboard";
+                            window.location.href = "/student-dashboard?userId=" + userId;
                         else if (userType === "P")
-                            window.location.href = "/professor-dashboard";
+                            window.location.href = "/professor-dashboard?userId=" + userId;
                         else if (userType === "A")
-                            window.location.href = "/admin";
+                            window.location.href = "/admin?userId=" + userId;
                         else {
                             // Invalid user type
                             error.innerHTML = "Invalid user type.";
