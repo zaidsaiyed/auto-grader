@@ -83,7 +83,7 @@
                         // Redirect to the appropriate dashboard with user ID as a parameter
                         var userType = matchingUser.types;
                         if (userType === "S")
-                            window.location.href = "/student-dashboard?userId=" + userId;
+                            window.location.href = "/studentdashboard?userId=" + userId;
                         else if (userType === "P")
                             window.location.href = "/professor-dashboard?userId=" + userId;
                         else if (userType === "A")

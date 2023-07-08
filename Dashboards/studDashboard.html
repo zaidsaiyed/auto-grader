@@ -63,28 +63,12 @@
             background-color: #f2f2f2;
         }
     </style>
-     <script>
-        // Function to fetch enrolled courses for the student
+    <script>
+        // Function to fetch enrolled courses data from the server
         function fetchEnrolledCourses(studentId) {
             return fetch('/api/grade/student/' + studentId)
                 .then(response => response.json())
-                .then(grades => {
-                    // Extract course IDs from grades
-                    const courseIds = grades.map(grade => grade.course_id);
-
-                    // Fetch course details using course IDs
-                    return fetch('/api/course')
-                        .then(response => response.json())
-                        .then(courses => {
-                            // Filter courses for enrolled course IDs
-                            const enrolledCourses = courses.filter(course => courseIds.includes(course.course_id));
-
-                            return enrolledCourses;
-                        });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+                .then(data => data);
         }
 
         // Function to generate table rows for enrolled courses
@@ -109,7 +93,7 @@
                         row.appendChild(professorNameCell);
 
                         // Add click event listener to redirect to course page
-                        row.addEventListener('click', function() {
+                        row.addEventListener('click', function () {
                             window.location.href = '/course/' + course.course_id; // Replace with appropriate URL
                         });
 
