@@ -4,62 +4,74 @@
 <head>
     <title>Login Page</title>
     <style>
-      body {
-          font-family: Arial, sans-serif;
-          background-color: #f2f2f2;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-      .container {
-          width: 300px;
-          margin: 0 auto;
-          padding: 20px;
-          background-color: #fff;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      }
+        .container {
+            width: 400px;
+            padding: 40px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
 
-      h1 {
-          text-align: center;
-      }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
 
-      .form-group {
-          margin-bottom: 15px;
-      }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-      .form-group label {
-          display: block;
-          font-weight: bold;
-      }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555555;
+        }
 
-      .form-group input[type="text"],
-      .form-group input[type="password"] {
-          width: 100%;
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 3px;
-      }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+            font-size: 16px;
+            color: #555555;
+        }
 
-      .form-group input[type="submit"] {
-          width: 100%;
-          padding: 10px;
-          background-color: #4CAF50;
-          color: #fff;
-          border: none;
-          border-radius: 3px;
-          cursor: pointer;
-      }
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-      .form-group input[type="submit"]:hover {
-          background-color: #45a049;
-      }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
 
-      .error-message {
-          color: red;
-          margin-top: 5px;
-          text-align: center;
-      }
-  </style>
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
     <script>
         function login() {
             var username = document.getElementById("username").value;
@@ -119,7 +131,7 @@
                 <input type="password" id="password" required>
             </div>
             <div class="form-group">
-              <input type="submit" value="Login" onclick="login(); return false;">
+                <input type="submit" value="Login" onclick="login(); return false;">
             </div>
             <div id="error-message" class="error-message"></div>
         </form>

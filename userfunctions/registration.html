@@ -7,46 +7,55 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: #ffffff;
             border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
+            margin-bottom: 30px;
+            color: #333333;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             font-weight: bold;
+            margin-bottom: 5px;
+            color: #555555;
         }
 
         .form-group input[type="text"],
         .form-group input[type="password"] {
             width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            border: 1px solid #cccccc;
             border-radius: 3px;
+            font-size: 16px;
+            color: #555555;
         }
 
         .form-group input[type="submit"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #4CAF50;
-            color: #fff;
+            color: #ffffff;
             border: none;
             border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
         }
 
@@ -57,22 +66,24 @@
         .professor-link {
             text-align: center;
             margin-top: 10px;
+            font-size: 14px;
         }
 
         .professor-link a {
-            color: blue;
-            text-decoration: underline;
+            color: #3366cc;
+            text-decoration: none;
             cursor: pointer;
         }
 
         .popup {
             display: none;
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
         }
 
         .popup-content {
@@ -83,23 +94,50 @@
         }
 
         .popup-textbox {
-            width: 300px;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            max-width: 400px;
+            padding: 30px;
+            background-color: #ffffff;
             border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .popup-textbox h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .popup-textbox p {
+            margin-bottom: 20px;
+            color: #555555;
+        }
+
+        .popup-textbox button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .popup-textbox button:hover {
+            background-color: #45a049;
         }
 
         .error-message {
             color: red;
             margin-top: 5px;
+            font-size: 14px;
         }
     </style>
     <script>
         function openPopup() {
             var popup = document.getElementById("popup");
-            popup.style.display = "block";
+            popup.style.display = "flex";
         }
 
         function closePopup() {
@@ -174,10 +212,9 @@
     <div id="popup" class="popup">
         <div class="popup-content">
             <div class="popup-textbox">
-                Please contact your school admin via email for account creation.
-                <div style="text-align: center; margin-top: 20px;">
-                    <button onclick="closePopup()">Close</button>
-                </div>
+                <h2>Professor Account</h2>
+                <p>Please contact your school admin via email for account creation.</p>
+                <button onclick="closePopup()">Close</button>
             </div>
         </div>
     </div>
