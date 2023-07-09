@@ -5,7 +5,6 @@ const assignmentSchema = new Schema({
     assign_id: {
         type: String,
         required: true,
-        unique: true,
       },
       course_id: {
         type: String,

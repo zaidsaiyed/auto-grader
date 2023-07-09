@@ -58,4 +58,19 @@ module.exports = (app) => {
       res.status(400).json({ message: error.message });
     }
   });
+
+  //Delete an assignment
+  app.delete("/api/assignment/del/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const assignment = await Assignment.findOneAndDelete({ assign_id: id }).exec();
+      if (!assignment) {
+        res.status(404).json({ message: "Assignment not found" });       
+      }
+        res.json({ message: "Assignment deleted" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 };
