@@ -70,7 +70,7 @@ app.post('/uploadfile', upload.single('file'), (req, res) => {
 	res.send(lineCount.toString());
   });
 
-  // End of test code
+// End of test code
 
 // Get the default connection
 app.get("/", (req, res) => {
@@ -98,19 +98,19 @@ app.get("/createCourse", (req, res) => {
 });
 
 //Get Admin page
-app.get("/admin?userId=", (req, res) => {
+app.get("/admin", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/adminDashboard.html");
 });
 
 //Get Prof page
-app.get("/professor-dashboard?userId=", (req, res) => {
+app.get("/professordashboard", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/profDashboard.html");
 });
-
+  
 //Get Student page
-app.get("/studentdashboard?userId=", (req, res) => {
-	console.log("Student dashboard");
-	res.sendFile(__dirname + "/Dashboards/studDashboard.html");
+app.get("/studentdashboard", (req, res) => {
+	const username = req.query.username; // Retrieve the username from the query parameter
+	res.render(__dirname + "/Dashboards/studDashboard.html", { username: username }); // Pass the username to the template
 });
 
 // Get file Upload page

@@ -13,7 +13,7 @@ module.exports = (app) => {
         }
     });
 
-    // Get user by ID
+    // Get user by Student ID
     app.get("/api/user/:id", async (req, res) => {
         try {
             if(req.params.id){

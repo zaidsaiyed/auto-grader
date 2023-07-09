@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Student Dashboard</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    }
+
+    .container {
+    width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+    text-align: center;
+    }
+
+    .dashboard {
+    margin-top: 20px;
+    }
+
+    .dashboard p {
+    font-size: 18px;
+    margin-bottom: 15px;
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+
+    th,
+    td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    }
+
+    th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: left;
+    }
+
+    a {
+    text-decoration: none;
+    color: #45a049;
+    transition: color 0.3s;
+    }
+
+    a:hover {
+    color: #45a049;
+    }
+
+    .error-message {
+    color: red;
+    margin-top: 5px;
+    text-align: center;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Student Dashboard</h1>
+    <div class="dashboard">
+      <p>Welcome, <span id="username"></span>!</p>
+      <table id="courseTable">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Professor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Course rows will be dynamically added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+
+    document.getElementById('username').textContent = username;
+
+    fetch('/api/user')
+        .then(response => response.json())
+        .then(users => {
+        const matchingUser = users.find(user => user.username === username);
+
+        if (matchingUser && matchingUser.student_id) {
+            //const studentId = matchingUser.student_id;
+            const studentID = '01' ;
+            fetch(`/api/grade/student/${studentId}`)
+            .then(response => response.json())
+            .then(grades => {
+                const courseIds = grades.map(grade => grade.course_id);
+
+                fetch('/api/courses')
+                .then(response => response.json())
+                .then(courses => {
+                    const courseTable = document.getElementById('courseTable');
+
+                    courseIds.forEach(courseId => {
+                        const course = courses.find(course => course.course_id === courseId);
+                        const professorName = course.professor_name;
+
+                        const row = document.createElement('tr');
+                        const courseCell = document.createElement('td');
+                        const professorCell = document.createElement('td');
+                        const courseLink = document.createElement('a');
+
+                        courseLink.textContent = course.course_name;
+                        courseLink.href = `/course?courseId=${encodeURIComponent(courseId)}`;
+
+                        courseCell.appendChild(courseLink);
+                        professorCell.textContent = professorName;
+
+                        row.appendChild(courseCell);
+                        row.appendChild(professorCell);
+
+                        courseTable.appendChild(row);
+                    });
+                })
+                .catch(error => console.error(error));
+            })
+            .catch(error => console.error(error));
+        } else {
+            console.error('User not found or student ID missing');
+        }
+        })
+        .catch(error => console.error(error));
+    });
+    </script>
+</body>
+
+</html>
