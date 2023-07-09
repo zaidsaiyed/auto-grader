@@ -108,8 +108,9 @@ app.get("/professor-dashboard?userId=", (req, res) => {
 });
 
 //Get Student page
-app.get("/student-dashboard?userId=", (req, res) => {
-	res.sendFile(__dirname + "/Dashboards/studentDashboard.html");
+app.get("/studentdashboard?userId=", (req, res) => {
+	console.log("Student dashboard");
+	res.sendFile(__dirname + "/Dashboards/studDashboard.html");
 });
 
 // Get file Upload page
