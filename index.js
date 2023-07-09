@@ -77,6 +77,12 @@ app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/userDetails.html");
 });
 
+// Landing Page
+app.get("/landing", (req, res) => {
+	res.sendFile(__dirname + "/userfunctions/landing.html");
+  });
+  
+
 // Get registration page
 app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
