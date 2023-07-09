@@ -72,15 +72,14 @@ app.post('/uploadfile', upload.single('file'), (req, res) => {
 
 // End of test code
 
-// Get the default connection
+// Get the default connection or Landing Page
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + "/userDetails.html");
+	res.sendFile(__dirname + "/userfunctions/landing.html");
 });
 
-// Landing Page
-app.get("/landing", (req, res) => {
-	res.sendFile(__dirname + "/userfunctions/landing.html");
-  });
+app.get("/userDetailsTest", (req, res) => {
+	res.sendFile(__dirname + "/userDetails.html");
+});
 
 // Get registration page
 app.get("/registration", (req, res) => {
