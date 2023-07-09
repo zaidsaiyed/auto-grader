@@ -81,7 +81,6 @@ app.get("/", (req, res) => {
 app.get("/landing", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/landing.html");
   });
-  
 
 // Get registration page
 app.get("/registration", (req, res) => {
