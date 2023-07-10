@@ -183,7 +183,6 @@
     <div class="container">
         <h1>Registration</h1>
         <form id="registration-form" action="/api/user" method="POST" onsubmit="return validateForm()">
-            // redirect after registration
             
             <div class="form-group">
                 <label for="user_name">Username:</label>
@@ -192,6 +191,10 @@
             <div class="form-group">
                 <label for="student_id">Student ID:</label>
                 <input type="text" id="student_id" name="student_id" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
@@ -204,7 +207,7 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Register">
-                <input type="hidden" name="redirect" value="/login">
+                <input type="hidden" name="redirect" value="/registration-success">
 
             </div>
         </form>

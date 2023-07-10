@@ -86,6 +86,11 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
+// Get registration success page
+app.get("/registration-success", (req, res) => {
+	res.sendFile(__dirname + "/userfunctions/registrationsuccess.html");
+});
+
 // Get prof registration page
 app.get("/profRegistration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/profRegistration.html");
@@ -119,7 +124,7 @@ app.get("/studentdashboard", (req, res) => {
 
 // Get file Upload page
 app.get("/upload", (req, res) => {
-	res.sendFile(__dirname + "/Test and trials/tryPy.html");
+	res.sendFile(__dirname + "/Test_trials/tryPy.html");
 });
 
 
