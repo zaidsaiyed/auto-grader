@@ -122,13 +122,6 @@ app.get("/upload", (req, res) => {
 	res.sendFile(__dirname + "/Test and trials/tryPy.html");
 });
 
-
-	
-
-app.get("/api/redirect", (req, res) => {
-	res.sendFile(__dirname + "/redirect.html");
-});
-
 console.log("\n************************************************************");
 
 app.listen(2222, () => console.log("Server running on port 2222. Visit http://localhost:2222/"));
