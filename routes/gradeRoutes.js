@@ -58,12 +58,11 @@ module.exports = (app) => {
         }
     });
 
-     // Route to get all grades by student ID
-     app.get('/api/grade/student/:studentId', async (req, res) => {
-        const { studentId } = req.params;
+    app.get('/api/grade/student/:studentId', async (req, res) => {
+        const StudentID = req.params.studentId;
         try {
-            const grades = await Grade.find({ student_id: studentId });
-            if (grades) {
+            const grades = await Grade.find({ student_id: StudentID });
+            if (grades.length > 0) {
                 res.json(grades);
             } else {
                 res.status(404).json({ message: "Grades not found" });

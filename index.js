@@ -72,6 +72,7 @@ app.post('/uploadfile', upload.single('file'), (req, res) => {
 
 // End of test code
 
+
 // Get the default connection or Landing Page
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/landing.html");
@@ -86,7 +87,9 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
+
 // Get registration success page
+
 app.get("/registration-success", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registrationsuccess.html");
 });
@@ -118,8 +121,7 @@ app.get("/professordashboard", (req, res) => {
   
 //Get Student page
 app.get("/studentdashboard", (req, res) => {
-	const username = req.query.username; // Retrieve the username from the query parameter
-	res.render(__dirname + "/Dashboards/studDashboard.html", { username: username }); // Pass the username to the template
+	res.sendFile(__dirname + "/Dashboards/studDashboard.html");
 });
 
 // Get file Upload page

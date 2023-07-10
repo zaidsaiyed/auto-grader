@@ -134,52 +134,84 @@
             font-size: 14px;
         }
     </style>
-    <script>
-        function openPopup() {
-            var popup = document.getElementById("popup");
-            popup.style.display = "flex";
-        }
+   <script>
+    function openPopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "flex";
+    }
 
-        function closePopup() {
-            var popup = document.getElementById("popup");
-            popup.style.display = "none";
-        }
+    function closePopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "none";
+    }
 
-        function validateForm() {
-            var password = document.getElementById("password").value;
-            var confirm_password = document.getElementById("confirm_password").value;
+    function validateForm(event) {
+        event.preventDefault();
 
-            if (password !== confirm_password) {
-                var error = document.getElementById("error-message");
-                error.innerHTML = "Passwords do not match.";
-                return false;
-            }
+        var password = document.getElementById("password").value;
+        var confirm_password = document.getElementById("confirm_password").value;
 
-            var studentId = document.getElementById("student_id").value;
+        if (password !== confirm_password) {
             var error = document.getElementById("error-message");
-            error.innerHTML = "";
-
-            fetch("/api/user")
-                .then(response => response.json())
-                .then(users => {
-                    var duplicateId = users.some(user => user.student_id === studentId);
-                    if (duplicateId) {
-                        error.innerHTML = "Student ID is already registered.";
-                    } else {
-                        document.getElementById("registration-form").submit();
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                    error.innerHTML = "An error occurred. Please try again.";
-                });
-
+            error.innerHTML = "Passwords do not match.";
             return false;
         }
-    </script>
+
+        var studentId = document.getElementById("student_id").value;
+        var user_name = document.getElementById("user_name").value;
+        var error = document.getElementById("error-message");
+        error.innerHTML = "";
+
+        fetch("/api/user")
+            .then(response => response.json())
+            .then(users => {
+                var duplicateId = users.some(user => user.student_id === studentId);
+                if (duplicateId) {
+                    error.innerHTML = "Student ID is already registered.";
+                } else {
+                    fetch("/api/user", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                user_name: user_name,
+                                student_id: studentId ,
+                                password: password,
+                                name: '',
+                                types:'S'
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(course => {
+                                // Course created successfully
+                                // Perform any necessary actions or show success message
+                                console.log("Course created:", course);
+                                // Redirect to a success page if needed
+                                window.location.href = "/registration-success";
+                            })
+                            .catch(error => {
+                                // Error occurred while creating the course
+                                var error = document.getElementById("error-message");
+                                error.innerHTML = "An error occurred. Please try again.";
+                                console.log(error);
+                            }
+                            );
+                    
+                    }
+            })
+            .catch(error => {
+                console.log(error);
+                error.innerHTML = "An error occurred. Please try again.";
+            });
+
+        return false;
+    }
+</script>
 </head>
 
 <body>
+
     <div class="container">
         <h1>Registration</h1>
         <form id="registration-form" action="/api/user" method="POST" onsubmit="return validateForm()">
@@ -191,11 +223,7 @@
             <div class="form-group">
                 <label for="student_id">Student ID:</label>
                 <input type="text" id="student_id" name="student_id" required>
-            </div>
-            <div class="form-group">
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+          </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
@@ -214,17 +242,37 @@
         <div class="professor-link">
             Are you a professor? <a onclick="openPopup()">Click here</a>
         </div>
+        <div class="form-group">
+            <label for="student_id">Student ID:</label>
+            <input type="text" id="student_id" name="student_id" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+            <div id="error-message" class="error-message"></div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Register">
+        </div>
+    </form>
+    <div class="professor-link">
+        Are you a professor? <a onclick="openPopup()">Click here</a>
     </div>
+</div>
 
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <div class="popup-textbox">
-                <h2>Professor Account</h2>
-                <p>Please contact your school admin via email for account creation.</p>
-                <button onclick="closePopup()">Close</button>
-            </div>
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <div class="popup-textbox">
+            <h2>Professor Account</h2>
+            <p>Please contact your school admin via email for account creation.</p>
+            <button onclick="closePopup()">Close</button>
         </div>
     </div>
+</div>
 </body>
 
 </html>
