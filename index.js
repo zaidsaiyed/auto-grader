@@ -93,9 +93,43 @@ app.get("/profRegistration", (req, res) => {
 });
 
 // Get login page
-app.get("/login", (req, res) => {
-	res.sendFile(__dirname + "/userfunctions/login.html");
-});
+app.route("/login")
+	.get((req, res) => {
+		res.sendFile(__dirname + "/userfunctions/login.html");
+	})
+	.post((req, res) => {
+		console.log(req.body.username);
+
+		fetch("/api/user")
+		.then(response => response.json())
+		.then(users => {
+			var matchingUser = users.find(user => user.user_name === req.body.username && user.password === req.body.password);
+
+			if (matchingUser) {
+				// Redirect to the appropriate dashboard with user_name as a parameter
+				var userType = matchingUser.types;
+				if (userType === "S")
+					window.location.href = "/studentdashboard?username=" + encodeURIComponent(username);
+				else if (userType === "P")
+					window.location.href = "/professordashboard?username=" + encodeURIComponent(username);
+				else if (userType === "A")
+					window.location.href = "/admin";
+				else {
+					// Invalid user type
+					error.innerHTML = "Invalid user type.";
+				}
+			} else {
+				// Login failed, display error message
+				error.innerHTML = "Invalid username or password.";
+			}
+		})
+		.catch(error => {
+			// Error occurred during login
+			error.innerHTML = "An error occurred. Please try again.";
+			console.log(error);
+		});
+		//res.sendFile(__dirname + "/userfunctions/login.html?err=");
+	});
 
 // Get create course page
 app.get("/createCourse", (req, res) => {
