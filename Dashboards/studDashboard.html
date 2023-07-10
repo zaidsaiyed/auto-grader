@@ -101,10 +101,10 @@
 
         if (matchingUser && matchingUser.student_id) {
             const studentId = matchingUser.student_id
-            fetch('/api/grade')
+            fetch(`/api/grade/${studentId}`)
             .then(response => response.json())
             .then(grades => {
-                const courseIds = grades.map(grade => grade.course_id && matchingUser.student_id === student_id);
+                const courseIds = grades.map(grade => grade.course_id);
 
                 fetch('/api/course')
                 .then(response => response.json())
