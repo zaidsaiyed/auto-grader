@@ -72,9 +72,14 @@ app.post('/uploadfile', upload.single('file'), (req, res) => {
 
 // End of test code
 
-// Landing Page
+
+// Get the default connection or Landing Page
 app.get("/", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/landing.html");
+});
+
+app.get("/userDetailsTest", (req, res) => {
+	res.sendFile(__dirname + "/userDetails.html");
 });
 
 // Get registration page
@@ -82,7 +87,9 @@ app.get("/registration", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registration.html");
 });
 
-//Get Success page
+
+// Get registration success page
+
 app.get("/registration-success", (req, res) => {
 	res.sendFile(__dirname + "/userfunctions/registrationsuccess.html");
 });
@@ -119,7 +126,7 @@ app.get("/studentdashboard", (req, res) => {
 
 // Get file Upload page
 app.get("/upload", (req, res) => {
-	res.sendFile(__dirname + "/Test and trials/tryPy.html");
+	res.sendFile(__dirname + "/Test_trials/tryPy.html");
 });
 
 

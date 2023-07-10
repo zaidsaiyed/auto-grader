@@ -211,12 +211,36 @@
 </head>
 
 <body>
-<div class="container">
-    <h1>Registration</h1>
-    <form id="registration-form" onsubmit="return validateForm(event)">
-        <div class="form-group">
-            <label for="user_name">Username:</label>
-            <input type="text" id="user_name" name="user_name" required>
+
+    <div class="container">
+        <h1>Registration</h1>
+        <form id="registration-form" action="/api/user" method="POST" onsubmit="return validateForm()">
+            
+            <div class="form-group">
+                <label for="user_name">Username:</label>
+                <input type="text" id="user_name" name="user_name" required>
+            </div>
+            <div class="form-group">
+                <label for="student_id">Student ID:</label>
+                <input type="text" id="student_id" name="student_id" required>
+          </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <div id="error-message" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register">
+                <input type="hidden" name="redirect" value="/registration-success">
+
+            </div>
+        </form>
+        <div class="professor-link">
+            Are you a professor? <a onclick="openPopup()">Click here</a>
         </div>
         <div class="form-group">
             <label for="student_id">Student ID:</label>
