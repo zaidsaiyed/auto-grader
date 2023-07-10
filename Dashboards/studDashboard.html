@@ -100,21 +100,20 @@
         const matchingUser = users.find(user => user.username === username);
 
         if (matchingUser && matchingUser.student_id) {
-            //const studentId = matchingUser.student_id;
-            const studentID = '01' ;
-            fetch(`/api/grade/student/${studentId}`)
+            const studentId = matchingUser.student_id
+            fetch('/api/grade')
             .then(response => response.json())
             .then(grades => {
-                const courseIds = grades.map(grade => grade.course_id);
+                const courseIds = grades.map(grade => grade.course_id && matchingUser.student_id === student_id);
 
-                fetch('/api/courses')
+                fetch('/api/course')
                 .then(response => response.json())
                 .then(courses => {
                     const courseTable = document.getElementById('courseTable');
 
                     courseIds.forEach(courseId => {
                         const course = courses.find(course => course.course_id === courseId);
-                        const professorName = course.professor_name;
+                        const professorName = course.prof;
 
                         const row = document.createElement('tr');
                         const courseCell = document.createElement('td');

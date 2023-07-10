@@ -29,9 +29,6 @@ const assignmentSchema = new Schema({
       total_tests: {
         type: Number,
       },
-      results: {
-        type: Number,
-      },
     });
     
 assignmentSchema.index({ course_id: 1, assign_id: 1 }, { unique: true });
