@@ -95,52 +95,60 @@
     document.getElementById('username').textContent = username;
 
     fetch('/api/user')
-        .then(response => response.json())
-        .then(users => {
+      .then(response => response.json())
+      .then(users => {
         const matchingUser = users.find(user => user.username === username);
 
         if (matchingUser && matchingUser.student_id) {
-            const studentId = matchingUser.student_id
-            fetch(`/api/grade/${studentId}`)
+          const studentId = matchingUser.student_id;
+          con
+          fetch(`/api/grade/${studentId}`)
             .then(response => response.json())
             .then(grades => {
-                const courseIds = grades.map(grade => grade.course_id);
+              const courseIds = [];
+              for (let i = 0; i < grades.length; i++) {
+                const grade = grades[i];
+                courseIds.push(grade.course_id);
+              }
+              console.log(courseIds)
 
-                fetch('/api/course')
+              fetch('/api/course')
                 .then(response => response.json())
                 .then(courses => {
-                    const courseTable = document.getElementById('courseTable');
+                  const courseTable = document.getElementById('courseTable');
 
-                    courseIds.forEach(courseId => {
-                        const course = courses.find(course => course.course_id === courseId);
-                        const professorName = course.prof;
+                  for (let i = 0; i < courseIds.length; i++) {
+                    const courseId = courseIds[i];
+                    const course = courses.find(course => course.course_id === courseId);
+                    const professorName = course.prof;
 
-                        const row = document.createElement('tr');
-                        const courseCell = document.createElement('td');
-                        const professorCell = document.createElement('td');
-                        const courseLink = document.createElement('a');
+                    const row = document.createElement('tr');
+                    const courseCell = document.createElement('td');
+                    const professorCell = document.createElement('td');
+                    const courseLink = document.createElement('a');
 
-                        courseLink.textContent = course.course_name;
-                        courseLink.href = `/course?courseId=${encodeURIComponent(courseId)}`;
+                    courseLink.textContent = course.course_name;
+                    courseLink.href = `/course?courseId=${encodeURIComponent(courseId)}`;
 
-                        courseCell.appendChild(courseLink);
-                        professorCell.textContent = professorName;
+                    courseCell.appendChild(courseLink);
+                    professorCell.textContent = professorName;
 
-                        row.appendChild(courseCell);
-                        row.appendChild(professorCell);
+                    row.appendChild(courseCell);
+                    row.appendChild(professorCell);
 
-                        courseTable.appendChild(row);
-                    });
+                    courseTable.appendChild(row);
+                  }
                 })
                 .catch(error => console.error(error));
             })
             .catch(error => console.error(error));
         } else {
-            console.error('User not found or student ID missing');
+          console.error('User not found or student ID missing');
         }
-        })
-        .catch(error => console.error(error));
-    });
+      })
+      .catch(error => console.error(error));
+  });
+
     </script>
 </body>
 
