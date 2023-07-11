@@ -36,13 +36,7 @@ module.exports = (app) => {
             password
         } = req.body;
 
-        const user = new User({
-            user_name,
-            student_id,
-            password,
-            name,
-            types
-        }).save();
+        const user = new User(req.body).save();
 
         res.send(user);
 

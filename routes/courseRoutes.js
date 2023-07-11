@@ -34,14 +34,9 @@ const Grade = mongoose.model("grade");
 
     // Create a new course
     app.post("/api/course", async (req, res) => {
-      const { course_id, course_name, prof } = req.body;
-
+      
       try {
-        const course = new Course({
-          course_id,
-          course_name,
-          prof
-        }).save();
+        const course = new Course(req.body).save();
         res.send(course);
       } catch (error) {
         res.status(400).json({ message: error.message });

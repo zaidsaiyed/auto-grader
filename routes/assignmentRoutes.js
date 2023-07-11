@@ -31,26 +31,9 @@ module.exports = (app) => {
 
   // Create a new assignment
   app.post("/api/assignment", async (req, res) => {
-    const {
-      assign_id,
-      course_id,
-      description,
-      files_location,
-      required_files,
-      tests,
-      results,
-    } = req.body;
-
+  
     try {
-      const assignment = new Assignment({
-        assign_id,
-        course_id,
-        description,
-        files_location,
-        required_files,
-        tests,
-        results,
-      });
+      const assignment = new Assignment(req.body);
 
       await assignment.save();
       res.send(assignment);
