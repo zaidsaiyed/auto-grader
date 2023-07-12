@@ -60,14 +60,10 @@ module.exports = (app) => {
 
     app.get('/api/grade/:studentId', async (req, res) => {
         const studentID = req.params.studentId;
-        console.log(studentID);
-
         try {
             const grades = await Grade.find({ student_id: studentID });
             if (grades.length > 0) {
-                console.log(grades);
                 res.json(grades);
-                console.log('Done');
             } else {
                 res.status(404).json({ message: "Grades not found" });
             }

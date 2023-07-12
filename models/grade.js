@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const gradeSchema = new Schema({
+  Name:{
+    type: String
+  },
   student_id: {
     type: String,
     required: true
@@ -30,11 +33,9 @@ const gradeSchema = new Schema({
   },
   total_tests: {
     type: Number,
-    required: true
   },
   earned: {
     type: Number,
-    required: true,
     validate: {
       validator: function(value) {
         return value <= this.total_tests;
@@ -42,17 +43,9 @@ const gradeSchema = new Schema({
       message: 'Earned marks cannot exceed total tests marks'
     }
   },
-  who_checked: {
+  comments:{
     type: String,
-    required: true,
-    validate: {
-      validator: async function(value) {
-        const user = await mongoose.model('user').findOne({ user_name: value, types: { $in: ['P'] } });
-        return user !== null;
-      },
-      message: 'Who checked must be a Professor (P)'
-    }
-  }
+  },
 });
 
 
