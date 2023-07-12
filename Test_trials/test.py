@@ -26,12 +26,7 @@ class TestSum(unittest.TestCase):
     def test_minimum_integer_values_sum(self):
         assert sum(-2147483648, -2147483648) == -4294967296
     
-    
 
-    
-# run the tests
-if __name__ == '__main__':
-    unittest.main()
 
 class CustomTestRunner(unittest.TextTestRunner):
     def __init__(self, *args, **kwargs):
