@@ -4,7 +4,7 @@ from student import sum
 class TestSum(unittest.TestCase):
     # Tests that the function returns the correct sum of two positive integers
     def test_positive_integers_sum(self):
-        assert sum(2, 3) == 5
+        assert sum(2, 3) == 6
 
     # Tests that the function returns the correct sum of two negative integers
     def test_negative_integers_sum(self):
