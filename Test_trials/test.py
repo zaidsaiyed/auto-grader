@@ -71,4 +71,6 @@ test_suite = unittest.TestLoader().loadTestsFromTestCase(TestSum)
 
 # Create a custom test runner and run the tests
 custom_runner = CustomTestRunner()
-print(custom_runner.run(test_suite))
+
+test_results = custom_runner.run(test_suite)
+print(test_results)
