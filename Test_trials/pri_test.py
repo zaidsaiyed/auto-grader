@@ -1,24 +1,32 @@
 import unittest
 from student import sum
 
-class TestSum(unittest.TestCase):
-    def test_sum_2_plus_2(self):
-        a, b = 2, 2
-        expected_result = 4
-        result = sum(a, b)
-        self.assertEqual(result, expected_result)
+class Unit_Tests(unittest.TestCase):
+    # Tests that the function returns the correct sum of two positive integers
+    def test_positive_integers_sum(self):
+        assert sum(2, 3) == 6
 
-    def test_sum_99_plus_1(self):
-        a, b = 99, 1
-        expected_result = 100
-        result = sum(a, b)
-        self.assertEqual(result, expected_result)
+    # Tests that the function returns the correct sum of two negative integers
+    def test_negative_integers_sum(self):
+        assert sum(-2, -3) == -5
 
-    def test_sum_22_33_11_55_44(self):
-        values = [22, 33, 11, 55, 44]
-        expected_result = 165
-        result = sum(*values)
-        self.assertEqual(result, expected_result)
+    # Tests that the function returns the correct sum of one positive and one negative integer
+    def test_positive_and_negative_integers_sum(self):
+        assert sum(2, -3) == -1
+
+    # Tests that the function returns the correct sum of zero and a positive integer
+    def test_zero_and_positive_integer_sum(self):
+        assert sum(0, 5) == 5
+
+    # Tests that the function returns the correct sum of the maximum possible integer values
+    def test_maximum_integer_values_sum(self):
+        assert sum(2147483647, 2147483647) == 4294967294
+        
+    # Tests that the function returns the correct sum of the minimum possible integer values
+    def test_minimum_integer_values_sum(self):
+        assert sum(-2147483648, -2147483648) == -4294967296
+    
+
 
 # Custom test result printer class
 class TestResultPrinter(unittest.TextTestResult):
@@ -42,18 +50,25 @@ class TestResultPrinter(unittest.TextTestResult):
         self.test_results.append((test_name, 'ERROR'))
 
     def print_results(self):
-        print("Testing: List_array Lab")
+        print("""\n
+--------------------------------
+Results:
+--------------------------------\n
+""")
         for test_name, result in self.test_results:
-            print(f"Test: {test_name}")
+            print(f"Test: {test_name.split('(')[0]}")
             print(result)
             print()
+        print(f"Final Marks:{self.testsRun - (len(self.failures) + len(self.errors))}/{self.testsRun}")
 
 class CustomTestRunner(unittest.TextTestRunner):
     def _makeResult(self):
         return TestResultPrinter(self.stream, self.descriptions, self.verbosity)
 
-if __name__ == '__main__':
-    test_suite = unittest.TestLoader().loadTestsFromTestCase(TestSum)
+def main():
+    test_suite = unittest.TestLoader().loadTestsFromTestCase(Unit_Tests)
     runner = CustomTestRunner()
     result = runner.run(test_suite)
     result.print_results()
+
+main()
