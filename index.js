@@ -153,7 +153,7 @@ app.get("/studentdashboard", (req, res) => {
 
 // Get file Upload page
 app.get("/upload", (req, res) => {
-	res.sendFile(__dirname + "/Test and trials/tryPy.html");
+	res.sendFile(__dirname + "/Test_trials/tryPy.html");
 });
 
 console.log("\n************************************************************");
