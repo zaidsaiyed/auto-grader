@@ -12,9 +12,6 @@ const Grade = mongoose.model("grade");
       try {
         const courses = await Course.find({}).exec();
         res.json(courses);
-
-        const courseName = req.body.course_name;
-        fs.mkdirSync(`./${courseName}`);
       } catch (error) {
         res.status(500).json({ message: error.message });
       }
@@ -42,6 +39,9 @@ const Grade = mongoose.model("grade");
       try {
         const course = new Course(req.body).save();
         res.send(course);
+
+        const courseName = req.body.course_name;
+        fs.mkdirSync(`./${courseName}`);
       } catch (error) {
         res.status(400).json({ message: error.message });
       }
