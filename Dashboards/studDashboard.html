@@ -106,7 +106,7 @@
             const courseLink = document.createElement('a');
   
             courseLink.textContent = course.course_name;
-            courseLink.href = `/course?courseId=${encodeURIComponent(course.course_id)}`;
+            courseLink.href = `/course?courseId=${course.course_id}`;
   
             courseCell.appendChild(courseLink);
             professorCell.textContent = course.prof;
