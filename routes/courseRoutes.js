@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
-const util = require("util");
-const rimraf = util.promisify(require("rimraf"));
 const Course = mongoose.model("course");
 const Assignment = mongoose.model("assignment");
 const Grade = mongoose.model("grade");
@@ -68,7 +66,8 @@ const Grade = mongoose.model("grade");
 
         // Remove the course folder
         const courseName = course.course_name;
-        await rimraf(`./courses/${courseName}`);
+        fs.rmdirSync(`./courses/${courseName}`, { recursive: true });
+  
   
         res.json({ message: "Course, assignments, and grades deleted successfully" });
       } catch (error) {
