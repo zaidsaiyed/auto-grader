@@ -41,7 +41,7 @@ const Grade = mongoose.model("grade");
         res.send(course);
 
         const courseName = req.body.course_name;
-        fs.mkdirSync(`./${courseName}`);
+        fs.mkdirSync(`./courses/${courseName}`);
       } catch (error) {
         res.status(400).json({ message: error.message });
       }
@@ -63,6 +63,11 @@ const Grade = mongoose.model("grade");
   
         // Delete the grades related to the course
         await Grade.deleteMany({ course_id: courseId }).exec();
+
+        // Remove the course folder
+        const courseName = course.course_name;
+        fs.rmdirSync(`./courses/${courseName}`, { recursive: true });
+  
   
         res.json({ message: "Course, assignments, and grades deleted successfully" });
       } catch (error) {

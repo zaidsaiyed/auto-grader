@@ -151,6 +151,16 @@ app.get("/studentdashboard", (req, res) => {
 	res.sendFile(__dirname + "/Dashboards/studDashboard.html");
 });
 
+//Get course page
+app.get("/course", (req, res) => {
+	res.sendFile(__dirname + "/coursefunctions/coursepage.html");
+});
+
+//Get Prof course page
+app.get("/profcourse", (req, res) => {
+	res.sendFile(__dirname + "/coursefunctions/profcoursepage.html");
+});
+
 // Get file Upload page
 app.get("/upload", (req, res) => {
 	res.sendFile(__dirname + "/Test_trials/tryPy.html");
