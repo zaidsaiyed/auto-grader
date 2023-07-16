@@ -41,7 +41,7 @@ const Grade = mongoose.model("grade");
         res.send(course);
 
         const courseName = req.body.course_name;
-        fs.mkdirSync(`./${courseName}`);
+        fs.mkdirSync(`./courses/${courseName}`);
       } catch (error) {
         res.status(400).json({ message: error.message });
       }
