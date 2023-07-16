@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
+const util = require("util");
+const rimraf = util.promisify(require("rimraf"));
 const Course = mongoose.model("course");
 const Assignment = mongoose.model("assignment");
 const Grade = mongoose.model("grade");
@@ -63,6 +65,10 @@ const Grade = mongoose.model("grade");
   
         // Delete the grades related to the course
         await Grade.deleteMany({ course_id: courseId }).exec();
+
+        // Remove the course folder
+        const courseName = course.course_name;
+        await rimraf(`./courses/${courseName}`);
   
         res.json({ message: "Course, assignments, and grades deleted successfully" });
       } catch (error) {
