@@ -2,168 +2,134 @@
 <html>
 
 <head>
-    <title>Professor Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-        }
+  <title>Professor Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
 
-        .prof-dashboard {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    h1 {
+      text-align: center;
+    }
 
-        .course-section,
-        .professor-section {
-            margin-bottom: 40px;
-        }
+    .dashboard {
+      margin-top: 20px;
+    }
 
-        h2 {
-            margin-bottom: 10px;
-        }
+    .dashboard p {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
 
-        button {
-            display: block;
-            margin-bottom: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+      text-align: left;
+    }
 
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    a {
+      text-decoration: none;
+      color: #45a049;
+      transition: color 0.3s;
+    }
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-    <script>
-        // Function to generate table rows for courses
-        function generateCourseTableRows() {
-            fetch('/api/course')
-                .then(response => response.json())
-                .then(courses => {
-                    var tbody = document.getElementById('course-table-body');
+    a:hover {
+      color: #45a049;
+    }
 
-                    // Clear existing rows
-                    tbody.innerHTML = '';
-
-                    // Generate table rows
-                    courses.forEach(function (course) {
-                        var row = document.createElement('tr');
-                        var courseIdCell = document.createElement('td');
-                        var professorNameCell = document.createElement('td');
-                        courseIdCell.textContent = course.course_id;
-                        professorNameCell.textContent = course.prof;
-
-                        row.appendChild(courseIdCell);
-                        row.appendChild(professorNameCell);
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-
-        // Function to generate table rows for professors
-        function generateProfessorTableRows() {
-            fetch('/api/user')
-                .then(response => response.json())
-                .then(users => {
-                    var professors = users.filter(user => user.types === 'P');
-                    var tbody = document.getElementById('professor-table-body');
-
-                    // Clear existing rows
-                    tbody.innerHTML = '';
-
-                    // Generate table rows
-                    professors.forEach(function (professor) {
-                        var row = document.createElement('tr');
-                        var userNameCell = document.createElement('td');
-                        var nameCell = document.createElement('td');
-
-                        userNameCell.textContent = professor.user_name;
-                        nameCell.textContent = professor.name;
-
-                        row.appendChild(userNameCell);
-                        row.appendChild(nameCell);
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-
-        // Run the functions when the page is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            generateCourseTableRows();
-            generateProfessorTableRows();
-        });
-
-    </script>
+    .error-message {
+      color: red;
+      margin-top: 5px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="prof-dashboard">
-        <h1>Welcome to the Professor Dashboard</h1>
-
-        <div class="course-section">
-            <h2>Courses</h2>
-            <button onclick="window.location.href='/createCourse'">Add Course</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Course ID</th>
-                        <th>Professor Name</th>
-                    </tr>
-                </thead>
-                <tbody id="course-table-body"></tbody>
-            </table>
-        </div>
-
-        <div class="professor-section">
-            <h2>Professors</h2>
-            <button onclick="window.location.href='/profRegistration'">Add Professor</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody id="professor-table-body"></tbody>
-            </table>
-        </div>
+  <div class="container">
+    <h1>Professor Dashboard</h1>
+    <div class="dashboard">
+      <p>Welcome, <span id="professorName"></span>!</p>
+      <table id="courseTable">
+        <thead>
+          <tr>
+            <th>Course List</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Course rows will be dynamically added here -->
+        </tbody>
+      </table>
     </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get('username');
+
+      
+
+      fetch('/api/user')
+        .then(response => response.json())
+        .then(users => {
+          const user = users.find(user => user.user_name === username);
+          if (user) {
+            const professorName = user.name;
+            document.getElementById('professorName').textContent = professorName;
+
+            fetch('/api/course')
+              .then(response => response.json())
+              .then(courses => {
+                const professorCourses = courses.filter(course => course.prof === professorName);
+                const courseTable = document.getElementById('courseTable');
+
+                professorCourses.forEach(course => {
+                  const row = document.createElement('tr');
+                  const courseCell = document.createElement('td');
+                  const courseLink = document.createElement('a');
+
+                  courseLink.textContent = course.course_name;
+                  courseLink.href = `/course?profcourseId=${course.course_id}`;
+
+                  courseCell.appendChild(courseLink);
+                  row.appendChild(courseCell);
+
+                  courseTable.appendChild(row);
+                });
+              })
+              .catch(error => console.error(error));
+          } else {
+            console.error(`User with username "${username}" not found.`);
+          }
+        })
+        .catch(error => console.error(error));
+    });
+
+  </script>
+
 </body>
 
 </html>
