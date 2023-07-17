@@ -42,6 +42,9 @@ const Grade = mongoose.model("grade");
 
         const courseId = req.body.course_id;
         fs.mkdirSync(`./courses/${courseId}`);
+        const courseFolderPath = `./courses/${courseId}`;
+        const emptyFilePath = `${courseFolderPath}/empty-file.txt`;
+        fs.writeFileSync(emptyFilePath, "");
       } catch (error) {
         res.status(400).json({ message: error.message });
       }
