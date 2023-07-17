@@ -58,6 +58,7 @@ module.exports = (app) => {
         }
     });
 
+    // Route to get all grades of a specific student
     app.get('/api/grade/:studentId', async (req, res) => {
         const studentID = req.params.studentId;
         try {

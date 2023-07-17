@@ -72,7 +72,7 @@
   <div class="container">
     <h1>Student Dashboard</h1>
     <div class="dashboard">
-      <p>Welcome, <span id="username"></span>!</p>
+      <p>Welcome, <span id="username"></span> !!</p>
       <table id="courseTable">
         <thead>
           <tr>
@@ -91,34 +91,56 @@
     window.addEventListener('DOMContentLoaded', (event) => {
       const urlParams = new URLSearchParams(window.location.search);
       const username = urlParams.get('username');
-  
+
       document.getElementById('username').textContent = username;
-  
-      fetch('/api/course')
+
+      fetch('/api/user')
         .then(response => response.json())
-        .then(courses => {
-          const courseTable = document.getElementById('courseTable');
-  
-          courses.forEach(course => {
-            const row = document.createElement('tr');
-            const courseCell = document.createElement('td');
-            const professorCell = document.createElement('td');
-            const courseLink = document.createElement('a');
-  
-            courseLink.textContent = course.course_name;
-            courseLink.href = `/course?courseId=${course.course_id}`;
-  
-            courseCell.appendChild(courseLink);
-            professorCell.textContent = course.prof;
-  
-            row.appendChild(courseCell);
-            row.appendChild(professorCell);
-  
-            courseTable.appendChild(row);
-          });
+        .then(users => {
+          const user = users.find(user => user.user_name === username);
+          if (user) {
+            const studentId = user.student_id;
+
+            fetch(`/api/grade/${studentId}`)
+              .then(response => response.json())
+              .then(grades => {
+                const courseIds = [...new Set(grades.map(grade => grade.course_id))];
+
+                fetch('/api/course')
+                  .then(response => response.json())
+                  .then(courses => {
+                    const courseTable = document.getElementById('courseTable');
+
+                    courses.forEach(course => {
+                      if (courseIds.includes(course.course_id)) {
+                        const row = document.createElement('tr');
+                        const courseCell = document.createElement('td');
+                        const professorCell = document.createElement('td');
+                        const courseLink = document.createElement('a');
+
+                        courseLink.textContent = course.course_name;
+                        courseLink.href = `/course?courseId=${course.course_id}`;
+
+                        courseCell.appendChild(courseLink);
+                        professorCell.textContent = course.prof;
+
+                        row.appendChild(courseCell);
+                        row.appendChild(professorCell);
+
+                        courseTable.appendChild(row);
+                      }
+                    });
+                  })
+                  .catch(error => console.error(error));
+              })
+              .catch(error => console.error(error));
+          } else {
+            console.error(`User with username "${username}" not found.`);
+          }
         })
         .catch(error => console.error(error));
     });
+
   </script>
   
 </body>

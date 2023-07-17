@@ -74,11 +74,10 @@
       <p>Professor: <span id="professorName"></span></p>
     </div>
     <div class="assignments">
-      <h2>Assignments</h2>
       <table id="assignmentsTable">
         <thead>
           <tr>
-            <th>Assignment</th>
+            <th><h2>Assignment</h2></th>
           </tr>
         </thead>
         <tbody id="assignmentsBody"></tbody>
@@ -99,28 +98,26 @@
             document.getElementById('courseName').textContent = course.course_name;
             document.getElementById('professorName').textContent = course.prof;
 
-            fetch(`/api/assignment`)
+            fetch(`/api/assignments/course/${courseId}`)
               .then(response => response.json())
               .then(assignments => {
                 const assignmentsTable = document.getElementById('assignmentsTable');
                 const assignmentsBody = document.getElementById('assignmentsBody');
-
+                console.log(assignments);
                 assignments.forEach(assignment => {
-                  if (assignment.course_id === course.course_id) {
-                    const row = document.createElement('tr');
-                    const assignmentCell = document.createElement('td');
-                    const assignmentLink = document.createElement('a');
+                  const row = document.createElement('tr');
+                  const assignmentCell = document.createElement('td');
+                  const assignmentLink = document.createElement('a');
 
-                    assignmentLink.textContent = assignment.name;
-                    assignmentLink.href = `/assignment?assignmentId=${assignment.id}`;
-                    assignmentLink.classList.add('assignment-link');
+                  assignmentLink.textContent = assignment.assign_id;
+                  assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
+                  assignmentLink.classList.add('assignment-link');
 
-                    assignmentCell.appendChild(assignmentLink);
+                  assignmentCell.appendChild(assignmentLink);
 
-                    row.appendChild(assignmentCell);
+                  row.appendChild(assignmentCell);
 
-                    assignmentsBody.appendChild(row);
-                  }
+                  assignmentsBody.appendChild(row);
                 });
               })
               .catch(error => console.error(error));

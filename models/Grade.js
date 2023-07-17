@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const gradeSchema = new Schema({
-  Name:{
+  name:{
     type: String
   },
   student_id: {
@@ -17,8 +17,7 @@ const gradeSchema = new Schema({
         return user !== null;
       },
       message: 'Course does not exist.'
-    },
-    required: true
+    }
   },
   assign_id: {
     type: String,
@@ -28,8 +27,7 @@ const gradeSchema = new Schema({
         return user !== null;
       },
       message: 'Assignment does not exist.'
-    },
-    required: true
+    }
   },
   total_tests: {
     type: Number,
