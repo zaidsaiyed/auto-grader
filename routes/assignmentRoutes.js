@@ -29,6 +29,18 @@ module.exports = (app) => {
     }
   });
 
+  // Get assignments by course_id
+  app.get("/api/assignments/course/:courseId", async (req, res) => {
+    const { courseId } = req.params;
+
+    try {
+      const assignments = await Assignment.find({ course_id: courseId }).exec();
+      res.json(assignments);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Create a new assignment
   app.post("/api/assignment", async (req, res) => {
   
@@ -43,11 +55,11 @@ module.exports = (app) => {
   });
 
   //Delete an assignment
-  app.delete("/api/assignment/del/:id", async (req, res) => {
-    const { id } = req.params;
+  app.delete("/api/assignment/del/:courseId/:assignID", async (req, res) => {
+    const { courseId, assignID} = req.params;
 
     try {
-      const assignment = await Assignment.findOneAndDelete({ assign_id: id }).exec();
+      const assignment = await Assignment.findOneAndDelete({course_id: courseId, assign_id: assignID });
       if (!assignment) {
         res.status(404).json({ message: "Assignment not found" });       
       }
