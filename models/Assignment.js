@@ -26,7 +26,7 @@ const assignmentSchema = new Schema({
     type: String,
   },
   required_files: {
-    type: String,
+    type: [String],
   },
   total_tests: {
     type: Number,
