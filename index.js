@@ -169,6 +169,11 @@ app.get("/upload", (req, res) => {
   res.sendFile(__dirname + "/Test_trials/tryPy.html");
 });
 
+// Test test test
+app.get("/test", (req, res) => {
+  res.sendFile(__dirname + "/assignfunctions/studentAssign.html");
+});
+
 console.log("\n************************************************************");
 
 app.listen(2222, () =>

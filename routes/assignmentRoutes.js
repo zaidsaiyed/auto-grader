@@ -1,5 +1,24 @@
 const mongoose = require("mongoose");
 const Assignment = mongoose.model("assignment");
+const fs = require("fs");
+const multer = require("multer");
+
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const FolderPath = `./softcheck_uploads`
+    if (!fs.existsSync(FolderPath)) {
+      fs.mkdirSync(FolderPath);
+    }
+    cb(null, FolderPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+// Create multer upload instance
+const upload = multer({ storage });
 
 module.exports = (app) => {
   // Get all assignments
@@ -70,4 +89,37 @@ module.exports = (app) => {
       res.status(500).json({ message: error.message });
     }
   });
+
+
+
+  app.post("/api/assgn/upload", upload.single("file"), (req, res) => {
+    if (!req.file) {
+      res.status(400).json({ message: "No file uploaded" });
+      return;
+    }
+    
+    // Define the path to the Python script
+    const pythonScriptPath = 'softcheck_uploads/pri_test.py';
+  
+    // Execute the Python script as a child process
+    const { exec } = require('child_process');
+    exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing Python script: ${error}`);
+        res.status(500).json({ message: "Error executing Python script" });
+        return;
+      }
+  
+      // Process the output from the Python script
+      //console.log(`Python script output: ${stdout}`);
+      const result = stdout;
+      res.json({ success: true, result: result });
+    });
+
+    // delete uploaded file after processing
+    //fs.unlinkSync(req.file.path);
+
+
+  });
+  
 };
