@@ -1,175 +1,175 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Create Course</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
 
-        .container {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 {
-            text-align: center;
-        }
+      h1 {
+        text-align: center;
+      }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+      .form-group {
+        margin-bottom: 15px;
+      }
 
-        .form-group label {
-            display: block;
-            font-weight: bold;
-        }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+      }
 
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
+      .form-group input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
 
-        .form-group select {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
+      .form-group select {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
 
-        .form-group input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
+      .form-group input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
 
-        .form-group input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+      .form-group input[type="submit"]:hover {
+        background-color: #45a049;
+      }
 
-        .error-message {
-            color: red;
-            margin-top: 5px;
-        }
+      .error-message {
+        color: red;
+        margin-top: 5px;
+      }
     </style>
     <script>
-        function populateProfessors() {
-            var selectElement = document.getElementById("prof");
-            fetch("/api/user")
-                .then(response => response.json())
-                .then(users => {
-                    // Filter users with type 'P' (Professor)
-                    var professors = users.filter(user => user.types === 'P');
-                    professors.forEach(professor => {
-                        var option = document.createElement("option");
-                        option.value = professor.name;
-                        option.text = professor.name;
-                        selectElement.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+      function populateProfessors() {
+        var selectElement = document.getElementById("prof");
+        fetch("/api/user")
+          .then((response) => response.json())
+          .then((users) => {
+            // Filter users with type 'P' (Professor)
+            var professors = users.filter((user) => user.types === "P");
+            professors.forEach((professor) => {
+              var option = document.createElement("option");
+              option.value = professor.name;
+              option.text = professor.name;
+              selectElement.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      function validateForm() {
+        var course_id = document.getElementById("course_id").value;
+        var course_name = document.getElementById("course_name").value;
+        var prof = document.getElementById("prof").value;
+
+        if (!course_id || !course_name || !prof) {
+          var error = document.getElementById("error-message");
+          error.innerHTML = "Please fill in all fields.";
+          return false;
         }
 
-        function validateForm() {
-            var course_id = document.getElementById("course_id").value;
-            var course_name = document.getElementById("course_name").value;
-            var prof = document.getElementById("prof").value;
-    
-            if (!course_id || !course_name || !prof) {
-                var error = document.getElementById("error-message");
-                error.innerHTML = "Please fill in all fields.";
-                return false;
+        // Fetch all course IDs
+        fetch("/api/course")
+          .then((response) => response.json())
+          .then((courses) => {
+            // Check if course ID already exists
+            var duplicateCourse = courses.some(
+              (course) => course.course_id === course_id
+            );
+            if (duplicateCourse) {
+              var error = document.getElementById("error-message");
+              error.innerHTML = "Course already exists.";
+            } else {
+              // Make a POST request to create the course
+              fetch("/api/course", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  course_id: course_id,
+                  course_name: course_name,
+                  prof: prof,
+                }),
+              })
+                .then((response) => response.json())
+                .then((course) => {
+                  // Course created successfully
+                  // Perform any necessary actions or show success message
+                  console.log("Course created:", course);
+                  // Redirect to a success page if needed
+                  window.location.href = "/admin";
+                })
+                .catch((error) => {
+                  // Error occurred while creating the course
+                  var error = document.getElementById("error-message");
+                  error.innerHTML = "An error occurred. Please try again.";
+                  console.log(error);
+                });
             }
-    
-            // Fetch all course IDs
-            fetch("/api/course")
-                .then(response => response.json())
-                .then(courses => {
-                    // Check if course ID already exists
-                    var duplicateCourse = courses.some(course => course.course_id === course_id);
-                    if (duplicateCourse) {
-                        var error = document.getElementById("error-message");
-                        error.innerHTML = "Course already exists.";
-                    } else {
-                        // Make a POST request to create the course
-                        fetch("/api/course", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                course_id: course_id,
-                                course_name: course_name,
-                                prof: prof
-                            })
-                        })
-                            .then(response => response.json())
-                            .then(course => {
-                                // Course created successfully
-                                // Perform any necessary actions or show success message
-                                console.log("Course created:", course);
-                                // Redirect to a success page if needed
-                                window.location.href = "/admin";
-                            })
-                            .catch(error => {
-                                // Error occurred while creating the course
-                                var error = document.getElementById("error-message");
-                                error.innerHTML = "An error occurred. Please try again.";
-                                console.log(error);
-                            });
-                    }
-                })
-                .catch(error => {
-                    // Error occurred while fetching courses
-                    var error = document.getElementById("error-message");
-                    error.innerHTML = "An error occurred. Please try again.";
-                    console.log(error);
-                });
-    
-            return false;
-        }
+          })
+          .catch((error) => {
+            // Error occurred while fetching courses
+            var error = document.getElementById("error-message");
+            error.innerHTML = "An error occurred. Please try again.";
+            console.log(error);
+          });
+
+        return false;
+      }
     </script>
-</head>
+  </head>
 
-<body onload="populateProfessors()">
+  <body onload="populateProfessors()">
     <div class="container">
-        <h1>Create Course</h1>
-        <form id="create-course-form" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="course_id">Course ID:</label>
-                <input type="text" id="course_id" required>
-            </div>
-            <div class="form-group">
-                <label for="course_name">Course Name:</label>
-                <input type="text" id="course_name" required>
-            </div>
-            <div class="form-group">
-                <label for="prof">Professor:</label>
-                <select id="prof" required>
-                    <option value="" disabled selected>Select a professor</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create Course">
-            </div>
-            <div id="error-message" class="error-message"></div>
-        </form>
+      <h1>Create Course</h1>
+      <form id="create-course-form" onsubmit="return validateForm()">
+        <div class="form-group">
+          <label for="course_id">Course ID:</label>
+          <input type="text" id="course_id" required />
+        </div>
+        <div class="form-group">
+          <label for="course_name">Course Name:</label>
+          <input type="text" id="course_name" required />
+        </div>
+        <div class="form-group">
+          <label for="prof">Professor:</label>
+          <select id="prof" required>
+            <option value="" disabled selected>Select a professor</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Create Course" />
+        </div>
+        <div id="error-message" class="error-message"></div>
+      </form>
     </div>
-</body>
-
+  </body>
 </html>

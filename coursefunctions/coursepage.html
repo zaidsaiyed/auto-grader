@@ -1,134 +1,137 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Course Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
 
-<head>
-  <title>Course Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
+      .container {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
 
-    .container {
-      width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
+      h1 {
+        text-align: center;
+      }
 
-    h1 {
-      text-align: center;
-    }
+      .course-details {
+        margin-top: 20px;
+      }
 
-    .course-details {
-      margin-top: 20px;
-    }
+      .course-details p {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
 
-    .course-details p {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
+      .assignments {
+        margin-top: 20px;
+      }
 
-    .assignments {
-      margin-top: 20px;
-    }
+      .assignments table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 
-    .assignments table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+      .assignments th,
+      .assignments td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
 
-    .assignments th,
-    .assignments td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
+      .assignments th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        text-align: left;
+      }
 
-    .assignments th {
-      background-color: #f5f5f5;
-      font-weight: bold;
-      text-align: left;
-    }
+      .assignment-link {
+        color: #45a049;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
 
-    .assignment-link {
-      color: #45a049;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+      .assignment-link:hover {
+        color: #45a049;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
 
-    .assignment-link:hover {
-      color: #45a049;
-      text-decoration: underline;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <h1>Course Details</h1>
-    <div class="course-details">
-      <p>Course: <span id="courseName"></span></p>
-      <p>Professor: <span id="professorName"></span></p>
+  <body>
+    <div class="container">
+      <h1>Course Details</h1>
+      <div class="course-details">
+        <p>Course: <span id="courseName"></span></p>
+        <p>Professor: <span id="professorName"></span></p>
+      </div>
+      <div class="assignments">
+        <table id="assignmentsTable">
+          <thead>
+            <tr>
+              <th><h2>Assignment</h2></th>
+            </tr>
+          </thead>
+          <tbody id="assignmentsBody"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="assignments">
-      <table id="assignmentsTable">
-        <thead>
-          <tr>
-            <th><h2>Assignment</h2></th>
-          </tr>
-        </thead>
-        <tbody id="assignmentsBody"></tbody>
-      </table>
-    </div>
-  </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get('courseId');
+    <script>
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get("courseId");
 
-      fetch('/api/course')
-        .then(response => response.json())
-        .then(courses => {
-          const course = courses.find(course => course.course_id === courseId);
-          if (course) {
-            document.getElementById('courseName').textContent = course.course_name;
-            document.getElementById('professorName').textContent = course.prof;
+        fetch("/api/course")
+          .then((response) => response.json())
+          .then((courses) => {
+            const course = courses.find(
+              (course) => course.course_id === courseId
+            );
+            if (course) {
+              document.getElementById("courseName").textContent =
+                course.course_name;
+              document.getElementById("professorName").textContent =
+                course.prof;
 
-            fetch(`/api/assignments/course/${courseId}`)
-              .then(response => response.json())
-              .then(assignments => {
-                const assignmentsTable = document.getElementById('assignmentsTable');
-                const assignmentsBody = document.getElementById('assignmentsBody');
-                console.log(assignments);
-                assignments.forEach(assignment => {
-                  const row = document.createElement('tr');
-                  const assignmentCell = document.createElement('td');
-                  const assignmentLink = document.createElement('a');
+              fetch(`/api/assignments/course/${courseId}`)
+                .then((response) => response.json())
+                .then((assignments) => {
+                  const assignmentsTable =
+                    document.getElementById("assignmentsTable");
+                  const assignmentsBody =
+                    document.getElementById("assignmentsBody");
+                  console.log(assignments);
+                  assignments.forEach((assignment) => {
+                    const row = document.createElement("tr");
+                    const assignmentCell = document.createElement("td");
+                    const assignmentLink = document.createElement("a");
 
-                  assignmentLink.textContent = assignment.assign_id;
-                  assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
-                  assignmentLink.classList.add('assignment-link');
+                    assignmentLink.textContent = assignment.assign_id;
+                    assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
+                    assignmentLink.classList.add("assignment-link");
 
-                  assignmentCell.appendChild(assignmentLink);
+                    assignmentCell.appendChild(assignmentLink);
 
-                  row.appendChild(assignmentCell);
+                    row.appendChild(assignmentCell);
 
-                  assignmentsBody.appendChild(row);
-                });
-              })
-              .catch(error => console.error(error));
-          } else {
-            console.error(`Course with course_id "${courseId}" not found.`);
-          }
-        })
-        .catch(error => console.error(error));
-    });
-  </script>
-
-</body>
-
+                    assignmentsBody.appendChild(row);
+                  });
+                })
+                .catch((error) => console.error(error));
+            } else {
+              console.error(`Course with course_id "${courseId}" not found.`);
+            }
+          })
+          .catch((error) => console.error(error));
+      });
+    </script>
+  </body>
 </html>

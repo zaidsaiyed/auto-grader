@@ -18,7 +18,7 @@ module.exports = (app) => {
     const { id } = req.params;
 
     try {
-      const assignment = await Assignment.find({ assign_id: id}).exec();
+      const assignment = await Assignment.find({ assign_id: id }).exec();
       if (assignment) {
         res.json(assignment);
       } else {
@@ -43,7 +43,6 @@ module.exports = (app) => {
 
   // Create a new assignment
   app.post("/api/assignment", async (req, res) => {
-  
     try {
       const assignment = new Assignment(req.body);
 
@@ -56,14 +55,17 @@ module.exports = (app) => {
 
   //Delete an assignment
   app.delete("/api/assignment/del/:courseId/:assignID", async (req, res) => {
-    const { courseId, assignID} = req.params;
+    const { courseId, assignID } = req.params;
 
     try {
-      const assignment = await Assignment.findOneAndDelete({course_id: courseId, assign_id: assignID });
+      const assignment = await Assignment.findOneAndDelete({
+        course_id: courseId,
+        assign_id: assignID,
+      });
       if (!assignment) {
-        res.status(404).json({ message: "Assignment not found" });       
+        res.status(404).json({ message: "Assignment not found" });
       }
-        res.json({ message: "Assignment deleted" });
+      res.json({ message: "Assignment deleted" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

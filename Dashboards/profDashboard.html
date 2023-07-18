@@ -1,135 +1,132 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Professor Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
 
-<head>
-  <title>Professor Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
+      .container {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
 
-    .container {
-      width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
+      h1 {
+        text-align: center;
+      }
 
-    h1 {
-      text-align: center;
-    }
+      .dashboard {
+        margin-top: 20px;
+      }
 
-    .dashboard {
-      margin-top: 20px;
-    }
+      .dashboard p {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
 
-    .dashboard p {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
 
-    th,
-    td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
+      th {
+        background-color: #f5f5f5;
+        font-weight: bold;
+        text-align: left;
+      }
 
-    th {
-      background-color: #f5f5f5;
-      font-weight: bold;
-      text-align: left;
-    }
+      a {
+        text-decoration: none;
+        color: #45a049;
+        transition: color 0.3s;
+      }
 
-    a {
-      text-decoration: none;
-      color: #45a049;
-      transition: color 0.3s;
-    }
+      a:hover {
+        color: #45a049;
+      }
 
-    a:hover {
-      color: #45a049;
-    }
+      .error-message {
+        color: red;
+        margin-top: 5px;
+        text-align: center;
+      }
+    </style>
+  </head>
 
-    .error-message {
-      color: red;
-      margin-top: 5px;
-      text-align: center;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <h1>Professor Dashboard</h1>
-    <div class="dashboard">
-      <p>Welcome, <span id="professorName"></span>!</p>
-      <table id="courseTable">
-        <thead>
-          <tr>
-            <th>Course List</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Course rows will be dynamically added here -->
-        </tbody>
-      </table>
+  <body>
+    <div class="container">
+      <h1>Professor Dashboard</h1>
+      <div class="dashboard">
+        <p>Welcome, <span id="professorName"></span>!</p>
+        <table id="courseTable">
+          <thead>
+            <tr>
+              <th>Course List</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Course rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const username = urlParams.get('username');
+    <script>
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get("username");
 
-      
+        fetch("/api/user")
+          .then((response) => response.json())
+          .then((users) => {
+            const user = users.find((user) => user.user_name === username);
+            if (user) {
+              const professorName = user.name;
+              document.getElementById("professorName").textContent =
+                professorName;
 
-      fetch('/api/user')
-        .then(response => response.json())
-        .then(users => {
-          const user = users.find(user => user.user_name === username);
-          if (user) {
-            const professorName = user.name;
-            document.getElementById('professorName').textContent = professorName;
+              fetch("/api/course")
+                .then((response) => response.json())
+                .then((courses) => {
+                  const professorCourses = courses.filter(
+                    (course) => course.prof === professorName
+                  );
+                  const courseTable = document.getElementById("courseTable");
 
-            fetch('/api/course')
-              .then(response => response.json())
-              .then(courses => {
-                const professorCourses = courses.filter(course => course.prof === professorName);
-                const courseTable = document.getElementById('courseTable');
+                  professorCourses.forEach((course) => {
+                    const row = document.createElement("tr");
+                    const courseCell = document.createElement("td");
+                    const courseLink = document.createElement("a");
 
-                professorCourses.forEach(course => {
-                  const row = document.createElement('tr');
-                  const courseCell = document.createElement('td');
-                  const courseLink = document.createElement('a');
+                    courseLink.textContent = course.course_name;
+                    courseLink.href = `/course?profcourseId=${course.course_id}`;
 
-                  courseLink.textContent = course.course_name;
-                  courseLink.href = `/course?profcourseId=${course.course_id}`;
+                    courseCell.appendChild(courseLink);
+                    row.appendChild(courseCell);
 
-                  courseCell.appendChild(courseLink);
-                  row.appendChild(courseCell);
-
-                  courseTable.appendChild(row);
-                });
-              })
-              .catch(error => console.error(error));
-          } else {
-            console.error(`User with username "${username}" not found.`);
-          }
-        })
-        .catch(error => console.error(error));
-    });
-
-  </script>
-
-</body>
-
+                    courseTable.appendChild(row);
+                  });
+                })
+                .catch((error) => console.error(error));
+            } else {
+              console.error(`User with username "${username}" not found.`);
+            }
+          })
+          .catch((error) => console.error(error));
+      });
+    </script>
+  </body>
 </html>
