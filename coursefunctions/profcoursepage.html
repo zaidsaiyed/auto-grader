@@ -63,6 +63,26 @@
       color: #45a049;
       text-decoration: underline;
     }
+
+    .popup {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      display: none;
+    }
+
+    .popup-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 
@@ -85,12 +105,15 @@
         <tbody id="assignmentsBody"></tbody>
       </table>
     </div>
-    <form action="/api/course/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" id="file" accept="csv">
-        <input type="hidden" name="courseId" id="courseId">
-        <input type="submit" value="Upload" id="uploadButton">
-    </form>
-
+    <div class="popup" id="uploadPopup">
+      <div class="popup-content">
+        <form id="uploadForm">
+          <input type="file" name="file" id="file" accept="csv">
+          <input type="hidden" name="courseId" id="courseId">
+          <input type="button" value="Upload" id="uploadButton">
+        </form>
+      </div>
+    </div>
   </div>
   <script>
     let courseId;
@@ -106,27 +129,15 @@
             document.getElementById('courseName').textContent = course.course_name;
             document.getElementById('professorName').textContent = course.prof;
 
-            fetch(`/api/assignments/course/${courseId}`)
+            // Check if a file already exists for the course
+            fetch(`/api/course/file-exists/${courseId}`)
               .then(response => response.json())
-              .then(assignments => {
-                const assignmentsTable = document.getElementById('assignmentsTable');
-                const assignmentsBody = document.getElementById('assignmentsBody');
-                console.log(assignments);
-                assignments.forEach(assignment => {
-                  const row = document.createElement('tr');
-                  const assignmentCell = document.createElement('td');
-                  const assignmentLink = document.createElement('a');
-
-                  assignmentLink.textContent = assignment.assign_id;
-                  assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
-                  assignmentLink.classList.add('assignment-link');
-
-                  assignmentCell.appendChild(assignmentLink);
-
-                  row.appendChild(assignmentCell);
-
-                  assignmentsBody.appendChild(row);
-                });
+              .then(data => {
+                if (!data.fileExists) {
+                  showUploadPopup();
+                } else {
+                  loadAssignments(courseId);
+                }
               })
               .catch(error => console.error(error));
           } else {
@@ -134,38 +145,76 @@
           }
         })
         .catch(error => console.error(error));
-    });
 
-    function uploadFile() {
-      var file = document.getElementById("file").files[0];
-      const reader = new FileReader();
+      const uploadForm = document.getElementById('uploadForm');
+      const uploadButton = document.getElementById('uploadButton');
+      uploadButton.addEventListener('click', handleUpload);
 
-      reader.onload = function (e) {
-        const contents = e.target.result;
-        const rows = contents.split('\n');
+      function loadAssignments(courseId) {
+        fetch(`/api/assignments/course/${courseId}`)
+          .then(response => response.json())
+          .then(assignments => {
+            const assignmentsTable = document.getElementById('assignmentsTable');
+            const assignmentsBody = document.getElementById('assignmentsBody');
+            console.log(assignments);
+            assignments.forEach(assignment => {
+              const row = document.createElement('tr');
+              const assignmentCell = document.createElement('td');
+              const assignmentLink = document.createElement('a');
 
-        // Process each row
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          console.log(row); // Do something with the row
-          const columns = row.split(',');
+              assignmentLink.textContent = assignment.assign_id;
+              assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
+              assignmentLink.classList.add('assignment-link');
 
-          // Access the values in each column
-          for (let j = 0; j < columns.length; j++) {
-            const value = columns[j];
-            //console.log(value); // Do something with the value -->
-          }
+              assignmentCell.appendChild(assignmentLink);
+
+              row.appendChild(assignmentCell);
+
+              assignmentsBody.appendChild(row);
+            });
+          })
+          .catch(error => console.error(error));
+      }
+
+      function showUploadPopup() {
+        const popup = document.getElementById('uploadPopup');
+        popup.style.display = 'flex';
+      }
+
+      function handleUpload() {
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+        if (!file) {
+          return;
         }
 
         const formData = new FormData();
-        formData.append(courseId, file); // Assuming fileInput is an input field of type "file"
+        formData.append('file', file);
+        formData.append('courseId', courseId);
 
-      };
+        fetch(`/api/course/upload/${courseId}`, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          if (data.success) {
+            hideUploadPopup();
+            loadAssignments(courseId);
+          } else {
+            // Handle upload error
+          }
+        })
+        .catch(error => console.error(error));
+      }
 
-      reader.readAsText(file);
-    }
+      function hideUploadPopup() {
+        const popup = document.getElementById('uploadPopup');
+        popup.style.display = 'none';
+      }
+    });
   </script>
-
 </body>
 
 </html>

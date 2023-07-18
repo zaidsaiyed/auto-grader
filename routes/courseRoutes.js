@@ -1,11 +1,26 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
-const { log } = require("console");
+const multer = require("multer");
 const Course = mongoose.model("course");
-const Assignment = mongoose.model("assignment");
-const Grade = mongoose.model("grade");
-const multer = require('multer');
 
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const courseId = req.params.course_id;
+    const courseFolderPath = `./courses/${courseId}`;
+    if (!fs.existsSync(courseFolderPath)) {
+      fs.mkdirSync(courseFolderPath);
+    }
+    cb(null, courseFolderPath);
+  },
+  filename: (req, file, cb) => {
+    const fileName = `${req.params.course_id}.csv`;
+    cb(null, fileName);
+  },
+});
+
+// Create multer upload instance
+const upload = multer({ storage });
 
 module.exports = (app) => {
   // Get all courses
@@ -15,38 +30,33 @@ module.exports = (app) => {
       res.json(courses);
     } catch (error) {
       res.status(500).json({
-        message: error.message
+        message: error.message,
       });
     }
   });
 
   // Get course by ID
   app.get("/api/course/:id", async (req, res) => {
-    const {
-      id
-    } = req.params;
+    const { id } = req.params;
 
     try {
-      const course = await Course.findOne({
-        course_id: id
-      }).exec();
+      const course = await Course.findOne({ course_id: id }).exec();
       if (course) {
         res.json(course);
       } else {
         res.status(404).json({
-          message: "Course not found"
+          message: "Course not found",
         });
       }
     } catch (error) {
       res.status(500).json({
-        message: error.message
+        message: error.message,
       });
     }
   });
 
   // Create a new course
   app.post("/api/course", async (req, res) => {
-
     try {
       const course = new Course(req.body).save();
       res.send(course);
@@ -58,102 +68,63 @@ module.exports = (app) => {
       fs.writeFileSync(emptyFilePath, "");
     } catch (error) {
       res.status(400).json({
-        message: error.message
+        message: error.message,
       });
     }
   });
 
-  // Delete a new assignment
+  // Delete a course
   app.delete("/api/course/del/:course_id", async (req, res) => {
     try {
       const courseId = req.params.course_id;
 
       // Delete the course
       const course = await Course.findOneAndDelete({
-        course_id: courseId
+        course_id: courseId,
       }).exec();
 
       if (!course) {
         return res.status(404).json({
-          message: "Course not found"
+          message: "Course not found",
         });
       }
 
-      // Delete the assignments related to the course
-      await Assignment.deleteMany({
-        course_id: courseId
-      }).exec();
-
-      // Delete the grades related to the course
-      await Grade.deleteMany({
-        course_id: courseId
-      }).exec();
-
-      // Remove the course folder
-      fs.rmdirSync(`./courses/${courseId}`, {
-        recursive: true
-      });
-
+      // Delete the course folder
+      const courseFolderPath = `./courses/${courseId}`;
+      fs.rmdirSync(courseFolderPath, { recursive: true });
 
       res.json({
-        message: "Course, assignments, and grades deleted successfully"
+        message: "Course deleted successfully",
       });
     } catch (error) {
       res.status(500).json({
-        message: error.message
+        message: error.message,
       });
     }
   });
 
-  // Upload a course csv file
-  const fileStorageEngine = multer.diskStorage({
-    destination: (req, file, cb) => {
-      const courseFolderPath = `./courses/`;
-      cb(null, courseFolderPath);
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
+  // Check if a file exists for a course
+  app.get("/api/course/file-exists/:course_id", (req, res) => {
+    const { course_id } = req.params;
+
+    const courseFolderPath = `./courses/${course_id}`;
+    const filePath = `${courseFolderPath}/${course_id}.csv`;
+
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (err) {
+        res.json({ fileExists: false });
+      } else {
+        res.json({ fileExists: true });
+      }
+    });
   });
 
-  const upload = multer({
-    storage: fileStorageEngine
-  });
-  
-  app.post("/api/course/upload", upload.single('file'), async (req, res) => {
-    try { 
-      console.log(req.file);
-
-      fs.readFile(req.file.path, 'utf8', (err, data) => {
-        if (err) {
-          console.error('Error reading file:', err);
-          return;
-        }
-
-        const rows = data.split('\n');
-        // Process each row
-        for (let i = 0; i < rows.length; i++) {
-          const row = rows[i];
-          console.log(row); // Do something with the row
-          const columns = row.split(',');
-
-          // Access the values in each column
-          for (let j = 0; j < columns.length; j++) {
-            const value = columns[j];
-            //console.log(value); // Do something with the value -->
-          }
-        }
-      });
-
-      res.json({
-        message: "File uploaded successfully"
-      });
-    } 
-    catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: error.message
-      });
+  // Upload a CSV file for a course
+  app.post("/api/course/upload/:course_id", upload.single("file"), (req, res) => {
+    if (!req.file) {
+      res.status(400).json({ message: "No file uploaded" });
+    } else {
+      res.json({ success: true });
     }
   });
 };
