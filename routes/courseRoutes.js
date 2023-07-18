@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
+const fset = require("fs-extra");
 const multer = require("multer");
 const Course = mongoose.model("course");
 
@@ -91,8 +92,7 @@ module.exports = (app) => {
 
       // Delete the course folder
       const courseFolderPath = `./courses/${courseId}`;
-      fs.rmdirSync(courseFolderPath, { recursive: true });
-
+      await fset.remove(courseFolderPath);
       res.json({
         message: "Course deleted successfully",
       });

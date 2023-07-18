@@ -154,7 +154,7 @@ app.get("/studentdashboard", (req, res) => {
   res.sendFile(__dirname + "/Dashboards/studDashboard.html");
 });
 
-//Get course page
+//Get Student course page
 app.get("/course", (req, res) => {
   res.sendFile(__dirname + "/coursefunctions/coursepage.html");
 });
@@ -162,6 +162,11 @@ app.get("/course", (req, res) => {
 //Get Prof course page
 app.get("/profcourse", (req, res) => {
   res.sendFile(__dirname + "/coursefunctions/profcoursepage.html");
+});
+
+//Get Prof Assignment page
+app.get("/profassignment", (req, res) => {
+  res.sendFile(__dirname + "/assignfunctions/profassign.html");
 });
 
 // Get file Upload page
