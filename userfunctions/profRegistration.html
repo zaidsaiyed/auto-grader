@@ -1,163 +1,169 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Professor Registration</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
 
-        .container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 40px;
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333333;
-        }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333333;
+      }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+      .form-group {
+        margin-bottom: 15px;
+      }
 
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            color: #555555;
-        }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        color: #555555;
+      }
 
-        .form-group input[type="text"],
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 3px;
-            font-size: 16px;
-            color: #555555;
-        }
+      .form-group input[type="text"],
+      .form-group input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 3px;
+        font-size: 16px;
+        color: #555555;
+      }
 
-        .form-group input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: #ffffff;
-            border: none;
-            border-radius: 3px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+      .form-group input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background-color: #4caf50;
+        color: #ffffff;
+        border: none;
+        border-radius: 3px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
 
-        .form-group input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+      .form-group input[type="submit"]:hover {
+        background-color: #45a049;
+      }
 
-        .error-message {
-            color: red;
-            margin-top: 5px;
-        }
+      .error-message {
+        color: red;
+        margin-top: 5px;
+      }
     </style>
     <script>
-        function validateForm() {
-            var password = document.getElementById("password").value;
-            var confirm_password = document.getElementById("confirm_password").value;
+      function validateForm() {
+        var password = document.getElementById("password").value;
+        var confirm_password =
+          document.getElementById("confirm_password").value;
 
-            if (password !== confirm_password) {
-                var error = document.getElementById("error-message");
-                error.innerHTML = "Passwords do not match.";
-                return false;
-            }
-
-            var user_name = document.getElementById("user_name").value;
-            var name = document.getElementById("name").value;
-            var error = document.getElementById("error-message");
-            error.innerHTML = "";
-
-            fetch("/api/user")
-                .then(response => response.json())
-                .then(users => {
-                    var duplicateUser = users.some(user => user.user_name === user_name || user.name === name);
-                    if (duplicateUser) {
-                        error.innerHTML = "Professor already exists.";
-                    } else {
-                        fetch("/api/user", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                user_name: user_name,
-                                student_id:"0",
-                                password: password,
-                                name: name,
-                                types:'P'
-                            })
-                        })
-                            .then(response => response.json())
-                            .then(course => {
-                                // Course created successfully
-                                // Perform any necessary actions or show success message
-                                console.log("Course created:", course);
-                                // Redirect to a success page if needed
-                                window.location.href = "/admin";
-                            })
-                            .catch(error => {
-                                // Error occurred while creating the course
-                                var error = document.getElementById("error-message");
-                                error.innerHTML = "An error occurred. Please try again.";
-                                console.log(error);
-                            });
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                    error.innerHTML = "An error occurred. Please try again.";
-                });
-
-            return false;
+        if (password !== confirm_password) {
+          var error = document.getElementById("error-message");
+          error.innerHTML = "Passwords do not match.";
+          return false;
         }
+
+        var user_name = document.getElementById("user_name").value;
+        var name = document.getElementById("name").value;
+        var error = document.getElementById("error-message");
+        error.innerHTML = "";
+
+        fetch("/api/user")
+          .then((response) => response.json())
+          .then((users) => {
+            var duplicateUser = users.some(
+              (user) => user.user_name === user_name || user.name === name
+            );
+            if (duplicateUser) {
+              error.innerHTML = "Professor already exists.";
+            } else {
+              fetch("/api/user", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  user_name: user_name,
+                  student_id: "0",
+                  password: password,
+                  name: name,
+                  types: "P",
+                }),
+              })
+                .then((response) => response.json())
+                .then((course) => {
+                  // Course created successfully
+                  // Perform any necessary actions or show success message
+                  console.log("Course created:", course);
+                  // Redirect to a success page if needed
+                  window.location.href = "/admin";
+                })
+                .catch((error) => {
+                  // Error occurred while creating the course
+                  var error = document.getElementById("error-message");
+                  error.innerHTML = "An error occurred. Please try again.";
+                  console.log(error);
+                });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            error.innerHTML = "An error occurred. Please try again.";
+          });
+
+        return false;
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <h1>Professor Registration</h1>
-        <form id="registration-form" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="user_name">Username:</label>
-                <input type="text" id="user_name" name="user_name" required>
-            </div>
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-                <div id="error-message" class="error-message"></div>
-            </div>
-            <div class="form-group">
-                <input type="hidden" name="types" value="P">
-                <input type="hidden" name="student_id" value="0">
-                <input type="submit" value="Register">
-            </div>
-        </form>
+      <h1>Professor Registration</h1>
+      <form id="registration-form" onsubmit="return validateForm()">
+        <div class="form-group">
+          <label for="user_name">Username:</label>
+          <input type="text" id="user_name" name="user_name" required />
+        </div>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            required
+          />
+          <div id="error-message" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <input type="hidden" name="types" value="P" />
+          <input type="hidden" name="student_id" value="0" />
+          <input type="submit" value="Register" />
+        </div>
+      </form>
     </div>
-</body>
-
+  </body>
 </html>
