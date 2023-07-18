@@ -116,8 +116,17 @@ module.exports = (app) => {
       res.json({ success: true, result: result });
     });
 
-    // delete uploaded file after processing
-    //fs.unlinkSync(req.file.path);
+    setTimeout(() => {
+      fs.unlink(req.file.path, (error) => {
+        if (error) {
+          console.error(`Error deleting file: ${error}`);
+          return;
+        }
+        console.log('File deleted successfully');
+      });
+      
+    }, 5000);
+  
 
 
   });
