@@ -136,7 +136,7 @@
       if (keyValuePairs) {
         keyValuePairs.forEach((pair, index) => {
           const key = pair.replace(/'/g, ''); // Remove the single quotes around the key
-          const delay = (index + 1) * 1000; // Delay in milliseconds, incrementing for each pair
+          const delay = (index + 1) * 100; // Delay in milliseconds, incrementing for each pair
     
           setTimeout(() => {
             formattedText += `Testing For ${key} . . . . . . . . . Done\n`;

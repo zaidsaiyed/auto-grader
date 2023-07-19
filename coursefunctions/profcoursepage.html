@@ -163,7 +163,7 @@
               const assignmentLink = document.createElement('a');
 
               assignmentLink.textContent = assignment.assign_id;
-              assignmentLink.href = `/profassignment?courseId=${courseId}&assignId=${assignment.assign_id}`;
+              assignmentLink.href = `/updateassignment?courseId=${courseId}&assignId=${assignment.assign_id}`;
               assignmentLink.classList.add('assignment-link');
 
               assignmentCell.appendChild(assignmentLink);
