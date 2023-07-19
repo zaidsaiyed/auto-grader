@@ -192,38 +192,43 @@ module.exports = (app) => {
     // use this to create a script path for python to cgheck the uploaded fill
 
     // Define the path to the Python script
-    const pythonScriptPath = "softcheck_uploads/final_unzip.py";
-
-    // Execute the Python script as a child process
-    setTimeout(() => {
+    
+    
+    // setTimeout(() => {
+      //   fs.unlink(req.file.path, (error) => {
+    //     if (error) {
+    //       console.error(`Error deleting file: ${error}`);
+    //       return;
+    //     }
+    //     console.log("File deleted successfully");
+    //   });
+    // }, 5000);
+  });
+  
+  // Child process to execute Python script
+  
+  app.post('/api/runPy', (req, res) => {
     const { exec } = require("child_process");
+    const pythonScriptPath = "softcheck_uploads/final_unzip.py";
     exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing Python script: ${error}`);
         res.status(500).json({ message: "Error executing Python script" });
         return;
       }
-
       // Process the output from the Python script
       //console.log(`Python script output: ${stdout}`);
       const result = stdout;
       res.json({ success: true, result: result });
     });
-  }, 5000);
+});
 
-    setTimeout(() => {
-      fs.unlink(req.file.path, (error) => {
-        if (error) {
-          console.error(`Error deleting file: ${error}`);
-          return;
-        }
-        console.log("File deleted successfully");
-      });
-    }, 5000);
-  });
 
-  app.put(
-    "/api/assignment/:courseId/:assignId",
+
+
+
+app.put(
+  "/api/assignment/:courseId/:assignId",
     upload2.single("unitTestFile"),
     async (req, res) => {
       const { courseId, assignId } = req.params; // Extract the courseId and assignId
