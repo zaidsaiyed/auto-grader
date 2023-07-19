@@ -1,5 +1,5 @@
 import unittest
-from functions import *
+from student import *
 
 
 class ListManipulationTests(unittest.TestCase):

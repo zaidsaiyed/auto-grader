@@ -115,7 +115,7 @@
                     const assignmentLink = document.createElement("a");
 
                     assignmentLink.textContent = assignment.assign_id;
-                    assignmentLink.href = `/assignment?assignmentId=${assignment.assign_id}`;
+                    assignmentLink.href = `/studentassignmentchecker?assignId=${assignment.assign_id}`;
                     assignmentLink.classList.add("assignment-link");
 
                     assignmentCell.appendChild(assignmentLink);
@@ -123,6 +123,7 @@
                     row.appendChild(assignmentCell);
 
                     assignmentsBody.appendChild(row);
+
                   });
                 })
                 .catch((error) => console.error(error));

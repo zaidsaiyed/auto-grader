@@ -85,7 +85,7 @@
         <button onclick="checkAssignment()">Check Assignment</button>
       </div>
 
-      <table id="gradesTable">
+      <table id="gradesTable" style="display: none;">
         <tr>
           <th>Name</th>
           <th>Student ID</th>
@@ -183,7 +183,7 @@
           var assignId = getParameterByName("assignId");
 
           // Redirect to the check assignment page with the assignId
-          window.location.href = "/checkAssignment?assignId=" + assignId;
+          window.location.href = "/profassignmentchecker?assignId=" + assignId;
         }
 
         // Function to search grades by student ID

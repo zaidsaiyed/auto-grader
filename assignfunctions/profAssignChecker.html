@@ -99,9 +99,9 @@
 
 <body>
   <div class="container">
-    <h1>Assignment Checker</h1>
+    <h1> Assignment Checker</h1>
     <div class="upload-section">
-      <input type="file" id="fileInput" accept=".py">
+      <input type="file" id="fileInput" accept=".zip">
       <label for="fileInput" id="fileLabel">Choose File</label>
       <button id="uploadButton">Upload</button>
     </div>
@@ -113,6 +113,9 @@
   </div>
   <script>
     window.addEventListener('DOMContentLoaded', (event) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const assignId = urlParams.get("assignId");
+
       const fileInput = document.getElementById('fileInput');
       const fileLabel = document.getElementById('fileLabel');
       const uploadButton = document.getElementById('uploadButton');
@@ -139,6 +142,7 @@
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('assignId', assignId);
 
         // loading screen
         statusText.textContent = 'Status: Checking Assignment...';
@@ -147,8 +151,9 @@
 
         setTimeout(() => {
           statusText.classList.remove('blink'); // Remove the blinking animation
-
-          fetch('/api/assign/upload', {
+          
+          console.log("uploading");
+          fetch('/api/profAssign/upload', {
             method: 'POST',
             body: formData
           })

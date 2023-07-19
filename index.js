@@ -169,6 +169,25 @@ app.get("/profassignment", (req, res) => {
   res.sendFile(__dirname + "/assignfunctions/profassign.html");
 });
 
+// Get Student Assignment page
+app.get("/studentassignmentchecker", (req, res) => {
+  const assignId = req.query.assignId; 
+  res.sendFile("/assignfunctions/studentAssignChecker.html", {
+    root: __dirname,
+    query: {
+      assignId: assignId
+    }
+  });
+});
+// Get Professor Assignment Checker page
+app.get("/profassignmentchecker", (req, res) => {
+  const assignId = req.query.assignId; 
+  res.sendFile("/assignfunctions/profAssignChecker.html", {
+    root: __dirname,
+    query: { assignId : assignId }
+  });
+});
+
 //Get Update Assignment page
 app.get("/updateassignment", (req, res) => {
   res.sendFile(__dirname + "/assignfunctions/updateassign.html");
@@ -183,6 +202,7 @@ app.get("/upload", (req, res) => {
 app.get("/editgrade", (req, res) => {
   res.sendFile(__dirname + "/assignFunctions/editgrade.html");
 });
+
 
 // Test test test
 app.get("/test", (req, res) => {
