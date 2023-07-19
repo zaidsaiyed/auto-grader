@@ -169,6 +169,11 @@ app.get("/profassignment", (req, res) => {
   res.sendFile(__dirname + "/assignfunctions/profassign.html");
 });
 
+//Get Update Assignment page
+app.get("/updateassignment", (req, res) => {
+  res.sendFile(__dirname + "/assignfunctions/updateassign.html");
+});
+
 // Get file Upload page
 app.get("/upload", (req, res) => {
   res.sendFile(__dirname + "/Test_trials/tryPy.html");
