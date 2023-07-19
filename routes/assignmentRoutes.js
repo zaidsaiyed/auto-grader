@@ -164,7 +164,6 @@ module.exports = (app) => {
   // Set up multer storage for prof assignment upload
   const prof_ass_storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      console.log("here");
       const assignId = req.body.assignId;
       // do the same thing that is required for the unit test file
 
@@ -183,7 +182,6 @@ module.exports = (app) => {
   const profupload = multer({ storage : prof_ass_storage });
 
   app.post("/api/profAssign/upload", profupload.single("file"), (req, res) => {
-    console.log("Worked")
     if (!req.file) {
       res.status(400).json({ message: "No file uploaded" });
       return;
