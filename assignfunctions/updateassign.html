@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Assignment</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 100%;
+      }
+
+      input[type="file"] {
+        margin-bottom: 10px;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      label span {
+        margin-left: 10px;
+      }
+
+      button {
+        background-color: #45a049;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #357e3d;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Update Assignment</h1>
+      <form id="updateAssignmentForm" enctype="multipart/form-data">
+        <input type="text" id="courseId" placeholder="Course ID" readonly />
+        <input type="text" id="assignId" placeholder="Assignment ID" readonly />
+        <input type="text" id="description" placeholder="Description" />
+        <div>
+          <label for="unitTestFile">
+            <span>Upload Unit Test File:</span>
+          </label>
+          <input
+            type="file"
+            id="unitTestFile"
+            name="unitTestFile"
+            accept=".py"
+          />
+        </div>
+        <input type="text" id="requiredFiles" placeholder="Required Files" />
+        <input type="number" id="totalTests" placeholder="Total Tests" />
+        <button type="submit">Update</button>
+      </form>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get("courseId");
+      const assignId = urlParams.get("assignId");
+
+      const updateAssignmentForm = document.getElementById(
+        "updateAssignmentForm"
+      );
+      const courseIdInput = document.getElementById("courseId");
+      const assignIdInput = document.getElementById("assignId");
+      const descriptionInput = document.getElementById("description");
+      const unitTestFileInput = document.getElementById("unitTestFile");
+      const requiredFilesInput = document.getElementById("requiredFiles");
+      const totalTestsInput = document.getElementById("totalTests");
+
+      courseIdInput.value = courseId;
+      assignIdInput.value = assignId;
+
+      // Populate the form with assignment data
+      fetch(`/api/assignment/${courseId}/${assignId}`)
+        .then((response) => response.json())
+        .then((assignment) => {
+          descriptionInput.value = assignment.description;
+          requiredFilesInput.value = assignment.required_files;
+          totalTestsInput.value = assignment.total_tests;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      // Handle form submission
+      updateAssignmentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(updateAssignmentForm);
+        const updatedAssignment = {};
+
+        formData.forEach((value, key) => {
+          if (key === "unitTestFile") {
+            const filePath = `./courses/${courseId}/${assignId}/unit_test.py`;
+            updatedAssignment.files_location = filePath;
+            updatedAssignment.unit_test = value;
+            formData.set("unitTestFile", value, "unit_test.py");
+          } else {
+            updatedAssignment[key] = value;
+          }
+        });
+
+        // Send the updated assignment data to the server
+        fetch(`/api/assignment/${courseId}/${assignId}`, {
+          method: "PUT",
+          body: JSON.stringify(updatedAssignment),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Assignment updated:", data);
+            alert("Assignment updated successfully");
+            window.location.href = `/profassignment?courseId=${courseId}&assignId=${assignId}`;
+          })
+          .catch((error) => {
+            console.error("Error updating assignment:", error);
+            alert("An error occurred while updating the assignment");
+          });
+      });
+    </script>
+  </body>
+</html>
