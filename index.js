@@ -179,6 +179,11 @@ app.get("/upload", (req, res) => {
   res.sendFile(__dirname + "/Test_trials/tryPy.html");
 });
 
+//Edit Individual Grade
+app.get("/editgrade", (req, res) => {
+  res.sendFile(__dirname + "/assignFunctions/editgrade.html");
+});
+
 // Test test test
 app.get("/test", (req, res) => {
   res.sendFile(__dirname + "/assignfunctions/studentAssign.html");
