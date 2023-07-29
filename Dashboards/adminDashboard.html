@@ -5,22 +5,54 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        position: sticky;
+        top: 0;
+        background-color: #333;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .roles {
+        display: flex;
+      }
+
+      .role {
+        margin-right: 20px;
+        font-size: 20px;
+        color: #fff;
+        cursor: pointer;
       }
 
       .admin-dashboard {
         max-width: 800px;
-        margin: 0 auto;
+        margin: 60px auto 0;
         padding: 20px;
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: #212121;
+        border: 1px solid #666;
         border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
       }
 
       h1 {
         text-align: center;
         margin-bottom: 20px;
+        color: #fff;
       }
 
       .course-section,
@@ -30,6 +62,7 @@
 
       h2 {
         margin-bottom: 10px;
+        color: #fff;
       }
 
       button {
@@ -57,10 +90,11 @@
         padding: 8px;
         text-align: left;
         border-bottom: 1px solid #ddd;
+        color: #fff;
       }
 
       th {
-        background-color: #f2f2f2;
+        background-color: #555;
       }
     </style>
     <script>
@@ -123,6 +157,10 @@
           });
       }
 
+      function redirectToLanding() {
+        window.location.href = "/";
+      }
+
       // Run the functions when the page is loaded
       document.addEventListener("DOMContentLoaded", function () {
         generateCourseTableRows();
@@ -132,6 +170,14 @@
   </head>
 
   <body>
+    <div class="header">
+      <div class="header-title" onclick="redirectToLanding()">AutoGrader System</div>
+      <div class="roles">
+        <div class="role admin" >Admin</div>
+        <div class="role professor" >Professor</div>
+        <div class="role student" >Student</div>
+      </div>
+    </div>
     <div class="admin-dashboard">
       <h1>Welcome to the Admin Dashboard</h1>
 
