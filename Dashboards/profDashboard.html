@@ -5,21 +5,65 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
       }
 
-      .container {
-        width: 800px;
-        margin: 0 auto;
+      .header {
+        position: sticky;
+        top: 0;
+        background-color: #212121;
         padding: 20px;
-        background-color: #fff;
-        border: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .roles {
+        display: flex;
+      }
+
+      .role {
+        margin-right: 20px;
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        /* spacing between them words*/
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+
+      .professor {
+        margin-right: 20px;
+        font-size: 24px;
+        color: #4caf50;
+        cursor: pointer;
+      }
+
+      .professor-dashboard {
+        max-width: 800px;
+        margin: 60px auto 0;
+        padding: 20px;
+        background-color: #212121;
+        border: 1px solid #666;
         border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
       }
 
       h1 {
         text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
       }
 
       .dashboard {
@@ -40,17 +84,18 @@
       td {
         padding: 8px;
         border-bottom: 1px solid #ddd;
+        color: #fff;
       }
 
       th {
-        background-color: #f5f5f5;
+        background-color: #555;
         font-weight: bold;
         text-align: left;
       }
 
       a {
         text-decoration: none;
-        color: #45a049;
+        color: #4caf50;
         transition: color 0.3s;
       }
 
@@ -67,7 +112,15 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="header">
+      <div class="header-title" onclick="redirectToLanding()">AutoGrader System</div>
+      <div class="roles">
+        <div class="role admin">Admin</div>
+        <div class="role professor">Professor</div>
+        <div class="role student">Student</div>
+      </div>
+    </div>
+    <div class="professor-dashboard">
       <h1>Professor Dashboard</h1>
       <div class="dashboard">
         <p>Welcome, <span id="professorName"></span>!</p>
@@ -127,6 +180,10 @@
           })
           .catch((error) => console.error(error));
       });
+
+      function redirectToLanding() {
+        window.location.href = "/";
+      }
     </script>
   </body>
 </html>
