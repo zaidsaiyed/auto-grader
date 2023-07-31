@@ -3,6 +3,8 @@ const fs = require("fs");
 const fset = require("fs-extra");
 const multer = require("multer");
 const Course = mongoose.model("course");
+const csvParser = require("csv-parser");
+const Assignment = mongoose.model("assignment");
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -120,11 +122,60 @@ module.exports = (app) => {
   });
 
   // Upload a CSV file for a course
-  app.post("/api/course/upload/:course_id", upload.single("file"), (req, res) => {
-    if (!req.file) {
-      res.status(400).json({ message: "No file uploaded" });
-    } else {
-      res.json({ success: true });
+  app.post("/api/course/upload/:course_id", upload.single("file"), async (req, res) => {
+    const courseId = req.params.course_id;
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
+
+    const file = req.files.file;
+
+    // Extract data from the CSV file and prepare it for MongoDB insertion
+    const dataToInsert = [];
+    let assignIds = [];
+
+    fs.createReadStream(file.tempFilePath)
+      .pipe(csvParser())
+      .on("headers", (headers) => {
+        // Find the column names containing "Points" and extract assignIds from them
+        assignIds = headers
+          .filter((col) => / Points$/.test(col))
+
+        // If no assignIds found, return an error response
+        if (assignIds.length === 0) {
+          return res
+            .status(400)
+            .json({ message: "No column with 'Points' found in the header" });
+        }
+      })
+      .on("data", (row) => {
+        // Extract data and create an array of objects for MongoDB insertion
+        assignIds.forEach((assignId) => {
+          const pointsInfo = row[`${assignId} Points`];
+          const maxPoints = parseFloat(
+            pointsInfo.match(/MaxPoints:([0-9.]+)/)[1]
+          );
+          dataToInsert.push({
+            assign_id: assignId,
+            course_id: courseId,
+            description: "",
+            total_tests: maxPoints,
+            // Add other fields if necessary based on your schema
+          });
+        });
+      })
+      .on("end", async () => {
+        try {
+          // Insert the extracted data into the 'assignment' collection using the assignmentSchema model
+          await Assignment.insertMany(dataToInsert);
+
+          return res.json({ success: true });
+        } catch (error) {
+          console.error("Error inserting data into MongoDB:", error);
+          return res
+            .status(500)
+            .json({ message: "Failed to insert data into MongoDB" });
+        }
+      });
   });
 };
