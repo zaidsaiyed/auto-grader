@@ -5,21 +5,29 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f2f2f2;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
       }
 
       .container {
-        width: 300px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border: 1px solid #ccc;
+        width: 400px;
+        padding: 40px;
+        background-color: #212121;
+        border: 1px solid #666;
         border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
       }
 
       h1 {
         text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
       }
 
       .form-group {
@@ -29,40 +37,55 @@
       .form-group label {
         display: block;
         font-weight: bold;
+        color: #fff;
       }
 
-      .form-group input[type="text"] {
-        width: 100%;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-      }
-
+      .form-group input[type="text"],
+      .form-group input[type="password"],
       .form-group select {
-        width: 100%;
-        padding: 5px;
+        width: 95%;
+        padding: 12px;
         border: 1px solid #ccc;
         border-radius: 3px;
+        font-size: 16px;
+        color: #555;
+        background-color: #fff;
       }
 
       .form-group input[type="submit"] {
-        width: 100%;
-        padding: 10px;
+        width: 101%;
+        padding: 12px;
         background-color: #4caf50;
         color: #fff;
         border: none;
         border-radius: 3px;
+        font-size: 16px;
+        font-weight: bold;
         cursor: pointer;
+        transition: background-color 0.3s;
       }
 
       .form-group input[type="submit"]:hover {
-        background-color: #45a049;
+        background-color: #39813d;
       }
 
       .error-message {
         color: red;
-        margin-top: 5px;
+        margin-top: 10px;
+        text-align: center;
       }
+
+      #prof {
+        width: 101%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 16px;
+        color: #555;
+        background-color: #fff;
+      }
+
     </style>
     <script>
       function populateProfessors() {
