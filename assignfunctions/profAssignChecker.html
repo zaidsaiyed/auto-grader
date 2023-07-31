@@ -6,21 +6,26 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #212121;
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
-      width: 800px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: 60px auto 0;
       padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
+      background-color: #212121;
+      border: 1px solid #666;
       border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
     }
 
     .upload-section {
@@ -33,12 +38,20 @@
       display: none;
     }
 
-    .upload-section label {
+    .upload-section label,
+    .upload-section #uploadButton,
+    .upload-section #runProcessButton {
       padding: 10px 20px;
-      background-color: #4CAF50;
-      color: #fff;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .upload-section label {
+      background-color: #4caf50;
+      color: #fff;
       transition: background-color 0.3s;
     }
 
@@ -48,32 +61,25 @@
 
     .upload-section #uploadButton {
       margin-left: 10px;
-      padding: 10px 20px;
-      background-color: #2196F3;
+      background-color: #2196f3;
       color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
       transition: background-color 0.3s;
     }
 
     .upload-section #uploadButton:hover {
-      background-color: #1976D2;
+      background-color: #1976d2;
     }
 
     .upload-section #runProcessButton {
       margin-left: 10px;
-      padding: 10px 20px;
       background-color: #f0f321;
       color: #160404;
-      border-radius: 5px;
-      cursor: pointer;
       transition: background-color 0.3s;
     }
 
     .upload-section #runProcessButton:hover {
-      background-color: #1976D2;
+      background-color: #1976d2;
     }
-
 
     .results-section {
       margin-top: 20px;
@@ -85,12 +91,14 @@
     .results-section p {
       font-size: 18px;
       margin-bottom: 10px;
+      color: #fff;
     }
 
     pre {
       white-space: pre-wrap;
       font-family: Arial, sans-serif;
       font-size: 16px;
+      color: #fff;
     }
 
     /* Blinking animation */
@@ -163,7 +171,9 @@
 
     window.addEventListener('DOMContentLoaded', (event) => {
       const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get("courseId");
       const assignId = urlParams.get("assignId");
+      
 
       const fileInput = document.getElementById('fileInput');
       const fileLabel = document.getElementById('fileLabel');
@@ -194,9 +204,10 @@
         const formData = new FormData();
         formData.append('file', file);
         formData.append('assignId', assignId);
+        formData.append('courseId', courseId);
 
         // Loading screen
-        statusText.textContent = 'Status: Checking Assignment...';
+        statusText.textContent = 'Status: Checking....';
         resultText.textContent = '';
         document.querySelector('.results-section').style.display = 'block';
 
@@ -211,7 +222,8 @@
             .then(response => response.json())
             .then(data => {
               if (data.success) {
-                statusText.textContent = 'Status: Assignment Checked Successfully';
+
+                statusText.textContent = 'Status: File Uploaded Successfully';
                 resultText.textContent = formatResultText(data.result);
               } else {
                 //statusText.textContent = 'Status: Assignment Check Failed';
@@ -226,10 +238,14 @@
               // Handle error case
             });
           }, 500);
+          setTimeout(() => {
+            statusText.classList.add('blink'); // Add the blinking animation
+            statusText.textContent = 'Status: File Uploaded Successfully';
+          }, 500);
         }
         
         
-      function runChildProcess() {
+        function runChildProcess() {
         fetch('/api/runPy', {
           method: 'POST',
         })

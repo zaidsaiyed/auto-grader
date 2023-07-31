@@ -190,7 +190,7 @@ def generate_custom_output():
         # creating a text file for all grades and appending the grades to it in the format of student name grades
         
         with open("grades.txt", "a") as f:
-            f.write(f"{student_folder} {grades}\n")
+            f.write(f"{student_folder}, {grades}\n")
             f.close()
         os.chdir(temp_dir)
         

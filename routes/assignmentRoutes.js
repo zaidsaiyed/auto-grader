@@ -3,6 +3,8 @@ const fs = require("fs-extra");
 const Assignment = mongoose.model("assignment");
 const Grade = mongoose.model("grade");
 const multer = require("multer");
+const path = require('path');
+const fs1 = require('fs');
 
 
 // Set up multer storage 2
@@ -187,10 +189,26 @@ module.exports = (app) => {
       res.status(400).json({ message: "No file uploaded" });
       return;
     }
-    const assignId = req.body.assignId;
-    // copying test file for python from Assignment folder
-    
 
+    // const {assignId, courseId} = req.params;
+    const assignId = req.body.assignId;
+    const courseId = req.body.courseId;
+
+    // copying test file for python from Assignment folder
+
+    const filepath = `./courses/${courseId}/${assignId}`
+
+    const sourceFile = path.join(filepath, 'final_unit_tests.py'); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
+    const destinationFile = path.join('./softcheck_uploads', 'final_unit_tests.py'); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
+
+    fs1.copyFile(sourceFile, destinationFile, (err) => {
+    if (err) {
+      console.error('Error copying file:', err);
+      return res.status(500).send('Error copying file.');
+    }
+
+    res.send('File copied successfully!');
+  });
 
     // get course name
     // Search for folder inside courses folder
