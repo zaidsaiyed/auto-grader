@@ -181,9 +181,11 @@
       // Function to handle the check assignment button click event
       function checkAssignment() {
         var assignId = getParameterByName("assignId");
+        var courseId = getParameterByName("courseId");
 
         // Redirect to the check assignment page with the assignId
-        window.location.href = "/profassignmentchecker?assignId=" + assignId;
+
+        window.location.href = "/profassignmentchecker?assignId=" + assignId + "&courseId=" + courseId;
       }
 
       // Function to search grades by student ID
