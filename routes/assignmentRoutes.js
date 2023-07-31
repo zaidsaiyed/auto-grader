@@ -188,6 +188,10 @@ module.exports = (app) => {
       return;
     }
     const assignId = req.body.assignId;
+    // copying test file for python from Assignment folder
+    
+
+
     // get course name
     // Search for folder inside courses folder
     // use this to create a script path for python to cgheck the uploaded fill
