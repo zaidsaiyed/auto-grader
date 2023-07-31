@@ -200,7 +200,7 @@ app.get("/upload", (req, res) => {
 
 //Edit Individual Grade
 app.get("/editgrade", (req, res) => {
-  res.sendFile(__dirname + "/assignFunctions/editgrade.html");
+  res.sendFile(__dirname + "/gradefunctions/editgrade.html");
 });
 
 

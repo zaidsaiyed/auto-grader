@@ -97,4 +97,29 @@ module.exports = (app) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+  // Route to update a grade
+  app.put("/api/grade/:courseId/:assignId/:studentId", async (req, res) => {
+    const { courseId, assignId, studentId } = req.params;
+
+    try {
+      const gradeToUpdate = await Grade.findOne({
+        course_id: courseId,
+        assign_id: assignId,
+        student_id: studentId,
+      });
+
+      if (!gradeToUpdate) {
+        return res.status(404).json({ error: "Grade not found" });
+      }
+
+      gradeToUpdate.earned = parseFloat(req.body.earned);
+      gradeToUpdate.comments = req.body.comments;
+
+      await gradeToUpdate.save();
+      res.json(gradeToUpdate);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 };

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const fs = require("fs-extra");
 const Assignment = mongoose.model("assignment");
+const Grade = mongoose.model("grade");
 const multer = require("multer");
 
 
@@ -223,38 +224,37 @@ module.exports = (app) => {
     });
 });
 
+// Route to update assignment and update total_tests in grades
+  app.put("/api/assignment/:courseId/:assignId", upload2.single("unitTestFile"), async (req, res) => {
+    const { courseId, assignId } = req.params; // Extract the courseId and assignId
 
+    try {
+      const updatedAssignment = await Assignment.findOneAndUpdate(
+        { course_id: courseId, assign_id: assignId }, // Filter
+        {
+          $set: {
+            description: req.body.description,
+            required_files: req.body.requiredFiles,
+            total_tests: req.body.totalTests,
+          },
+        }, // Update
+        { new: true } // Options: Return the updated assignment
+      );
 
-
-
-app.put(
-  "/api/assignment/:courseId/:assignId",
-    upload2.single("unitTestFile"),
-    async (req, res) => {
-      const { courseId, assignId } = req.params; // Extract the courseId and assignId
-
-      try {
-        const updatedAssignment = await Assignment.findOneAndUpdate(
-          { course_id: courseId, assign_id: assignId }, // Filter
-          {
-            $set: {
-              description: req.body.description,
-              required_files: req.body.requiredFiles,
-              total_tests: req.body.totalTests,
-            },
-          }, // Update
-          { new: true } // Options: Return the updated assignment
-        );
-
-        if (!updatedAssignment) {
-          res.status(404).json({ message: "Assignment not found" });
-          return;
-        }
-
-        res.json(updatedAssignment);
-      } catch (error) {
-        res.status(500).json({ message: error.message });
+      if (!updatedAssignment) {
+        res.status(404).json({ message: "Assignment not found" });
+        return;
       }
+
+      // Update total_tests in grades collection for this assignment
+      await Grade.updateMany(
+        { course_id: courseId, assign_id: assignId }, // Filter
+        { $set: { total_tests: req.body.totalTests } } // Update
+      );
+
+      res.json(updatedAssignment);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-  );
+  });
 };

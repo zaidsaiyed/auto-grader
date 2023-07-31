@@ -140,15 +140,15 @@
         </div>
         <input type="text" id="requiredFiles" placeholder="Required Files" />
         <input type="number" id="totalTests" placeholder="Total Tests" />
-        <button type="submit">Update</button>
+        <button type="button" onclick="updateAssignment()">Update</button>
       </form>
     </div>
-
+  
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const courseId = urlParams.get("courseId");
       const assignId = urlParams.get("assignId");
-
+  
       const updateAssignmentForm = document.getElementById(
         "updateAssignmentForm"
       );
@@ -158,10 +158,10 @@
       const unitTestFileInput = document.getElementById("unitTestFile");
       const requiredFilesInput = document.getElementById("requiredFiles");
       const totalTestsInput = document.getElementById("totalTests");
-
+  
       courseIdInput.value = courseId;
       assignIdInput.value = assignId;
-
+  
       // Populate the form with assignment data
       fetch(`/api/assignment/${courseId}/${assignId}`)
         .then((response) => response.json())
@@ -173,32 +173,23 @@
         .catch((error) => {
           console.error(error);
         });
-
-      // Handle form submission
-      updateAssignmentForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(updateAssignmentForm);
-        const updatedAssignment = {};
-
-        formData.forEach((value, key) => {
-          if (key === "unitTestFile") {
-            const filePath = `./courses/${courseId}/${assignId}/unit_test.py`;
-            updatedAssignment.files_location = filePath;
-            updatedAssignment.unit_test = value;
-            formData.set("unitTestFile", value, "unit_test.py");
-          } else {
-            updatedAssignment[key] = value;
-          }
-        });
-
-        // Send the updated assignment data to the server
+  
+      // Function to handle form submission
+      function updateAssignment() {
+        const description = document.getElementById("description").value;
+        const requiredFiles = document.getElementById("requiredFiles").value;
+        const totalTests = document.getElementById("totalTests").value;
+  
+        const formData = new FormData();
+        formData.append("description", description);
+        formData.append("requiredFiles", requiredFiles);
+        formData.append("totalTests", totalTests);
+        formData.append("unitTestFile", unitTestFileInput.files[0]);
+  
+        // Send the updated assignment data to the server using fetch
         fetch(`/api/assignment/${courseId}/${assignId}`, {
           method: "PUT",
-          body: JSON.stringify(updatedAssignment),
-          headers: {
-            "Content-Type": "application/json",
-          },
+          body: formData,
         })
           .then((response) => response.json())
           .then((data) => {
@@ -210,7 +201,7 @@
             console.error("Error updating assignment:", error);
             alert("An error occurred while updating the assignment");
           });
-      });
+      }
     </script>
   </body>
 </html>
