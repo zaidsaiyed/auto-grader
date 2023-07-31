@@ -6,21 +6,70 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #212121;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      background-color: #212121;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .roles {
+      display: flex;
+    }
+
+    .role {
+      margin-right: 20px;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      /* spacing between them words*/
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .professor {
+      margin-right: 20px;
+      font-size: 24px;
+      color: #4caf50;
+      cursor: pointer;
     }
 
     .container {
-      width: 800px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: 60px auto 0;
       padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
+      background-color: #212121;
+      border: 1px solid #666;
       border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    h2{
+      color: #fff;
+      font-size: larger;
     }
 
     .course-details {
@@ -45,22 +94,26 @@
     .assignments td {
       padding: 8px;
       border-bottom: 1px solid #ddd;
+      color: #fff;
     }
 
     .assignments th {
-      background-color: #f5f5f5;
+      /* header cell size*/
+          
+      background-color: #555;
       font-weight: bold;
       text-align: left;
+      
     }
-
+  
     .assignment-link {
-      color: #45a049;
+      color: #4caf50;
       text-decoration: none;
       transition: color 0.3s;
     }
 
     .assignment-link:hover {
-      color: #45a049;
+      color: #37803b;
       text-decoration: underline;
     }
 
@@ -79,14 +132,23 @@
     }
 
     .popup-content {
-      background-color: #fff;
+      background-color: #212121;
       padding: 20px;
       border-radius: 5px;
+      color: #fff;
     }
   </style>
 </head>
 
 <body>
+    <div class="header">
+      <div class="header-title" onclick="redirectToLanding()">AutoGrader System</div>
+      <div class="roles">
+        <div class="role admin">Admin</div>
+        <div class="role professor">Professor</div>
+        <div class="role student">Student</div>
+      </div>
+    </div>
   <div class="container">
     <h1>Course Details</h1>
     <div class="course-details">
@@ -214,6 +276,10 @@
         popup.style.display = 'none';
       }
     });
+
+    function redirectToLanding() {
+      window.location.href = "/";
+    }
   </script>
 </body>
 
