@@ -16,7 +16,6 @@ app.use(express.static("public"));
 
 const bodyParser = require("body-parser"); // Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 require("./routes/userRoutes")(app); // Load the user routes
 require("./routes/courseRoutes")(app); // Load the course routes
@@ -112,10 +111,10 @@ app
           var userType = matchingUser.types;
           if (userType === "S")
             window.location.href =
-              "/studentdashboard?username=" + encodeURIComponent(username);
+              "/studentdashboard?username=" +(username);
           else if (userType === "P")
             window.location.href =
-              "/professordashboard?username=" + encodeURIComponent(username);
+              "/professordashboard?username=" +(username);
           else if (userType === "A") window.location.href = "/admin";
           else {
             // Invalid user type
