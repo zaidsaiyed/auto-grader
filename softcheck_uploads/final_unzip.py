@@ -2,7 +2,6 @@ import shutil
 import os
 import glob
 import zipfile
-import csv
 import re
 import sys
 import time
@@ -97,44 +96,6 @@ def find_student_name(zip_file):
     if len(matches) >= 2:
         student_name = " ".join(matches[:2])
     return student_name
-
-# Delete this function
-def update_grades_csv(grade_csv_file, assignment_name, student_name, grades):
-    results_directory = "results"
-    os.makedirs(results_directory, exist_ok=True)
-    results_csv_file = os.path.join(results_directory, "results.csv")
-    if not os.path.exists(results_csv_file):
-        shutil.copy2(grade_csv_file, results_csv_file)
-
-    header = []
-    data = []
-
-    with open(results_csv_file, "r") as csv_file:
-        reader = csv.reader(csv_file)
-        header = next(reader)
-        assignment_position = None
-
-        for idx, col in enumerate(header):
-            if assignment_name.lower() in col.lower():
-                assignment_position = idx
-                break
-
-        if assignment_position is None:
-            print("Assignment name not found.")
-            return
-
-        for row in reader:
-            name = row[2] + " " + row[1]
-            if name == student_name:
-                row[assignment_position] = grades[0]
-            data.append(row)
-
-    with open(results_csv_file, "w", newline="") as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(header)
-        writer.writerows(data)
-    
-    shutil.copy2(results_csv_file, grade_csv_file)
 
 def generate_custom_output():
     folder_des = 'softcheck_uploads'

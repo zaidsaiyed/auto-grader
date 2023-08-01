@@ -212,6 +212,19 @@ module.exports = (app) => {
       console.error('Error copying file:', err);
       return res.status(500).send('Error copying file.');
     }
+    
+    const newfilepath = `./courses/${courseId}`
+
+    const sourceFile = path.join(newfilepath, 'Test1.csv'); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
+    const destinationFile = path.join('./softcheck_uploads', 'Test1.csv'); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
+
+    fs1.copyFile(sourceFile, destinationFile, (err) => {
+    if (err) {
+      console.error('Error copying file:', err);
+      return res.status(500).send('Error copying file.');
+    }
+  });
+    
     // Create the text content with courseId and assignId
     const textData = `Course ID: ${courseId}, Assignment ID: ${assignId}\n`;
 
@@ -255,6 +268,7 @@ module.exports = (app) => {
   // Child process to execute Python script
   
   app.post('/api/runPy', (req, res) => {
+    
     const { exec } = require("child_process");
     const pythonScriptPath = "softcheck_uploads/final_unzip.py";
     exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
@@ -269,6 +283,23 @@ module.exports = (app) => {
       res.json({ success: true, result: result });
     });
 });
+
+app.post('/api/csvrunPy', (req, res) => {
+  const { exec } = require("child_process");
+  const pythonScriptPath = "softcheck_uploads/csv.py";
+  exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing Python script: ${error}`);
+      res.status(500).json({ message: "Error executing Python script" });
+      return;
+    }
+    // Process the output from the Python script
+    //console.log(`Python script output: ${stdout}`);
+    const result = stdout;
+    res.json({ success: true, result: result });
+  });
+});
+
 
 // Route to update assignment and update total_tests in grades
   app.put("/api/assignment/:courseId/:assignId", upload2.single("unitTestFile"), async (req, res) => {
