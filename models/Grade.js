@@ -38,12 +38,6 @@ const gradeSchema = new Schema({
   },
   earned: {
     type: Number,
-    validate: {
-      validator: function (value) {
-        return value <= this.total_tests;
-      },
-      message: "Earned marks cannot exceed total tests marks",
-    },
   },
   comments: {
     type: String,
