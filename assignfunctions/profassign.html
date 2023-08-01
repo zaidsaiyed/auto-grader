@@ -90,7 +90,7 @@
         <span style="margin-right: 10px"></span>
         <button onclick="checkAssignment()">Check Assignment</button>
         <button onclick="downloadCSV()">Download CSV</button>
-        <!-- New Download Button -->
+        <button onclick="handleBackButton()" id="backButton">Back</button>
       </div>
 
       <table id="gradesTable">
@@ -105,6 +105,13 @@
       <script>
         var allGradesData; // Store the original grades data
 
+        function handleBackButton() {
+          const courseId = getParameterByName("courseId");
+
+          // Redirect to the professor course page with the courseId
+          window.location.href = "/profcourse?courseId=" + courseId;
+        }
+        
         // Function to generate the table dynamically
         function generateTable(data, totalTests) {
           var table = document.getElementById("gradesTable");
