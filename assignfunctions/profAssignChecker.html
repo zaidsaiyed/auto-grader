@@ -119,6 +119,28 @@
       .blink {
         animation: blinking 1.4s infinite;
       }
+
+      /* Back button styles */
+    #backButton {
+      background-color: #f44336; /* Red background color */
+      color: #fff; /* White text color */
+      padding: 10px 20px; /* Padding around the button text */
+      border: none; /* Remove button border */
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer; /* Show pointer cursor on hover */
+      font-size: 16px; /* Button text font size */
+      font-weight: bold; /* Button text font weight */
+      text-align: center; /* Center the button text */
+      transition: background-color 0.3s; /* Smooth transition for background color change */
+    }
+
+    #backButton:hover {
+      background-color: #d32f2f; /* Darker red on hover */
+    }
+
+    #backButton:focus {
+      outline: none; /* Remove focus outline */
+    }
     </style>
   </head>
 
@@ -135,6 +157,9 @@
         </div>
         <div class="child-item">
           <button id="runProcessButton">Run Process</button>
+        </div>
+        <div class="child-item">
+          <button id="backButton">Back</button>
         </div>
       </div>
       <div class="results-section">
@@ -185,10 +210,24 @@
         const runProcessButton = document.getElementById("runProcessButton");
         const resultText = document.getElementById("resultText");
         const statusText = document.getElementById("statusText");
-
+        const backButton = document.getElementById("backButton");
+        
+        backButton.addEventListener("click", handleBackButton);
         fileInput.addEventListener("change", handleFileSelection);
         uploadButton.addEventListener("click", handleUpload);
         runProcessButton.addEventListener("click", runChildProcess);
+
+        function handleBackButton() {
+          // Redirect to the professor assignment checker page with assignId and courseId
+          const urlParams = new URLSearchParams(window.location.search);
+          const assignId = urlParams.get("assignId");
+          const courseId = urlParams.get("courseId");
+          window.location.href =
+            "/profassignment?assignId=" +
+            assignId +
+            "&courseId=" +
+            courseId;
+        }
 
         function handleFileSelection(event) {
           const selectedFile = event.target.files[0];
@@ -288,7 +327,7 @@
               if (data.success) {
                 console.log("CSV file is ready to Download");
               } else {
-                console.log("NO NO NO");
+                console.log("Crashed");
               }
             });
         }
