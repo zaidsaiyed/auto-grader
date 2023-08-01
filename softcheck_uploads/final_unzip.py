@@ -6,6 +6,8 @@ import re
 import sys
 import time
 import subprocess
+from csv import DictReader
+from csv import DictWriter
 
 # Prevents the creation of .pyc files
 sys.dont_write_bytecode = True
@@ -97,10 +99,73 @@ def find_student_name(zip_file):
         student_name = " ".join(matches[:2])
     return student_name
 
+def csv_update():
+    input_file_path = 'Test1.csv'
+    output_file_path = 'updated_data.csv'
+
+    file_path = 'grades.txt'
+
+    with open(file_path, 'r') as file:
+        lines = [line.strip() for line in file]
+        header_text = lines[0]
+        assignment_name = header_text.split(',')[1].split(':')[1].strip()
+        marks = lines[1:]
+        elements = [element.split(',') for element in marks]
+        new_dict = {}
+        for element in elements:
+            name = element[0]
+            grade = element[1].strip()
+            if grade == '':
+                grade = 0
+            grade = int(grade)
+            key_val = {name:grade}
+            new_dict.update(key_val)
+        #print(new_dict)
+        #print(f'this is from TXT {assignment_name}\n')
+            
+    data = []
+    with open(input_file_path, 'r') as csv_file:
+        csv_reader = DictReader(csv_file)  
+        
+        for row in csv_reader:
+            data.append(row)
+
+        
+        
+        normal_data = list(csv_reader)
+        headers = csv_reader.fieldnames
+        list_of_assigments_draft = headers[3:len(headers)-1]
+        list_of_assigments = []
+        for i in list_of_assigments_draft:
+            new_i = i.split(' Points')[0]
+            if new_i == assignment_name:
+                list_of_assigments.append(i)
+        #print(f'\nThe assgn name u want to edit{list_of_assigments}')
+    
+        for row in data:
+            student_name = row['First Name'] + " " + row['Last Name']
+            #print(student_name)
+            if student_name in new_dict.keys():
+                new_dict_grade = new_dict[student_name]
+                #print(f'From CVS {student_name}: From TXT {new_dict_grade}')
+                row[list_of_assigments[0]] = new_dict_grade
+
+                
+        #print(f'\n\nFinal Updated data: {data}')
+
+        with open(output_file_path, 'w', newline='') as csv_file:
+            csv_writer = DictWriter(csv_file, fieldnames=headers)
+            csv_writer.writeheader()
+            csv_writer.writerows(data)
+
+
+
+
 def generate_custom_output():
     folder_des = 'softcheck_uploads'
     
-    current_directory = os.getcwd()
+    current_directory = os.getcwd() # Project directory
+    
     folders = [item for item in os.listdir(current_directory) if os.path.isdir(item)]
     for f in folders:
         if f == folder_des:
@@ -141,9 +206,6 @@ def generate_custom_output():
         grades_dict[student_folder] = grades
         # print(grades_dict)
 
-        # grades_csv_file = "grades.csv"
-        # update_grades_csv(grades_csv_file, assignment_name, student_folder, grades)
-
         for file_name in file_list:
             os.remove(file_name)
             #print(file_name)
@@ -153,6 +215,9 @@ def generate_custom_output():
         with open("grades.txt", "a") as f:
             f.write(f"{student_folder}, {grades}\n")
             f.close()
+            
+        
+        csv_update()
         os.chdir(temp_dir)
         
     return grades_dict
