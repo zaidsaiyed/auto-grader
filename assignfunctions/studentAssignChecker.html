@@ -6,27 +6,33 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background-color: #212121;
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
-      width: 800px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: 60px auto 0;
       padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
+      background-color: #212121;
+      border: 1px solid #666;
       border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
     }
 
     .upload-section {
       margin-top: 20px;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .upload-section input[type="file"] {
@@ -35,7 +41,7 @@
 
     .upload-section label {
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: #fff;
       border-radius: 5px;
       cursor: pointer;
@@ -49,7 +55,7 @@
     .upload-section #uploadButton {
       margin-left: 10px;
       padding: 10px 20px;
-      background-color: #2196F3;
+      background-color: #2196f3;
       color: #fff;
       border-radius: 5px;
       cursor: pointer;
@@ -57,7 +63,7 @@
     }
 
     .upload-section #uploadButton:hover {
-      background-color: #1976D2;
+      background-color: #1976d2;
     }
 
     .results-section {
@@ -70,12 +76,14 @@
     .results-section p {
       font-size: 18px;
       margin-bottom: 10px;
+      color: #fff;
     }
 
     pre {
       white-space: pre-wrap;
       font-family: Arial, sans-serif;
       font-size: 16px;
+      color: #fff;
     }
 
     /* Blinking animation */
@@ -83,9 +91,11 @@
       0% {
         opacity: 0;
       }
+
       50% {
         opacity: 1;
       }
+
       100% {
         opacity: 0;
       }

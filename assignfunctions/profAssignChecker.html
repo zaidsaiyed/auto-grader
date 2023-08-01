@@ -31,7 +31,8 @@
     .upload-section {
       margin-top: 20px;
       display: flex;
-      align-items: center;
+      align-items: center; 
+      justify-content: center;
     }
 
     .upload-section input[type="file"] {
@@ -106,9 +107,11 @@
       0% {
         opacity: 0;
       }
+
       50% {
         opacity: 1;
       }
+
       100% {
         opacity: 0;
       }
@@ -124,10 +127,16 @@
   <div class="container">
     <h1>Assignment Checker</h1>
     <div class="upload-section">
-      <input type="file" id="fileInput" accept=".zip">
-      <label for="fileInput" id="fileLabel">Choose File</label>
-      <button id="uploadButton">Upload</button>
-      <button id="runProcessButton">Run Process</button>
+      <div class="child-item">
+        <input type="file" id="fileInput" accept=".zip">
+        <label for="fileInput" id="fileLabel">Choose File</label>
+      </div>
+      <div class="child-item">
+        <button id="uploadButton">Upload</button>
+      </div>
+      <div class="child-item">
+        <button id="runProcessButton">Run Process</button>
+      </div>
     </div>
     <div class="results-section">
       <p id="statusText" class="blink">Status: Checking Assignment...</p>
@@ -140,15 +149,15 @@
     function formatResultText(result) {
       const keyValuePairs = result.match(/'([^']+)':/g); // Extract the key-value pairs
       let formattedText = '';
-    
+
       if (keyValuePairs) {
         keyValuePairs.forEach((pair, index) => {
           const key = pair.replace(/'/g, ''); // Remove the single quotes around the key
           const delay = (index + 1) * 100; // Delay in milliseconds, incrementing for each pair
-    
+
           setTimeout(() => {
             formattedText += `Testing For ${key} . . . . . . . . . Done\n`;
-    
+
             if (index === keyValuePairs.length - 1) {
               setTimeout(() => {
                 formattedText += 'Updating CSV file . . . . .\n';
@@ -163,17 +172,17 @@
           }, delay);
         });
       }
-    
+
       return formattedText.trim(); // Remove any extra whitespace at the beginning or end
     }
-    
+
 
 
     window.addEventListener('DOMContentLoaded', (event) => {
       const urlParams = new URLSearchParams(window.location.search);
       const courseId = urlParams.get("courseId");
       const assignId = urlParams.get("assignId");
-      
+
 
       const fileInput = document.getElementById('fileInput');
       const fileLabel = document.getElementById('fileLabel');
@@ -237,15 +246,15 @@
               //resultText.textContent = '';
               // Handle error case
             });
-          }, 500);
-          setTimeout(() => {
-            statusText.classList.add('blink'); // Add the blinking animation
-            statusText.textContent = 'Status: File Uploaded Successfully';
-          }, 500);
-        }
-        
-        
-        function runChildProcess() {
+        }, 500);
+        setTimeout(() => {
+          statusText.classList.add('blink'); // Add the blinking animation
+          statusText.textContent = 'Status: File Uploaded Successfully';
+        }, 500);
+      }
+
+
+      function runChildProcess() {
         fetch('/api/runPy', {
           method: 'POST',
         })
