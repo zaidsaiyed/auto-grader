@@ -279,26 +279,35 @@ module.exports = (app) => {
       }
       // Process the output from the Python script
       //console.log(`Python script output: ${stdout}`);
+
+
       const result = stdout;
       res.json({ success: true, result: result });
     });
 });
 
-app.post('/api/csvrunPy', (req, res) => {
-  const { exec } = require("child_process");
-  const pythonScriptPath = "softcheck_uploads/csv.py";
-  exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing Python script: ${error}`);
-      res.status(500).json({ message: "Error executing Python script" });
-      return;
-    }
-    // Process the output from the Python script
-    //console.log(`Python script output: ${stdout}`);
-    const result = stdout;
-    res.json({ success: true, result: result });
-  });
+// Move csv file to course folder
+app.post('/api/movCSV', (req, res) => {
+
+  const courseId = req.body.courseId;
+  console.log(courseId);
+
+  // copying test file for python from Assignment folder
+
+  const filepath = `./courses/${courseId}`
+
+  const destinationFile = path.join(filepath, `${courseId}.csv`); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
+  const sourceFile = path.join('./softcheck_uploads', `${courseId}.csv`); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
+
+  fs1.copyFile(sourceFile, destinationFile, (err) => {
+  if (err) {
+    console.error('Error copying file:', err);
+    return res.status(500).send('Error copying file.');
+  }
 });
+});
+
+
 
 
 // Route to update assignment and update total_tests in grades

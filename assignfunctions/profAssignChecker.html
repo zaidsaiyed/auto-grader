@@ -253,6 +253,26 @@
         }, 500);
       }
 
+      function mov_cvs(){
+        const NewformData = new FormData();
+        NewformData.append('courseId', courseId);
+        NewformData.append('assignId', assignId);
+
+        fetch('/api/movCSV', {
+          method: 'POST',
+          body: NewformData
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if (data.success) {
+              console.log("CSV file is ready to Download");
+            } else {
+              console.log("NO NO NO");
+            }
+          });
+      };
+
 
       function runChildProcess() {
         fetch('/api/runPy', {
@@ -265,6 +285,7 @@
               console.log(stdout);
               statusText.textContent = 'Status: Assignment Checked Successfully';
               resultText.textContent = formatResultText(stdout);
+              mov_cvs();
             } else {
               //statusText.textContent = 'Status: Assignment Check Failed';
               //resultText.textContent = '';
