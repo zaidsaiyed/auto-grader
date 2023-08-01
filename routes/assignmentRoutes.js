@@ -96,6 +96,12 @@ module.exports = (app) => {
       const folderPath = assignment.files_location;
       await fs.remove(folderPath);
 
+
+      //Delete related grades
+      await Grade.deleteMany({
+        assign_id: AssignID
+      });
+
       res.json({ message: "Assignment deleted" });
     } catch (error) {
       res.status(500).json({ message: error.message });

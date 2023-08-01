@@ -5,6 +5,7 @@ const multer = require("multer");
 const Course = mongoose.model("course");
 const csvParser = require("csv-parser");
 const Assignment = mongoose.model("assignment");
+const Grade = mongoose.model("grade");
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -95,8 +96,19 @@ module.exports = (app) => {
       // Delete the course folder
       const courseFolderPath = `./courses/${courseId}`;
       await fset.remove(courseFolderPath);
+
+      //Delete related assignments
+      await Assignment.deleteMany({
+        course_id: courseId,
+      });
+
+      //Delete related grades
+      await Grade.deleteMany({
+        course_id: courseId,
+      });
+
       res.json({
-        message: "Course deleted successfully",
+        message: "Course, assignments, and grades deleted successfully",
       });
     } catch (error) {
       res.status(500).json({
@@ -129,23 +141,26 @@ module.exports = (app) => {
       const courseId = req.params.course_id;
       const filePath = `./courses/${courseId}/${courseId}.csv`;
 
-      const dataToInsert = []; // Declare the dataToInsert array here
-      let headers = []; // Declare the headers array here
+      const assignments = []; // Store assignment data here
+      const students = new Set(); // Store student IDs using a Set
+      const studentNames = new Map(); // Store student names using a Map
+
+      // Parse the CSV file
       fs.createReadStream(filePath)
         .pipe(csvParser())
-        .on("headers", async (headers) => {
+        .on("headers", (headers) => {
           // Trim headers to remove leading and trailing spaces
           headers = headers.map((header) => header.trim());
           // Find the column names containing " Points" and extract assignIds from them
           const assignIds = headers
             .filter((col) => col.includes(" Points"))
             .map((col) => col.replace(/ Points.*$/, ""));
-          console.log(assignIds);
 
           // If no assignIds found, return an error response
           if (assignIds.length !== 0) {
+            //Insert Assignment Data
             assignIds.forEach((assignId) => {
-              dataToInsert.push({
+              assignments.push({
                 assign_id: assignId,
                 course_id: courseId,
                 description: "",
@@ -154,23 +169,60 @@ module.exports = (app) => {
                 total_tests: null,
               });
             });
-            console.log(dataToInsert);
+  
 
-            // Assuming you have already connected to your MongoDB database
-            try {
-              // Insert the data into the Assignment collection
-              await Assignment.insertMany(dataToInsert);
+            //Parse the CSV file again to get student data
+            fs.createReadStream(filePath)
+              .pipe(csvParser())
+              .on("headers", () => {
+                // Skip headers for student data parsing
+              })
+              .on("data", (row) => {
+                //Insert Student Data
+                const studentId = row["OrgDefinedId"].replace("#", ""); // Remove "#" symbol
+                const firstName = row["First Name"];
+                const lastName = row["Last Name"];
 
-              // Respond with a success message
-              return res
-                .status(200)
-                .json({ success: true, message: "Data inserted successfully" });
-            } catch (error) {
-              console.error("Error inserting data into the database:", error);
-              return res
-                .status(500)
-                .json({ success: false, message: "Error inserting data" });
-            }
+                students.add(studentId);
+                studentNames.set(studentId, { firstName, lastName });
+              })
+              .on("end", async () => {
+                // All CSV data has been processed
+                try {
+                  // Insert Assignment Data
+                  await Assignment.insertMany(assignments);
+
+                  // Insert Grade Data for each student with default earned = null
+                  const grades = [];
+                  students.forEach((studentId) => {
+                    assignIds.forEach((assignId) => {
+                      const studentName = studentNames.get(studentId);
+                      grades.push({
+                        name: `${studentName.firstName} ${studentName.lastName}`,
+                        student_id: studentId,
+                        course_id: courseId,
+                        assign_id: assignId,
+                        total_tests: null,
+                        earned: null,
+                        comments: "",
+                      });
+                    });
+                  });
+                  await Grade.insertMany(grades);
+
+                  return res
+                    .status(200)
+                    .json({ message: "Data inserted successfully" });
+                } catch (error) {
+                  console.error(
+                    "Error inserting data into the database:",
+                    error
+                  );
+                  return res
+                    .status(500)
+                    .json({ message: "Error inserting data" });
+                }
+              });
           } else {
             return res.status(400).json({ message: "No assignment IDs found" });
           }
