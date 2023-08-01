@@ -65,6 +65,13 @@
         align-items: center;
       }
 
+      #backButton {
+        margin-left: 10px;
+      }
+
+      #downloadButton {
+        margin-left: 10px;
+      }
       .search-input {
         padding: 5px;
         border: 1px solid #fff;
@@ -89,7 +96,7 @@
         <button onclick="updateAssignment()">Update Assignment</button>
         <span style="margin-right: 10px"></span>
         <button onclick="checkAssignment()">Check Assignment</button>
-        <button onclick="downloadCSV()">Download CSV</button>
+        <button onclick="downloadCSV()" id="downloadButton">Download CSV</button>
         <button onclick="handleBackButton()" id="backButton">Back</button>
       </div>
 
