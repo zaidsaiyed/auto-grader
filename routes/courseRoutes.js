@@ -212,7 +212,7 @@ module.exports = (app) => {
 
                   return res
                     .status(200)
-                    .json({ message: "Data inserted successfully" });
+                    .json({  success: true ,message: "Data inserted successfully" });
                 } catch (error) {
                   console.error(
                     "Error inserting data into the database:",
