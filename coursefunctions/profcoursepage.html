@@ -1,286 +1,320 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Course Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <title>Course Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #212121;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
+      .header {
+        position: sticky;
+        top: 0;
+        background-color: #212121;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .header {
-      position: sticky;
-      top: 0;
-      background-color: #212121;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .header-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+      }
 
-    .header-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-    }
+      .roles {
+        display: flex;
+      }
 
-    .roles {
-      display: flex;
-    }
+      .role {
+        margin-right: 20px;
+        font-size: 24px;
+        color: #fff;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        /* spacing between them words*/
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
 
-    .role {
-      margin-right: 20px;
-      font-size: 24px;
-      color: #fff;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
-      /* spacing between them words*/
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
+      .professor {
+        margin-right: 20px;
+        font-size: 24px;
+        color: #4caf50;
+        cursor: pointer;
+      }
 
-    .professor {
-      margin-right: 20px;
-      font-size: 24px;
-      color: #4caf50;
-      cursor: pointer;
-    }
+      .container {
+        max-width: 800px;
+        margin: 60px auto 0;
+        padding: 20px;
+        background-color: #212121;
+        border: 1px solid #666;
+        border-radius: 5px;
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+      }
 
-    .container {
-      max-width: 800px;
-      margin: 60px auto 0;
-      padding: 20px;
-      background-color: #212121;
-      border: 1px solid #666;
-      border-radius: 5px;
-      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-    }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+      }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #fff;
-    }
+      h2 {
+        color: #fff;
+        font-size: larger;
+      }
 
-    h2{
-      color: #fff;
-      font-size: larger;
-    }
+      .course-details {
+        margin-top: 20px;
+      }
 
-    .course-details {
-      margin-top: 20px;
-    }
+      .course-details p {
+        font-size: 18px;
+        margin-bottom: 15px;
+      }
 
-    .course-details p {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
+      .assignments {
+        margin-top: 20px;
+      }
 
-    .assignments {
-      margin-top: 20px;
-    }
+      .assignments table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 
-    .assignments table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+      .assignments th,
+      .assignments td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        color: #fff;
+      }
 
-    .assignments th,
-    .assignments td {
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-      color: #fff;
-    }
+      .assignments th {
+        /* header cell size*/
 
-    .assignments th {
-      /* header cell size*/
-          
-      background-color: #555;
-      font-weight: bold;
-      text-align: left;
-      
-    }
-  
-    .assignment-link {
-      color: #4caf50;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
+        background-color: #555;
+        font-weight: bold;
+        text-align: left;
+      }
 
-    .assignment-link:hover {
-      color: #37803b;
-      text-decoration: underline;
-    }
+      .assignment-link {
+        color: #4caf50;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
 
-    .popup {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      display: none;
-    }
+      .assignment-link:hover {
+        color: #37803b;
+        text-decoration: underline;
+      }
 
-    .popup-content {
-      background-color: #212121;
-      padding: 20px;
-      border-radius: 5px;
-      color: #fff;
-    }
-  </style>
-</head>
+      .popup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        display: none;
+      }
 
-<body>
+      .popup-content {
+        background-color: #212121;
+        padding: 20px;
+        border-radius: 5px;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
     <div class="header">
-      <div class="header-title" onclick="redirectToLanding()">AutoGrader System</div>
+      <div class="header-title" onclick="redirectToLanding()">
+        AutoGrader System
+      </div>
       <div class="roles">
         <div class="role admin">Admin</div>
         <div class="role professor">Professor</div>
         <div class="role student">Student</div>
       </div>
     </div>
-  <div class="container">
-    <h1>Course Details</h1>
-    <div class="course-details">
-      <p>Course: <span id="courseName"></span></p>
-      <p>Professor: <span id="professorName"></span></p>
-    </div>
-    <div class="assignments">
-      <table id="assignmentsTable">
-        <thead>
-          <tr>
-            <th>
-              <h2>Assignment</h2>
-            </th>
-          </tr>
-        </thead>
-        <tbody id="assignmentsBody"></tbody>
-      </table>
-    </div>
-    <div class="popup" id="uploadPopup">
-      <div class="popup-content">
-        <form id="uploadForm">
-          <input type="file" name="file" id="file" accept="csv">
-          <input type="hidden" name="courseId" id="courseId">
-          <input type="button" value="Upload" id="uploadButton">
-        </form>
+    <div class="container">
+      <h1>Course Details</h1>
+      <div class="course-details">
+        <p>Course: <span id="courseName"></span></p>
+        <p>Professor: <span id="professorName"></span></p>
+      </div>
+      <div class="assignments">
+        <table id="assignmentsTable">
+          <thead>
+            <tr>
+              <th>
+                <h2>Assignment</h2>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="assignmentsBody"></tbody>
+        </table>
+      </div>
+      <div class="popup" id="uploadPopup">
+        <div class="popup-content">
+          <form id="uploadForm">
+            <input type="file" name="file" id="file" accept="csv" />
+            <input type="hidden" name="courseId" id="courseId" />
+            <input type="button" value="Upload" id="uploadButton" />
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  <script>
-    let courseId;
-    window.addEventListener('DOMContentLoaded', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      courseId = urlParams.get('courseId');
-      document.getElementById('courseId').value = courseId;
-      fetch('/api/course')
-        .then(response => response.json())
-        .then(courses => {
-          const course = courses.find(course => course.course_id === courseId);
-          if (course) {
-            document.getElementById('courseName').textContent = course.course_name;
-            document.getElementById('professorName').textContent = course.prof;
+    <script>
+      let courseId;
+      let assignId;
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        courseId = urlParams.get("courseId");
+        document.getElementById("courseId").value = courseId;
+        fetch("/api/course")
+          .then((response) => response.json())
+          .then((courses) => {
+            const course = courses.find(
+              (course) => course.course_id === courseId
+            );
+            if (course) {
+              document.getElementById("courseName").textContent =
+                course.course_name;
+              document.getElementById("professorName").textContent =
+                course.prof;
 
-            // Check if a file already exists for the course
-            fetch(`/api/course/file-exists/${courseId}`)
-              .then(response => response.json())
-              .then(data => {
-                if (!data.fileExists) {
-                  showUploadPopup();
-                } else {
-                  loadAssignments(courseId);
-                }
-              })
-              .catch(error => console.error(error));
-          } else {
-            console.error(`Course with course_id "${courseId}" not found.`);
-          }
-        })
-        .catch(error => console.error(error));
-
-      const uploadForm = document.getElementById('uploadForm');
-      const uploadButton = document.getElementById('uploadButton');
-      uploadButton.addEventListener('click', handleUpload);
-
-      function loadAssignments(courseId) {
-        fetch(`/api/assignments/course/${courseId}`)
-          .then(response => response.json())
-          .then(assignments => {
-            const assignmentsTable = document.getElementById('assignmentsTable');
-            const assignmentsBody = document.getElementById('assignmentsBody');
-            console.log(assignments);
-            assignments.forEach(assignment => {
-              const row = document.createElement('tr');
-              const assignmentCell = document.createElement('td');
-              const assignmentLink = document.createElement('a');
-
-              assignmentLink.textContent = assignment.assign_id;
-              assignmentLink.href = `/updateassignment?courseId=${courseId}&assignId=${assignment.assign_id}`;
-              assignmentLink.classList.add('assignment-link');
-
-              assignmentCell.appendChild(assignmentLink);
-
-              row.appendChild(assignmentCell);
-
-              assignmentsBody.appendChild(row);
-            });
+              // Check if a file already exists for the course
+              fetch(`/api/course/file-exists/${courseId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                  if (!data.fileExists) {
+                    showUploadPopup();
+                  } else {
+                    loadAssignments(courseId);
+                  }
+                })
+                .catch((error) => console.error(error));
+            } else {
+              console.error(`Course with course_id "${courseId}" not found.`);
+            }
           })
-          .catch(error => console.error(error));
-      }
+          .catch((error) => console.error(error));
 
-      function showUploadPopup() {
-        const popup = document.getElementById('uploadPopup');
-        popup.style.display = 'flex';
-      }
+        const uploadForm = document.getElementById("uploadForm");
+        const uploadButton = document.getElementById("uploadButton");
+        uploadButton.addEventListener("click", handleUpload);
 
-      function handleUpload() {
-        const fileInput = document.getElementById('file');
-        const file = fileInput.files[0];
-        if (!file) {
-          return;
+        function loadAssignments(courseId) {
+          fetch(`/api/assignments/course/${courseId}`)
+            .then((response) => response.json())
+            .then((assignments) => {
+              const assignmentsTable =
+                document.getElementById("assignmentsTable");
+              const assignmentsBody =
+                document.getElementById("assignmentsBody");
+              console.log(assignments);
+              assignments.forEach((assignment) => {
+                const row = document.createElement("tr");
+                const assignmentCell = document.createElement("td");
+                const assignmentLink = document.createElement("a");
+
+                assignmentLink.textContent = assignment.assign_id;
+                assignId = assignment.assign_id;
+                // Add check for the existence of the assignment file
+                const assignFilePath = `/courses/${courseId}/${assignment.assign_id}/final_unit_tests.py`;
+                fetch(assignFilePath)
+                  .then((response) => {
+                    if (response.ok) {
+                      // Assignment file exists
+                      assignmentLink.href = `/profassignment?courseId=${courseId}&assignId=${assignment.assign_id}`;
+                    } else {
+                      // Assignment file doesn't exist
+                      assignmentLink.href = `/updateassignment?courseId=${courseId}&assignId=${assignment.assign_id}`;
+                    }
+                    assignmentLink.classList.add("assignment-link");
+                    assignmentCell.appendChild(assignmentLink);
+                    row.appendChild(assignmentCell);
+                    assignmentsBody.appendChild(row);
+                  })
+                  .catch((error) => {
+                    // Handle error, e.g., assignment file not found
+                    console.error(error);
+                  });
+              });
+            })
+            .catch((error) => console.error(error));
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('courseId', courseId);
+        function showUploadPopup() {
+          const popup = document.getElementById("uploadPopup");
+          popup.style.display = "flex";
+        }
 
-        fetch(`/api/course/upload/${courseId}`, {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if (data.success) {
-            hideUploadPopup();
-            loadAssignments(courseId);
-          } else {
-            // Handle upload error
+        function handleUpload() {
+          const fileInput = document.getElementById("file");
+          const file = fileInput.files[0];
+          if (!file) {
+            return;
           }
-        })
-        .catch(error => console.error(error));
+
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("courseId", courseId);
+
+          fetch(`/api/course/upload/${courseId}`, {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              if (data.success) {
+                hideUploadPopup();
+                // Check if the assignment file was uploaded successfully and redirect accordingly
+                const assignFilePath = `/courses/${courseId}/${assignment.assign_id}/final_unit_tests.py`;
+                fetch(assignFilePath)
+                  .then((response) => {
+                    if (response.ok) {
+                      // Assignment file exists, redirect to professor assignment page
+                      window.location.href = `/profassignment?courseId=${courseId}&assignId=${assignId}`;
+                    } else {
+                      // Assignment file doesn't exist, redirect to update assignment page
+                      window.location.href = `/updateassignment?courseId=${courseId}&assignId=${assignId}`;
+                    }
+                  })
+                  .catch((error) => {
+                    // Handle error, e.g., assignment file not found
+                    console.error(error);
+                  });
+              } else {
+                // Handle upload error
+              }
+            })
+            .catch((error) => console.error(error));
+        }
+
+        function hideUploadPopup() {
+          const popup = document.getElementById("uploadPopup");
+          popup.style.display = "none";
+        }
+      });
+
+      function redirectToLanding() {
+        window.location.href = "/";
       }
-
-      function hideUploadPopup() {
-        const popup = document.getElementById('uploadPopup');
-        popup.style.display = 'none';
-      }
-    });
-
-    function redirectToLanding() {
-      window.location.href = "/";
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

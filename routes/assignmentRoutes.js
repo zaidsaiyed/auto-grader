@@ -93,7 +93,7 @@ module.exports = (app) => {
       }
 
       // Delete the assignment folder
-      const folderPath = assignment.files_location;
+      const folderPath = `./courses/${courseID}/${AssignID}`;
       await fs.remove(folderPath);
 
 

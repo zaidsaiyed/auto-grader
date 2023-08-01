@@ -6,6 +6,7 @@ const Course = mongoose.model("course");
 const csvParser = require("csv-parser");
 const Assignment = mongoose.model("assignment");
 const Grade = mongoose.model("grade");
+const path = require("path");
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -169,7 +170,6 @@ module.exports = (app) => {
                 total_tests: null,
               });
             });
-  
 
             //Parse the CSV file again to get student data
             fs.createReadStream(filePath)
@@ -212,7 +212,10 @@ module.exports = (app) => {
 
                   return res
                     .status(200)
-                    .json({  success: true ,message: "Data inserted successfully" });
+                    .json({
+                      success: true,
+                      message: "Data inserted successfully",
+                    });
                 } catch (error) {
                   console.error(
                     "Error inserting data into the database:",
@@ -229,4 +232,18 @@ module.exports = (app) => {
         });
     }
   );
+
+  // Endpoint to handle the file download request
+  app.get("/download/:courseId", (req, res) => {
+    const courseId = req.params.courseId;
+    const filePath = `./courses/${courseId}/${courseId}.csv`
+
+    res.download(filePath, (err) => {
+      if (err) {
+        // Handle errors, if any
+        console.error("Error downloading file:", err);
+        res.status(404).send("File not found.");
+      }
+    });
+  });
 };

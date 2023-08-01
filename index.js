@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const keys = require("./config/keys");
 const fs = require("fs"); // File system module
 const multer = require("multer"); // Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files.
+const path = require("path"); // The path module provides utilities for working with file and directory paths.
 
 mongoose.connect(keys.mongoURI, { useUnifiedTopology: true }); // Connect to the MongoDB
 

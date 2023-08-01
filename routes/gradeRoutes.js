@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Grade = mongoose.model("grade");
 const Assignment = mongoose.model("assignment");
+const fs = require("fs");
+const csv = require("csv-parser");
 
 module.exports = (app) => {
   // Route to create a new grade
@@ -122,4 +124,47 @@ module.exports = (app) => {
       res.status(500).json({ error: error.message });
     }
   });
+
+   // Route to create or update grades from CSV
+app.post('/api/grade/:courseId', async (req, res) => {
+  const { courseId } = req.params;
+  const csvFilePath = `./courses/${courseId}/${courseId}.csv`;
+
+  try {
+    const assignments = await Assignment.find({}).exec();
+    const assignmentsMap = new Map();
+    assignments.forEach((assignment) => {
+      assignmentsMap.set(assignment.assign_id, assignment.total_tests);
+    });
+
+    const stream = fs.createReadStream(csvFilePath).pipe(csv());
+    for await (const row of stream) {
+      const studentId = row['OrgDefinedId'].replace("#", '');
+      const fullName = `${row['First Name']} ${row['Last Name']}`;
+
+      const grades = Object.keys(row).filter((key) => key.includes('Points Grade'));
+      grades.forEach(async (gradeKey) => {
+        const assignId = gradeKey.split(' Points Grade')[0];
+        if (assignmentsMap.has(assignId)) {
+          const earned = parseFloat(row[gradeKey]);
+
+          // Check if 'earned' is NaN, if yes, set it to null
+          const earnedValue = isNaN(earned) ? null : earned;
+          console.log('Updated:', studentId, fullName, courseId, assignId, 'earned:', earnedValue);
+          const grade = await Grade.findOneAndUpdate(
+            { student_id: studentId, course_id: courseId, assign_id: assignId },
+            { earned: earnedValue },
+          ).exec();
+        }
+      });
+    }
+
+    console.log('CSV file successfully processed.');
+    res.status(200).json({ message: 'Grades updated from CSV successfully.' });
+  } catch (error) {
+    console.error('Error updating grades from CSV:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 };
