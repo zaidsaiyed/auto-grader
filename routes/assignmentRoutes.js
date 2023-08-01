@@ -212,8 +212,26 @@ module.exports = (app) => {
       console.error('Error copying file:', err);
       return res.status(500).send('Error copying file.');
     }
+    // Create the text content with courseId and assignId
+    const textData = `Course ID: ${courseId}, Assignment ID: ${assignId}\n`;
 
-    res.send('File copied successfully!');
+    // Get the file path of the uploaded file
+    const uploadedFilePath = req.file.path;
+
+    // Create a new text file in the same folder as the uploaded file
+    const newFileName = 'grades.txt';
+    const newFilePath = path.join(path.dirname(uploadedFilePath), newFileName);
+
+    // Write the text content into the new text file
+    fs.writeFile(newFilePath, textData, (err) => {
+      if (err) {
+        console.error(err);
+        return res.json({ success: false, error: 'Error creating the text file.' });
+      }
+
+      // File creation successful
+      return res.json({ success: true, message: 'Text file created successfully.' });
+    });
   });
 
     // get course name
