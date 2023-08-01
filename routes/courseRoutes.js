@@ -122,60 +122,59 @@ module.exports = (app) => {
   });
 
   // Upload a CSV file for a course
-  app.post("/api/course/upload/:course_id", upload.single("file"), async (req, res) => {
-    const courseId = req.params.course_id;
-    if (!req.files || !req.files.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+  app.post(
+    "/api/course/upload/:course_id",
+    upload.single("file"),
+    async (req, res) => {
+      const courseId = req.params.course_id;
+      const filePath = `./courses/${courseId}/${courseId}.csv`;
 
-    const file = req.files.file;
+      const dataToInsert = []; // Declare the dataToInsert array here
+      let headers = []; // Declare the headers array here
+      fs.createReadStream(filePath)
+        .pipe(csvParser())
+        .on("headers", async (headers) => {
+          // Trim headers to remove leading and trailing spaces
+          headers = headers.map((header) => header.trim());
+          // Find the column names containing " Points" and extract assignIds from them
+          const assignIds = headers
+            .filter((col) => col.includes(" Points"))
+            .map((col) => col.replace(/ Points.*$/, ""));
+          console.log(assignIds);
 
-    // Extract data from the CSV file and prepare it for MongoDB insertion
-    const dataToInsert = [];
-    let assignIds = [];
+          // If no assignIds found, return an error response
+          if (assignIds.length !== 0) {
+            assignIds.forEach((assignId) => {
+              dataToInsert.push({
+                assign_id: assignId,
+                course_id: courseId,
+                description: "",
+                files_location: "",
+                required_files: "",
+                total_tests: null,
+              });
+            });
+            console.log(dataToInsert);
 
-    fs.createReadStream(file.tempFilePath)
-      .pipe(csvParser())
-      .on("headers", (headers) => {
-        // Find the column names containing "Points" and extract assignIds from them
-        assignIds = headers
-          .filter((col) => / Points$/.test(col))
+            // Assuming you have already connected to your MongoDB database
+            try {
+              // Insert the data into the Assignment collection
+              await Assignment.insertMany(dataToInsert);
 
-        // If no assignIds found, return an error response
-        if (assignIds.length === 0) {
-          return res
-            .status(400)
-            .json({ message: "No column with 'Points' found in the header" });
-        }
-      })
-      .on("data", (row) => {
-        // Extract data and create an array of objects for MongoDB insertion
-        assignIds.forEach((assignId) => {
-          const pointsInfo = row[`${assignId} Points`];
-          const maxPoints = parseFloat(
-            pointsInfo.match(/MaxPoints:([0-9.]+)/)[1]
-          );
-          dataToInsert.push({
-            assign_id: assignId,
-            course_id: courseId,
-            description: "",
-            total_tests: maxPoints,
-            // Add other fields if necessary based on your schema
-          });
+              // Respond with a success message
+              return res
+                .status(200)
+                .json({ success: true, message: "Data inserted successfully" });
+            } catch (error) {
+              console.error("Error inserting data into the database:", error);
+              return res
+                .status(500)
+                .json({ success: false, message: "Error inserting data" });
+            }
+          } else {
+            return res.status(400).json({ message: "No assignment IDs found" });
+          }
         });
-      })
-      .on("end", async () => {
-        try {
-          // Insert the extracted data into the 'assignment' collection using the assignmentSchema model
-          await Assignment.insertMany(dataToInsert);
-
-          return res.json({ success: true });
-        } catch (error) {
-          console.error("Error inserting data into MongoDB:", error);
-          return res
-            .status(500)
-            .json({ message: "Failed to insert data into MongoDB" });
-        }
-      });
-  });
+    }
+  );
 };
