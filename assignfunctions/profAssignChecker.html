@@ -153,16 +153,16 @@
       if (keyValuePairs) {
         keyValuePairs.forEach((pair, index) => {
           const key = pair.replace(/'/g, ''); // Remove the single quotes around the key
-          const delay = (index + 1) * 100; // Delay in milliseconds, incrementing for each pair
+          const delay = (1) * 100; // Delay in milliseconds, incrementing for each pair
 
           setTimeout(() => {
             formattedText += `Testing For ${key} . . . . . . . . . Done\n`;
 
             if (index === keyValuePairs.length - 1) {
               setTimeout(() => {
-                formattedText += 'Updating CSV file . . . . .\n';
+              //  formattedText += 'Updating CSV file . . . . .\n';
                 setTimeout(() => {
-                  formattedText += 'CSV file is ready to Download . . . . . .';
+              //    formattedText += 'CSV file is ready to Download . . . . . .';
                   resultText.textContent = formattedText.trim(); // Update the result text
                 }, 500); // Delay before displaying the final message
               }, 1000); // Delay before displaying the CSV update message
