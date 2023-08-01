@@ -3,9 +3,8 @@ const fs = require("fs-extra");
 const Assignment = mongoose.model("assignment");
 const Grade = mongoose.model("grade");
 const multer = require("multer");
-const path = require('path');
-const fs1 = require('fs');
-
+const path = require("path");
+const fs1 = require("fs");
 
 // Set up multer storage 2
 const storage2 = multer.diskStorage({
@@ -96,10 +95,9 @@ module.exports = (app) => {
       const folderPath = `./courses/${courseID}/${AssignID}`;
       await fs.remove(folderPath);
 
-
       //Delete related grades
       await Grade.deleteMany({
-        assign_id: AssignID
+        assign_id: AssignID,
       });
 
       res.json({ message: "Assignment deleted" });
@@ -169,7 +167,6 @@ module.exports = (app) => {
     }, 5000);
   });
 
-
   // Set up multer storage for prof assignment upload
   const prof_ass_storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -188,7 +185,7 @@ module.exports = (app) => {
   });
 
   // Create multer upload instance
-  const profupload = multer({ storage : prof_ass_storage });
+  const profupload = multer({ storage: prof_ass_storage });
 
   app.post("/api/profAssign/upload", profupload.single("file"), (req, res) => {
     if (!req.file) {
@@ -202,60 +199,71 @@ module.exports = (app) => {
 
     // copying test file for python from Assignment folder
 
-    const filepath = `./courses/${courseId}/${assignId}`
+    const filepath = `./courses/${courseId}/${assignId}`;
 
-    const sourceFile = path.join(filepath, 'final_unit_tests.py'); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
-    const destinationFile = path.join('./softcheck_uploads', 'final_unit_tests.py'); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
-
-    fs1.copyFile(sourceFile, destinationFile, (err) => {
-    if (err) {
-      console.error('Error copying file:', err);
-      return res.status(500).send('Error copying file.');
-    }
-    
-    const newfilepath = `./courses/${courseId}`
-
-    const sourceFile = path.join(newfilepath, 'Test1.csv'); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
-    const destinationFile = path.join('./softcheck_uploads', 'Test1.csv'); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
+    const sourceFile = path.join(filepath, "final_unit_tests.py"); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
+    const destinationFile = path.join(
+      "./softcheck_uploads",
+      "final_unit_tests.py"
+    ); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
 
     fs1.copyFile(sourceFile, destinationFile, (err) => {
-    if (err) {
-      console.error('Error copying file:', err);
-      return res.status(500).send('Error copying file.');
-    }
-  });
-    
-    // Create the text content with courseId and assignId
-    const textData = `Course ID: ${courseId}, Assignment ID: ${assignId}\n`;
-
-    // Get the file path of the uploaded file
-    const uploadedFilePath = req.file.path;
-
-    // Create a new text file in the same folder as the uploaded file
-    const newFileName = 'grades.txt';
-    const newFilePath = path.join(path.dirname(uploadedFilePath), newFileName);
-
-    // Write the text content into the new text file
-    fs.writeFile(newFilePath, textData, (err) => {
       if (err) {
-        console.error(err);
-        return res.json({ success: false, error: 'Error creating the text file.' });
+        console.error("Error copying file:", err);
+        return res.status(500).send("Error copying file.");
       }
 
-      // File creation successful
-      return res.json({ success: true, message: 'Text file created successfully.' });
+      const newfilepath = `./courses/${courseId}`;
+
+      const sourceFile = path.join(newfilepath, "Test1.csv"); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
+      const destinationFile = path.join("./softcheck_uploads", "Test1.csv"); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
+
+      fs1.copyFile(sourceFile, destinationFile, (err) => {
+        if (err) {
+          console.error("Error copying file:", err);
+          return res.status(500).send("Error copying file.");
+        }
+      });
+
+      // Create the text content with courseId and assignId
+      const textData = `Course ID: ${courseId}, Assignment ID: ${assignId}\n`;
+
+      // Get the file path of the uploaded file
+      const uploadedFilePath = req.file.path;
+
+      // Create a new text file in the same folder as the uploaded file
+      const newFileName = "grades.txt";
+      const newFilePath = path.join(
+        path.dirname(uploadedFilePath),
+        newFileName
+      );
+
+      // Write the text content into the new text file
+      fs.writeFile(newFilePath, textData, (err) => {
+        if (err) {
+          console.error(err);
+          return res.json({
+            success: false,
+            error: "Error creating the text file.",
+          });
+        }
+
+        // File creation successful
+        return res.json({
+          success: true,
+          message: "Text file created successfully.",
+        });
+      });
     });
-  });
 
     // get course name
     // Search for folder inside courses folder
     // use this to create a script path for python to cgheck the uploaded fill
 
     // Define the path to the Python script
-    
-    
+
     // setTimeout(() => {
-      //   fs.unlink(req.file.path, (error) => {
+    //   fs.unlink(req.file.path, (error) => {
     //     if (error) {
     //       console.error(`Error deleting file: ${error}`);
     //       return;
@@ -264,11 +272,10 @@ module.exports = (app) => {
     //   });
     // }, 5000);
   });
-  
+
   // Child process to execute Python script
-  
-  app.post('/api/runPy', (req, res) => {
-    
+
+  app.post("/api/runPy", (req, res) => {
     const { exec } = require("child_process");
     const pythonScriptPath = "softcheck_uploads/final_unzip.py";
     exec(`python ${pythonScriptPath}`, (error, stdout, stderr) => {
@@ -280,67 +287,71 @@ module.exports = (app) => {
       // Process the output from the Python script
       //console.log(`Python script output: ${stdout}`);
 
-
       const result = stdout;
       res.json({ success: true, result: result });
     });
-});
-
-// Move csv file to course folder
-app.post('/api/movCSV', (req, res) => {
-
-  const courseId = req.body.courseId;
-  console.log(courseId);
-
-  // copying test file for python from Assignment folder
-
-  const filepath = `./courses/${courseId}`
-
-  const destinationFile = path.join(filepath, `${courseId}.csv`); // Replace 'source_folder' with your source folder path and 'file.txt' with the filename you want to copy.
-  const sourceFile = path.join('./softcheck_uploads', `${courseId}.csv`); // Replace 'destination_folder' with your destination folder path and 'file.txt' with the desired filename in the destination folder.
-
-  fs1.copyFile(sourceFile, destinationFile, (err) => {
-  if (err) {
-    console.error('Error copying file:', err);
-    return res.status(500).send('Error copying file.');
-  }
-});
-});
-
-
-
-
-// Route to update assignment and update total_tests in grades
-  app.put("/api/assignment/:courseId/:assignId", upload2.single("unitTestFile"), async (req, res) => {
-    const { courseId, assignId } = req.params; // Extract the courseId and assignId
-
-    try {
-      const updatedAssignment = await Assignment.findOneAndUpdate(
-        { course_id: courseId, assign_id: assignId }, // Filter
-        {
-          $set: {
-            description: req.body.description,
-            required_files: req.body.requiredFiles,
-            total_tests: req.body.totalTests,
-          },
-        }, // Update
-        { new: true } // Options: Return the updated assignment
-      );
-
-      if (!updatedAssignment) {
-        res.status(404).json({ message: "Assignment not found" });
-        return;
-      }
-
-      // Update total_tests in grades collection for this assignment
-      await Grade.updateMany(
-        { course_id: courseId, assign_id: assignId }, // Filter
-        { $set: { total_tests: req.body.totalTests } } // Update
-      );
-
-      res.json(updatedAssignment);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
   });
+
+  // Move csv file to course folder
+app.post("/api/movCSV/:courseId", (req, res) => {
+  const courseId = req.params.courseId;
+
+  // Create the course folder if it doesn't exist
+  const filepath = `./courses/${courseId}`;
+  fs1.mkdir(filepath, { recursive: true }, (err) => {
+    if (err) {
+      console.error("Error creating course folder:", err);
+      return res.status(500).send("Error creating course folder.");
+    }
+
+    const destinationFile = path.join(filepath, `${courseId}.csv`);
+    const sourceFile = path.join("./softcheck_uploads", `${courseId}.csv`);
+
+    fs1.copyFile(sourceFile, destinationFile, (err) => {
+      if (err) {
+        console.error("Error copying file:", err);
+        return res.status(500).send("Error copying file.");
+      }
+      return res.status(200).send("File copied successfully!");
+    });
+  });
+});
+
+  // Route to update assignment and update total_tests in grades
+  app.put(
+    "/api/assignment/:courseId/:assignId",
+    upload2.single("unitTestFile"),
+    async (req, res) => {
+      const { courseId, assignId } = req.params; // Extract the courseId and assignId
+
+      try {
+        const updatedAssignment = await Assignment.findOneAndUpdate(
+          { course_id: courseId, assign_id: assignId }, // Filter
+          {
+            $set: {
+              description: req.body.description,
+              required_files: req.body.requiredFiles,
+              total_tests: req.body.totalTests,
+            },
+          }, // Update
+          { new: true } // Options: Return the updated assignment
+        );
+
+        if (!updatedAssignment) {
+          res.status(404).json({ message: "Assignment not found" });
+          return;
+        }
+
+        // Update total_tests in grades collection for this assignment
+        await Grade.updateMany(
+          { course_id: courseId, assign_id: assignId }, // Filter
+          { $set: { total_tests: req.body.totalTests } } // Update
+        );
+
+        res.json(updatedAssignment);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  );
 };
