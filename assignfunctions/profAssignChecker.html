@@ -1,307 +1,298 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Assignment Checker</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #212121;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 60px auto 0;
-      padding: 20px;
-      background-color: #212121;
-      border: 1px solid #666;
-      border-radius: 5px;
-      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #fff;
-    }
-
-    .upload-section {
-      margin-top: 20px;
-      display: flex;
-      align-items: center; 
-      justify-content: center;
-    }
-
-    .upload-section input[type="file"] {
-      display: none;
-    }
-
-    .upload-section label,
-    .upload-section #uploadButton,
-    .upload-section #runProcessButton {
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .upload-section label {
-      background-color: #4caf50;
-      color: #fff;
-      transition: background-color 0.3s;
-    }
-
-    .upload-section label:hover {
-      background-color: #45a049;
-    }
-
-    .upload-section #uploadButton {
-      margin-left: 10px;
-      background-color: #2196f3;
-      color: #fff;
-      transition: background-color 0.3s;
-    }
-
-    .upload-section #uploadButton:hover {
-      background-color: #1976d2;
-    }
-
-    .upload-section #runProcessButton {
-      margin-left: 10px;
-      background-color: #f0f321;
-      color: #160404;
-      transition: background-color 0.3s;
-    }
-
-    .upload-section #runProcessButton:hover {
-      background-color: #1976d2;
-    }
-
-    .results-section {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      display: none;
-    }
-
-    .results-section p {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      color: #fff;
-    }
-
-    /* Blinking animation */
-    @keyframes blinking {
-      0% {
-        opacity: 0;
+  <head>
+    <title>Assignment Checker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
       }
 
-      50% {
-        opacity: 1;
+      .container {
+        max-width: 800px;
+        margin: 60px auto 0;
+        padding: 20px;
+        background-color: #212121;
+        border: 1px solid #666;
+        border-radius: 5px;
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
       }
 
-      100% {
-        opacity: 0;
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
       }
-    }
 
-    .blink {
-      animation: blinking 1.4s infinite;
-    }
-  </style>
-</head>
+      .upload-section {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-<body>
-  <div class="container">
-    <h1>Assignment Checker</h1>
-    <div class="upload-section">
-      <div class="child-item">
-        <input type="file" id="fileInput" accept=".zip">
-        <label for="fileInput" id="fileLabel">Choose File</label>
+      .upload-section input[type="file"] {
+        display: none;
+      }
+
+      .upload-section label,
+      .upload-section #uploadButton,
+      .upload-section #runProcessButton {
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .upload-section label {
+        background-color: #4caf50;
+        color: #fff;
+        transition: background-color 0.3s;
+      }
+
+      .upload-section label:hover {
+        background-color: #45a049;
+      }
+
+      .upload-section #uploadButton {
+        margin-left: 10px;
+        background-color: #2196f3;
+        color: #fff;
+        transition: background-color 0.3s;
+      }
+
+      .upload-section #uploadButton:hover {
+        background-color: #1976d2;
+      }
+
+      .upload-section #runProcessButton {
+        margin-left: 10px;
+        background-color: #f0f321;
+        color: #160404;
+        transition: background-color 0.3s;
+      }
+
+      .upload-section #runProcessButton:hover {
+        background-color: #1976d2;
+      }
+
+      .results-section {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: none;
+      }
+
+      .results-section p {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #fff;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        color: #fff;
+      }
+
+      /* Blinking animation */
+      @keyframes blinking {
+        0% {
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .blink {
+        animation: blinking 1.4s infinite;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Assignment Checker</h1>
+      <div class="upload-section">
+        <div class="child-item">
+          <input type="file" id="fileInput" accept=".zip" />
+          <label for="fileInput" id="fileLabel">Choose File</label>
+        </div>
+        <div class="child-item">
+          <button id="uploadButton">Upload</button>
+        </div>
+        <div class="child-item">
+          <button id="runProcessButton">Run Process</button>
+        </div>
       </div>
-      <div class="child-item">
-        <button id="uploadButton">Upload</button>
-      </div>
-      <div class="child-item">
-        <button id="runProcessButton">Run Process</button>
+      <div class="results-section">
+        <p id="statusText" class="blink">Status: Checking Assignment...</p>
+        <h2>Results</h2>
+        <pre id="resultText"></pre>
       </div>
     </div>
-    <div class="results-section">
-      <p id="statusText" class="blink">Status: Checking Assignment...</p>
-      <h2>Results</h2>
-      <pre id="resultText"></pre>
-    </div>
-  </div>
-  <script>
+    <script>
+      function formatResultText(result) {
+        const keyValuePairs = result.match(/'([^']+)':/g); // Extract the key-value pairs
+        let formattedText = "";
 
-    function formatResultText(result) {
-      const keyValuePairs = result.match(/'([^']+)':/g); // Extract the key-value pairs
-      let formattedText = '';
+        if (keyValuePairs) {
+          keyValuePairs.forEach((pair, index) => {
+            const key = pair.replace(/'/g, ""); // Remove the single quotes around the key
+            const delay = 1 * 100; // Delay in milliseconds, incrementing for each pair
 
-      if (keyValuePairs) {
-        keyValuePairs.forEach((pair, index) => {
-          const key = pair.replace(/'/g, ''); // Remove the single quotes around the key
-          const delay = (1) * 100; // Delay in milliseconds, incrementing for each pair
+            setTimeout(() => {
+              formattedText += `Testing For ${key} . . . . . . . . . Done\n`;
+
+              if (index === keyValuePairs.length - 1) {
+                setTimeout(() => {
+                  //  formattedText += 'Updating CSV file . . . . .\n';
+                  setTimeout(() => {
+                    //    formattedText += 'CSV file is ready to Download . . . . . .';
+                    resultText.textContent = formattedText.trim(); // Update the result text
+                  }, 500); // Delay before displaying the final message
+                }, 1000); // Delay before displaying the CSV update message
+              } else {
+                resultText.textContent = formattedText.trim(); // Update the result text after each pair
+              }
+            }, delay);
+          });
+        }
+
+        return formattedText.trim(); // Remove any extra whitespace at the beginning or end
+      }
+
+      window.addEventListener("DOMContentLoaded", (event) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get("courseId");
+        const assignId = urlParams.get("assignId");
+
+        const fileInput = document.getElementById("fileInput");
+        const fileLabel = document.getElementById("fileLabel");
+        const uploadButton = document.getElementById("uploadButton");
+        const runProcessButton = document.getElementById("runProcessButton");
+        const resultText = document.getElementById("resultText");
+        const statusText = document.getElementById("statusText");
+
+        fileInput.addEventListener("change", handleFileSelection);
+        uploadButton.addEventListener("click", handleUpload);
+        runProcessButton.addEventListener("click", runChildProcess);
+
+        function handleFileSelection(event) {
+          const selectedFile = event.target.files[0];
+          if (selectedFile) {
+            fileLabel.textContent = `File: ${selectedFile.name}`;
+          } else {
+            fileLabel.textContent = "Choose File";
+          }
+        }
+
+        function handleUpload() {
+          const file = fileInput.files[0];
+          if (!file) {
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("assignId", assignId);
+          formData.append("courseId", courseId);
+
+          // Loading screen
+          statusText.textContent = "Status: Checking....";
+          resultText.textContent = "";
+          document.querySelector(".results-section").style.display = "block";
 
           setTimeout(() => {
-            formattedText += `Testing For ${key} . . . . . . . . . Done\n`;
+            statusText.classList.remove("blink"); // Remove the blinking animation
 
-            if (index === keyValuePairs.length - 1) {
-              setTimeout(() => {
-              //  formattedText += 'Updating CSV file . . . . .\n';
-                setTimeout(() => {
-              //    formattedText += 'CSV file is ready to Download . . . . . .';
-                  resultText.textContent = formattedText.trim(); // Update the result text
-                }, 500); // Delay before displaying the final message
-              }, 1000); // Delay before displaying the CSV update message
-            } else {
-              resultText.textContent = formattedText.trim(); // Update the result text after each pair
-            }
-          }, delay);
-        });
-      }
-
-      return formattedText.trim(); // Remove any extra whitespace at the beginning or end
-    }
-
-
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get("courseId");
-      const assignId = urlParams.get("assignId");
-
-
-      const fileInput = document.getElementById('fileInput');
-      const fileLabel = document.getElementById('fileLabel');
-      const uploadButton = document.getElementById('uploadButton');
-      const runProcessButton = document.getElementById('runProcessButton');
-      const resultText = document.getElementById('resultText');
-      const statusText = document.getElementById('statusText');
-
-      fileInput.addEventListener('change', handleFileSelection);
-      uploadButton.addEventListener('click', handleUpload);
-      runProcessButton.addEventListener('click', runChildProcess);
-
-      function handleFileSelection(event) {
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-          fileLabel.textContent = `File: ${selectedFile.name}`;
-        } else {
-          fileLabel.textContent = 'Choose File';
-        }
-      }
-
-      function handleUpload() {
-        const file = fileInput.files[0];
-        if (!file) {
-          return;
+            console.log("Uploading...");
+            fetch("/api/profAssign/upload", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  statusText.textContent = "Status: File Uploaded Successfully";
+                  resultText.textContent = formatResultText(data.result);
+                } else {
+                  //statusText.textContent = 'Status: Assignment Check Failed';
+                  //resultText.textContent = '';
+                  // Handle error case
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+                //statusText.textContent = 'Status: Assignment Check Failed';
+                //resultText.textContent = '';
+                // Handle error case
+              });
+          }, 500);
+          setTimeout(() => {
+            statusText.classList.add("blink"); // Add the blinking animation
+            statusText.textContent = "Status: File Uploaded Successfully";
+          }, 500);
         }
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('assignId', assignId);
-        formData.append('courseId', courseId);
-
-        // Loading screen
-        statusText.textContent = 'Status: Checking....';
-        resultText.textContent = '';
-        document.querySelector('.results-section').style.display = 'block';
-
-        setTimeout(() => {
-          statusText.classList.remove('blink'); // Remove the blinking animation
-
-          console.log("Uploading...");
-          fetch('/api/profAssign/upload', {
-            method: 'POST',
-            body: formData
+        function runChildProcess() {
+          fetch("/api/runPy", {
+            method: "POST",
           })
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
               if (data.success) {
-
-                statusText.textContent = 'Status: File Uploaded Successfully';
-                resultText.textContent = formatResultText(data.result);
+                const stdout = data.result;
+                console.log(stdout);
+                statusText.textContent =
+                  "Status: Assignment Checked Successfully";
+                resultText.textContent = formatResultText(stdout);
+                mov_cvs();
               } else {
                 //statusText.textContent = 'Status: Assignment Check Failed';
                 //resultText.textContent = '';
                 // Handle error case
               }
             })
-            .catch(error => {
+            .catch((error) => {
               console.error(error);
               //statusText.textContent = 'Status: Assignment Check Failed';
               //resultText.textContent = '';
               // Handle error case
             });
-        }, 500);
-        setTimeout(() => {
-          statusText.classList.add('blink'); // Add the blinking animation
-          statusText.textContent = 'Status: File Uploaded Successfully';
-        }, 500);
-      }
+        }
 
-      function mov_cvs(){
-        const NewformData = new FormData();
-        NewformData.append('courseId', courseId);
-        NewformData.append('assignId', assignId);
+        function mov_cvs() {
+          // Use the courseId obtained from URL parameters
+          const urlParams = new URLSearchParams(window.location.search);
+          const courseId = urlParams.get("courseId");
 
-        fetch('/api/movCSV', {
-          method: 'POST',
-          body: NewformData
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-            if (data.success) {
-              console.log("CSV file is ready to Download");
-            } else {
-              console.log("NO NO NO");
-            }
-          });
-      };
-
-
-      function runChildProcess() {
-        fetch('/api/runPy', {
-          method: 'POST',
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              const stdout = data.result;
-              console.log(stdout);
-              statusText.textContent = 'Status: Assignment Checked Successfully';
-              resultText.textContent = formatResultText(stdout);
-              mov_cvs();
-            } else {
-              //statusText.textContent = 'Status: Assignment Check Failed';
-              //resultText.textContent = '';
-              // Handle error case
-            }
+          fetch(`/api/movCSV/${courseId}`, {
+            method: "POST",
           })
-          .catch(error => {
-            console.error(error);
-            //statusText.textContent = 'Status: Assignment Check Failed';
-            //resultText.textContent = '';
-            // Handle error case
-          });
-      }
-
-    });
-  </script>
-</body>
-
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              if (data.success) {
+                console.log("CSV file is ready to Download");
+              } else {
+                console.log("NO NO NO");
+              }
+            });
+        }
+      });
+    </script>
+  </body>
 </html>
