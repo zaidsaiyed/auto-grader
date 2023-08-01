@@ -1,245 +1,226 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Assignment Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #212121;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
+  <head>
+    <title>Assignment Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #212121;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+      }
 
-    .container {
-      max-width: 800px;
-      margin: 60px auto 0;
-      padding: 20px;
-      background-color: #212121;
-      border: 1px solid #666;
-      border-radius: 5px;
-      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-    }
+      .container {
+        max-width: 800px;
+        margin: 60px auto 0;
+        padding: 20px;
+        background-color: #212121;
+        border: 1px solid #666;
+        border-radius: 5px;
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+      }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #fff;
-    }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+      }
 
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 20px;
-    }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
 
-    th,
-    td {
-      border: 1px solid #fff;
-      padding: 8px;
-      text-align: left;
-      color: #fff;
-    }
+      th,
+      td {
+        border: 1px solid #fff;
+        padding: 8px;
+        text-align: left;
+        color: #fff;
+      }
 
-    th {
-      background-color: #45a049;
-      color: #fff;
-    }
+      th {
+        background-color: #45a049;
+        color: #fff;
+      }
 
-    button {
-      margin-top: 10px;
-      background-color: #45a049;
-      color: #fff;
-      border: none;
-      border-radius: 3px;
-      padding: 8px 16px;
-      cursor: pointer;
-    }
+      button {
+        margin-top: 10px;
+        background-color: #45a049;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
 
-    button:hover {
-      background-color: #357e3d;
-    }
+      button:hover {
+        background-color: #357e3d;
+      }
 
-    .search-bar {
-      margin-bottom: 10px;
-      align-items: center;
-    }
+      .search-bar {
+        margin-bottom: 10px;
+        align-items: center;
+      }
 
-    .search-input {
-      padding: 5px;
-      border: 1px solid #fff;
-      border-radius: 3px;
-      width: 200px;
-      margin-right: 10px;
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Assignment Page</h1>
+      .search-input {
+        padding: 5px;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        width: 200px;
+        margin-right: 10px;
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Assignment Page</h1>
 
-    <div class="search-bar">
-      <input
-        type="text"
-        class="search-input"
-        placeholder="Search by Student ID"
-        oninput="searchGrades(this.value)"
-      />
-      <button onclick="updateAssignment()">Update Assignment</button>
-      <span style="margin-right: 10px"></span>
-      <button onclick="checkAssignment()">Check Assignment</button>
-      <button onclick="downloadCSV()">Download CSV</button> <!-- New Download Button -->
-    </div>
+      <div class="search-bar">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by Student ID"
+          oninput="searchGrades(this.value)"
+        />
+        <button onclick="updateAssignment()">Update Assignment</button>
+        <span style="margin-right: 10px"></span>
+        <button onclick="checkAssignment()">Check Assignment</button>
+        <button onclick="downloadCSV()">Download CSV</button>
+        <!-- New Download Button -->
+      </div>
 
-    <table id="gradesTable">
-      <tr>
-        <th>Name</th>
-        <th>Student ID</th>
-        <th>Marks (Out of <span id="totalTests"></span>)</th>
-        <th>Edit</th>
-      </tr>
-    </table>
+      <table id="gradesTable">
+        <tr>
+          <th>Name</th>
+          <th>Student ID</th>
+          <th>Marks (Out of <span id="totalTests"></span>)</th>
+          <th>Edit</th>
+        </tr>
+      </table>
 
-    <script>
-      var allGradesData; // Store the original grades data
+      <script>
+        var allGradesData; // Store the original grades data
 
-      // Function to generate the table dynamically
-      function generateTable(data, totalTests) {
-        var table = document.getElementById("gradesTable");
+        // Function to generate the table dynamically
+        function generateTable(data, totalTests) {
+          var table = document.getElementById("gradesTable");
 
-        // Clear existing table rows
-        while (table.rows.length > 1) {
-          table.deleteRow(1);
+          // Clear existing table rows
+          while (table.rows.length > 1) {
+            table.deleteRow(1);
+          }
+
+          // Generate new table rows
+          data.forEach(function (grade) {
+            var row = table.insertRow();
+            var nameCell = row.insertCell();
+            var studentIdCell = row.insertCell();
+            var marksCell = row.insertCell();
+            var editCell = row.insertCell();
+
+            nameCell.innerHTML = grade.name;
+            studentIdCell.innerHTML = grade.student_id;
+            marksCell.innerHTML = grade.earned;
+            editCell.innerHTML =
+              "<button onclick='editgrade(\"" +
+              grade.student_id +
+              '", "' +
+              grade.course_id +
+              '", "' +
+              grade.assign_id +
+              "\")'>Edit</button>";
+          });
+
+          var totalTestsElement = document.getElementById("totalTests");
+          totalTestsElement.textContent = totalTests;
         }
 
-        // Generate new table rows
-        data.forEach(function (grade) {
-          var row = table.insertRow();
-          var nameCell = row.insertCell();
-          var studentIdCell = row.insertCell();
-          var marksCell = row.insertCell();
-          var editCell = row.insertCell();
+        // Function to fetch the grades data and generate the table
+        function fetchGrades() {
+          var courseId = getParameterByName("courseId");
+          var assignId = getParameterByName("assignId");
 
-          nameCell.innerHTML = grade.name;
-          studentIdCell.innerHTML = grade.student_id;
-          marksCell.innerHTML = grade.earned;
-          editCell.innerHTML =
-            "<button onclick='editgrade(\"" +
-            grade.student_id +
-            '", "' +
-            grade.course_id +
-            '", "' +
-            grade.assign_id +
-            "\")'>Edit</button>";
-        });
+          // Make an API call to fetch the grades
+          fetch("/api/grade/" + courseId + "/" + assignId)
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              allGradesData = data; // Store the original grades data
+              var totalTests = data.length > 0 ? data[0].total_tests : 0;
+              generateTable(data, totalTests);
+            })
+            .catch(function (error) {
+              console.error("Error:", error);
+            });
+        }
 
-        var totalTestsElement = document.getElementById("totalTests");
-        totalTestsElement.textContent = totalTests;
-      }
+        // Function to get the value of a query parameter from the URL
+        function getParameterByName(name) {
+          var url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return "";
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
 
-      // Function to fetch the grades data and generate the table
-      function fetchGrades() {
-        var courseId = getParameterByName("courseId");
-        var assignId = getParameterByName("assignId");
+        // Function to handle the edit button click event
+        function editgrade(studentId, courseId, assignId) {
+          // Redirect to the edit grade page with the studentId, courseId, and assignId
+          window.location.href = `/editgrade?courseId=${courseId}&assignId=${assignId}&studentId=${studentId}`;
+        }
 
-        // Make an API call to fetch the grades
-        fetch("/api/grade/" + courseId + "/" + assignId)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            allGradesData = data; // Store the original grades data
-            var totalTests = data.length > 0 ? data[0].total_tests : 0;
-            generateTable(data, totalTests);
-          })
-          .catch(function (error) {
-            console.error("Error:", error);
-          });
-      }
+        // Function to handle the update assignment button click event
+        function updateAssignment() {
+          var courseId = getParameterByName("courseId");
+          var assignId = getParameterByName("assignId");
 
-      // Function to get the value of a query parameter from the URL
-      function getParameterByName(name) {
-        var url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return "";
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-      }
+          // Redirect to the update assignment page with the courseId and assignId
+          window.location.href =
+            "/updateassignment?courseId=" + courseId + "&assignId=" + assignId;
+        }
 
-      // Function to handle the edit button click event
-      function editgrade(studentId, courseId, assignId) {
-        // Redirect to the edit grade page with the studentId, courseId, and assignId
-        window.location.href = `/editgrade?courseId=${courseId}&assignId=${assignId}&studentId=${studentId}`;
-      }
+        // Function to handle the check assignment button click event
+        function checkAssignment() {
+          var assignId = getParameterByName("assignId");
+          var courseId = getParameterByName("courseId");
 
-      // Function to handle the update assignment button click event
-      function updateAssignment() {
-        var courseId = getParameterByName("courseId");
-        var assignId = getParameterByName("assignId");
+          // Redirect to the check assignment page with the assignId
+          window.location.href =
+            "/profassignmentchecker?assignId=" +
+            assignId +
+            "&courseId=" +
+            courseId;
+        }
 
-        // Redirect to the update assignment page with the courseId and assignId
-        window.location.href =
-          "/updateassignment?courseId=" + courseId + "&assignId=" + assignId;
-      }
-
-      // Function to handle the check assignment button click event
-      function checkAssignment() {
-        var assignId = getParameterByName("assignId");
-        var courseId = getParameterByName("courseId");
-
-        // Redirect to the check assignment page with the assignId
-        window.location.href = "/profassignmentchecker?assignId=" + assignId + "&courseId=" + courseId;
-      }
-
-      // Function to search grades by student ID
-      function searchGrades(studentId) {
-        var filteredData = allGradesData.filter(function (grade) {
-          return grade.student_id.includes(studentId);
-        });
-
-        var totalTests =
-          filteredData.length > 0 ? filteredData[0].total_tests : 0;
-        generateTable(filteredData, totalTests);
-      }
-
-    
-
-      // Function to download the CSV file
-      function downloadCSV() {
-          fetch('/api/csvrunPy', {
-          method: 'POST',
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              const stdout = data.result;
-              console.log(stdout);
-            } else {
-              //statusText.textContent = 'Status: Assignment Check Failed';
-              //resultText.textContent = '';
-              // Handle error case
-            }
-          })
-          .catch(error => {
-            console.error(error);
-            //statusText.textContent = 'Status: Assignment Check Failed';
-            //resultText.textContent = '';
-            // Handle error case
+        // Function to search grades by student ID
+        function searchGrades(studentId) {
+          var filteredData = allGradesData.filter(function (grade) {
+            return grade.student_id.includes(studentId);
           });
 
+          var totalTests =
+            filteredData.length > 0 ? filteredData[0].total_tests : 0;
+          generateTable(filteredData, totalTests);
+        }
 
+        // Function to download the CSV file
+        function downloadCSV() {
+          // Get the courseId from the URL
+          var courseId = getParameterByName("courseId");
 
-
-
-
-      }
-
-      // Fetch grades when the page loads
-      fetchGrades();
-    </script>
-  </div>
-</body>
+          // Redirect the user to the file download endpoint on the server
+          window.location.href = "/download/" + courseId;
+        }
+        // Fetch grades when the page loads
+        fetchGrades();
+      </script>
+    </div>
+  </body>
 </html>
