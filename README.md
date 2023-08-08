@@ -3,8 +3,8 @@ This project is an Auto-Grader tool developed using JavaScript. It aims to autom
 
 ## Features
 -   **Automated code evaluation:** The Auto-Grader can analyze code submissions and provide automated feedback based on predefined grading criteria.
--   **Customizable grading criteria:** Instructors can define their own grading criteria, including test cases, code style, and best practices.
--   **Scalability:** The tool can handle a large number of code submissions, making it suitable for courses with a high volume of assignments.
+-   **Customizable grading criteria:** Instructors can define their grading criteria, including test cases, code style, and best practices.
+-   **Scalability:** The tool can handle many code submissions, making it suitable for courses with a high volume of assignments.
 -   **Detailed feedback:** The Auto-Grader provides detailed feedback to students, helping them understand their mistakes and areas for improvement.
 
 ## Languages Used
